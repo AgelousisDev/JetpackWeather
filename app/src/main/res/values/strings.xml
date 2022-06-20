@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">JetpackWeather</string>
+    <string name="key_ok_label">OK</string>
+</resources>
