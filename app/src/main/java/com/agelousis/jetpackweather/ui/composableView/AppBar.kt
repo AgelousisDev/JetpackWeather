@@ -30,7 +30,7 @@ fun WeatherTopAppBar(
     navigationIconTint: Color? = null,
     navigationIconBlock: NavigationIconBlock = {},
     actions: @Composable RowScope.() -> Unit = {},
-    content: @Composable (PaddingValues) -> Unit,
+    content: @Composable (PaddingValues) -> Unit = {},
 ) {
     Scaffold(
         topBar = {

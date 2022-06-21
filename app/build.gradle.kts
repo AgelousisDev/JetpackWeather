@@ -3,11 +3,13 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val navVersion = "2.5.0-beta01"
 val composeVersion = "1.2.0-beta03"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.1.0-alpha02"
 val composeActivityVersion = "1.5.0-beta01"
 val composeMaterialYouVersion = "1.0.0-alpha10"
+val liveDataViewModelVersion = "2.5.0-beta01"
 
 android {
     compileSdk = 32
@@ -26,6 +28,8 @@ android {
         getByName("debug") {
             signingConfig = signingConfigs.getByName(name = "debug")
             isDebuggable = true
+            buildConfigField(type = "String", name = "WEATHER_BASE_URL", value = "\"https://api.weatherapi.com/v1/\"")
+            buildConfigField(type ="String", name = "WEATHER_API_KEY", value = "\"3299b75bd83b4133b1e52728221706\"")
         }
         release {
             isMinifyEnabled = false
@@ -35,6 +39,8 @@ android {
                 ),
                 "proguard-rules.pro"
             )
+            buildConfigField(type = "String", name = "WEATHER_BASE_URL", value = "\"https://api.weatherapi.com/v1/\"")
+            buildConfigField(type ="String", name = "WEATHER_API_KEY", value = "\"3299b75bd83b4133b1e52728221706\"")
         }
     }
     compileOptions {
@@ -66,6 +72,19 @@ dependencies {
     implementation("androidx.compose.ui:ui-viewbinding:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$liveDataViewModelVersion")
+    // Retrofit & OkHttp
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.8")
+
+    // Navigation
+    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-compose:$navVersion")
+
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")

@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import com.agelousis.jetpackweather.ui.theme.JetpackWeatherTheme
-import com.agelousis.jetpackweather.weather.ui.WeatherActivityLayout
+import com.agelousis.jetpackweather.weather.ui.WeatherActivityBottomNavigationLayout
 
 class WeatherActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,7 +14,7 @@ class WeatherActivity : ComponentActivity() {
         setContent {
             JetpackWeatherTheme {
                 // A surface container using the 'background' color from the theme
-                WeatherActivityLayout()
+                WeatherActivityBottomNavigationLayout()
             }
         }
     }
