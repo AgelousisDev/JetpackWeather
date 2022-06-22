@@ -1,22 +1,19 @@
 package com.agelousis.jetpackweather.weather.ui
 
 import androidx.compose.animation.rememberSplineBasedDecay
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.ui.composableView.WeatherBottomNavigation
@@ -41,10 +38,7 @@ fun WeatherActivityBottomNavigationLayout() {
     }
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
-        decayAnimationSpec = decayAnimationSpec,
-        canScroll = {
-            true
-        }
+        decayAnimationSpec = decayAnimationSpec
     )
     Scaffold(
         modifier = Modifier.nestedScroll(
@@ -52,11 +46,17 @@ fun WeatherActivityBottomNavigationLayout() {
         ),
         topBar = {
             WeatherTopAppBar(
-                modifier = Modifier
-                    .statusBarsPadding(),
                 title = stringResource(id = R.string.app_name),
-                elevation = 0.dp,
+                scrolledContainerColor = MaterialTheme.colorScheme.surface,
+                scrollBehavior = scrollBehavior,
                 navigationIconBlock = onBack
+            )
+        },
+        content = { innerPadding ->
+            WeatherActivityNavigation(
+                viewModel = viewModel,
+                navController = navController,
+                contentPadding = innerPadding
             )
         },
         bottomBar = {
@@ -65,32 +65,43 @@ fun WeatherActivityBottomNavigationLayout() {
                 items = bottomNavigationItems
             )
         }
-    ) {
-        WeatherActivityLayout(
-            viewModel = viewModel,
-            navController = navController
-        )
-    }
+    )
 }
 
 @Composable
-fun WeatherActivityLayout(
+fun WeatherActivityNavigation(
     viewModel: WeatherViewModel,
-    navController: NavController
+    navController: NavHostController,
+    contentPadding: PaddingValues
 ) {
-    val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
-    val loaderState by viewModel.loaderStateStateFlow.collectAsState()
-    ConstraintLayout {
-        val progressIndicatorConstrainedReference = createRef()
-        if (loaderState)
-            CircularProgressIndicator(
-                modifier = Modifier.constrainAs(progressIndicatorConstrainedReference) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
+    NavHost(
+        navController = navController,
+        startDestination = WeatherNavigationScreen.Today.route
+    ) {
+        composable(
+            route = WeatherNavigationScreen.Today.route
+        ) {
+            TodayWeatherLayout(
+                viewModel = viewModel,
+                contentPadding = contentPadding
             )
+        }
+        composable(
+            route = WeatherNavigationScreen.Tomorrow.route
+        ) {
+            TomorrowWeatherLayout(
+                viewModel = viewModel,
+                contentPadding = contentPadding
+            )
+        }
+        composable(
+            route = WeatherNavigationScreen.NextDays.route
+        ) {
+            NextDaysWeatherLayout(
+                viewModel = viewModel,
+                contentPadding = contentPadding
+            )
+        }
     }
 }
 

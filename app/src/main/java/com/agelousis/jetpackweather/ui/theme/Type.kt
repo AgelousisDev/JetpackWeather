@@ -32,8 +32,8 @@ val Typography = Typography(
         ),
         displayLarge = TextStyle(
                 fontFamily = fonts,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
+                fontWeight = FontWeight.Normal,
+                fontSize = 20.sp
         ),
         bodyMedium = TextStyle(
                 fontFamily = fonts,
@@ -43,11 +43,11 @@ val Typography = Typography(
         displayMedium = TextStyle(
                 fontFamily = fonts,
                 fontWeight = FontWeight.Thin,
-                fontSize = 14.sp
+                fontSize = 16.sp
         ),
         displaySmall = TextStyle(
                 fontFamily = fonts,
                 fontStyle = FontStyle.Italic,
-                fontSize = 12.sp
+                fontSize = 14.sp
         )
 )

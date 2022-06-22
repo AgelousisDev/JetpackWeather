@@ -1,6 +1,5 @@
 package com.agelousis.jetpackweather.ui.composableView
 
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
@@ -8,9 +7,10 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 
@@ -19,13 +19,9 @@ fun WeatherBottomNavigation(
     navController: NavHostController,
     items: List<WeatherNavigationScreen>
 ) {
-    var selectedItem by remember {
-        mutableStateOf(value = 0)
-    }
-    NavigationBar(
-        modifier = Modifier
-            .navigationBarsPadding()
-    ) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+    NavigationBar {
         items.forEachIndexed { index, weatherNavigationScreen ->
             NavigationBarItem(
                 icon = {
@@ -40,12 +36,15 @@ fun WeatherBottomNavigation(
                         style = Typography.bodyMedium
                     )
                 },
-                selected = selectedItem == index,
+                selected = currentRoute == weatherNavigationScreen.route,
                 onClick = {
-                    selectedItem = index
-                    navController.navigate(
-                        weatherNavigationScreen.route
-                    )
+                    navController.navigate(weatherNavigationScreen.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }

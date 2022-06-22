@@ -24,8 +24,7 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
         primary = Purple40,
         secondary = PurpleGrey40,
-        tertiary = Pink40,
-
+        tertiary = Pink40
         /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
@@ -55,8 +54,8 @@ fun JetpackWeatherTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController((view.context as Activity).window, view).isAppearanceLightStatusBars = darkTheme
+            (view.context as Activity).window.statusBarColor = colorScheme.surface.toArgb()
+            WindowCompat.getInsetsController((view.context as Activity).window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
