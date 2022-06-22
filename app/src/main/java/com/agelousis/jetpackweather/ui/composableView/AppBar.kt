@@ -34,7 +34,7 @@ fun WeatherTopAppBar(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
+            LargeTopAppBar(
                 title = {
                     Text(
                         text = title,

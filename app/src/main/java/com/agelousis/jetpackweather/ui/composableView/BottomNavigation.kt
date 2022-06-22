@@ -1,12 +1,17 @@
 package com.agelousis.jetpackweather.ui.composableView
 
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 
 @Composable
@@ -14,20 +19,33 @@ fun WeatherBottomNavigation(
     navController: NavHostController,
     items: List<WeatherNavigationScreen>
 ) {
-    BottomNavigation {
-        val currentRoute = navController.currentDestination?.route
-        items.forEach { screen ->
-            BottomNavigationItem(
-                icon = { Icon(imageVector = screen.icon, contentDescription = "") },
-                label = { Text(stringResource(id = screen.resourceId)) },
-                selected = currentRoute == screen.route,
-                //alwaysShowLabels = false, // This hides the title for the unselected items
+    var selectedItem by remember {
+        mutableStateOf(value = 0)
+    }
+    NavigationBar(
+        modifier = Modifier
+            .navigationBarsPadding()
+    ) {
+        items.forEachIndexed { index, weatherNavigationScreen ->
+            NavigationBarItem(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Filled.Favorite,
+                        contentDescription = null
+                    )
+                },
+                label = {
+                    Text(
+                        text = stringResource(id = weatherNavigationScreen.resourceId),
+                        style = Typography.bodyMedium
+                    )
+                },
+                selected = selectedItem == index,
                 onClick = {
-                    // This if check gives us a "singleTop" behavior where we do not create a
-                    // second instance of the composable if we are already on that destination
-                    if (currentRoute != screen.route) {
-                        navController.navigate(screen.route)
-                    }
+                    selectedItem = index
+                    navController.navigate(
+                        weatherNavigationScreen.route
+                    )
                 }
             )
         }
