@@ -1,12 +1,15 @@
 package com.agelousis.jetpackweather.mapAddressPicker.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,6 +26,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.mapAddressPicker.MapAddressPickerActivity
 import com.agelousis.jetpackweather.mapAddressPicker.viewModel.MapViewModel
 import com.agelousis.jetpackweather.ui.composableView.WeatherSmallTopAppBar
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -44,6 +48,19 @@ fun MapAddressPickerView(
                 navigationIcon = Icons.Filled.ArrowBack,
                 navigationIconBlock = {
                     (context as Activity).finish()
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            (context as Activity).setResult(Activity.RESULT_OK, Intent())
+                            context.finish()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.CheckCircle,
+                            contentDescription = null
+                        )
+                    }
                 }
             )
         }
