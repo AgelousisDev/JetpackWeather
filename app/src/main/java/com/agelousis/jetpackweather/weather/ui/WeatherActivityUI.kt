@@ -4,11 +4,14 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.rememberSplineBasedDecay
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -80,17 +83,17 @@ fun WeatherActivityBottomNavigationLayout() {
                 }
             )
         },
+        bottomBar = {
+            WeatherBottomNavigation(
+                navController = navController,
+                items = bottomNavigationItems
+            )
+        },
         content = { innerPadding ->
             WeatherActivityNavigation(
                 viewModel = viewModel,
                 navController = navController,
                 contentPadding = innerPadding
-            )
-        },
-        bottomBar = {
-            WeatherBottomNavigation(
-                navController = navController,
-                items = bottomNavigationItems
             )
         }
     )

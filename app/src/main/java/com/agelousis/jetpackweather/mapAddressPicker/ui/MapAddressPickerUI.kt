@@ -1,25 +1,30 @@
 package com.agelousis.jetpackweather.mapAddressPicker.ui
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.viewModel.MapViewModel
+import com.agelousis.jetpackweather.ui.composableView.WeatherSmallTopAppBar
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
@@ -28,61 +33,103 @@ import com.google.android.gms.maps.model.LatLng
 fun MapAddressPickerView(
     viewModel: MapViewModel
 ) {
-    Surface(
-        color = MaterialTheme.colors.background
-    ) {
-        val mapView = rememberMapViewWithLifecycle()
-        val currentLocation = viewModel.location.collectAsState()
-        var text by remember { viewModel.addressText }
-        val context = LocalContext.current
-
-        Column(Modifier.fillMaxWidth()) {
-
-            Box{
-                TextField(
-                    value = text,
-                    onValueChange = {
-                        text = it
-                        if(!viewModel.isMapEditable.value)
-                            viewModel.onTextChanged(context, text)
-                    },
-                    modifier = Modifier.fillMaxWidth().padding(end = 80.dp),
-                    enabled = !viewModel.isMapEditable.value,
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent)
+    val context = LocalContext.current
+    Scaffold(
+        modifier = Modifier
+            .statusBarsPadding(),
+        topBar = {
+            WeatherSmallTopAppBar(
+                title = stringResource(id = R.string.app_name),
+                scrolledContainerColor = MaterialTheme.colorScheme.surface,
+                navigationIcon = Icons.Filled.ArrowBack,
+                navigationIconBlock = {
+                    (context as Activity).finish()
+                }
+            )
+        }
+    ) { paddingValues ->
+        Surface(
+            modifier = Modifier
+                .padding(
+                    top = paddingValues.calculateTopPadding()
                 )
 
-                Column(
-                    modifier = Modifier.fillMaxWidth().padding(10.dp).padding(bottom = 20.dp),
-                    horizontalAlignment = Alignment.End
-                ){
+        ) {
+            val mapView = rememberMapViewWithLifecycle()
+            val currentLocation = viewModel.location.collectAsState()
+            var text by remember { viewModel.addressText }
+
+            Column {
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        value = text,
+                        onValueChange = {
+                            text = it
+                            if(!viewModel.isMapEditable.value)
+                                viewModel.onTextChanged(context, text)
+                        },
+                        enabled = !viewModel.isMapEditable.value,
+                        modifier = Modifier
+                            .weight(
+                                weight = 0.6f
+                            )
+                            .padding(
+                                start = 8.dp
+                            )
+                    )
                     Button(
                         onClick = {
                             viewModel.isMapEditable.value = !viewModel.isMapEditable.value
-                        }
+                        },
+                        modifier = Modifier
+                            .weight(
+                                weight = 0.3f
+                            )
+                            .padding(
+                                start = 8.dp,
+                                end = 8.dp
+                            )
                     ) {
-                        Text(text = if(viewModel.isMapEditable.value) "Edit" else "Save")
+                        Text(text = if (viewModel.isMapEditable.value) "Edit" else "Save")
                     }
                 }
-            }
 
-            Box(modifier = Modifier.height(500.dp)){
-
-                currentLocation.value.let {
-                    if(viewModel.isMapEditable.value) {
-                        text = viewModel.getAddressFromLocation(context)
+                Surface(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(
+                            top = 16.dp
+                        ),
+                    shape = RoundedCornerShape(
+                        topStart = 16.dp,
+                        topEnd = 16.dp
+                    )
+                ) {
+                    currentLocation.value.let {
+                        if(viewModel.isMapEditable.value) {
+                            text = viewModel.getAddressFromLocation(context)
+                        }
+                        MapViewContainer(
+                            isEnabled = viewModel.isMapEditable.value,
+                            mapView = mapView,
+                            viewModel = viewModel
+                        )
                     }
-                    MapViewContainer(viewModel.isMapEditable.value, mapView, viewModel)
+                    MapPinOverlay()
                 }
-
-                MapPinOverlay()
             }
         }
     }
 }
 
 @Composable
-fun MapPinOverlay(){
-    Column(modifier = Modifier.fillMaxWidth()) {
+fun MapPinOverlay() {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -96,8 +143,8 @@ fun MapPinOverlay(){
             )
         }
         Box(
-            Modifier.weight(1f)
-        ){}
+            modifier = Modifier.weight(1f)
+        ) {}
     }
 }
 

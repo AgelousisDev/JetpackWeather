@@ -53,6 +53,45 @@ fun WeatherTopAppBar(
     )
 }
 
+@Composable
+fun WeatherSmallTopAppBar(
+    modifier: Modifier = Modifier,
+    title: String,
+    scrolledContainerColor: Color,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    navigationIcon: ImageVector? = null,
+    navigationIconTint: Color? = null,
+    navigationIconBlock: NavigationIconBlock = {},
+    actions: @Composable RowScope.() -> Unit = {}
+) {
+    SmallTopAppBar(
+        modifier = modifier,
+        title = {
+            Text(
+                text = title,
+                style = Typography.displayLarge
+            )
+        },
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            scrolledContainerColor = scrolledContainerColor
+        ),
+        navigationIcon = {
+            if (navigationIcon != null)
+                IconButton(
+                    onClick = navigationIconBlock
+                ) {
+                    Icon(
+                        imageVector = navigationIcon,
+                        contentDescription = "backIcon",
+                        tint = navigationIconTint ?: LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                    )
+                }
+        },
+        scrollBehavior = scrollBehavior,
+        actions = actions
+    )
+}
+
 @Preview
 @Composable
 fun WeatherTopAppBarPreview() {
