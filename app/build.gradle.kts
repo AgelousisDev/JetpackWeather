@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("org.jetbrains.kotlin.plugin.parcelize")
 }
 
 val navVersion = "2.5.0-beta01"
@@ -12,6 +13,7 @@ val composeActivityVersion = "1.5.0-beta01"
 val composeMaterialYouVersion = "1.0.0-alpha10"
 val liveDataViewModelVersion = "2.5.0-beta01"
 val playServicesMapsVersion = "18.0.2"
+val playServicesLocationVersion = "19.0.1"
 
 android {
     compileSdk = 32
@@ -88,9 +90,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     // Google Maps
+    implementation("com.google.android.gms:play-services-location:$playServicesLocationVersion")
     implementation("com.google.android.gms:play-services-maps:$playServicesMapsVersion")
-    implementation("com.google.maps.android:android-maps-utils:2.3.0")
-    implementation("com.google.maps.android:maps-utils-ktx:3.4.0")
+    implementation("com.google.maps.android:maps-compose:2.2.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")

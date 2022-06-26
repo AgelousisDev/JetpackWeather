@@ -1,5 +1,6 @@
 package com.agelousis.jetpackweather.weather.ui
 
+import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,7 +18,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,8 +26,13 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.MapAddressPickerActivity
 import com.agelousis.jetpackweather.ui.composableView.WeatherBottomNavigation
 import com.agelousis.jetpackweather.ui.composableView.WeatherTopAppBar
+import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
+import com.agelousis.jetpackweather.utils.helpers.LocationHelper
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
+import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 private val bottomNavigationItems by lazy {
     listOf(
@@ -38,10 +43,11 @@ private val bottomNavigationItems by lazy {
 }
 
 @Composable
-fun WeatherActivityBottomNavigationLayout() {
+fun WeatherActivityBottomNavigationLayout(
+    viewModel: WeatherViewModel
+) {
     val context = LocalContext.current
     val navController = rememberNavController()
-    val viewModel: WeatherViewModel = viewModel()
     val onBack: () -> Unit = {
         navController.navigateUp()
     }
@@ -49,18 +55,25 @@ fun WeatherActivityBottomNavigationLayout() {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         decayAnimationSpec = decayAnimationSpec
     )
+    val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
     val mapAddressPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
 
     }
+    requestLocation(
+        context = context,
+        viewModel = viewModel
+    )
     Scaffold(
         modifier = Modifier.nestedScroll(
             connection = scrollBehavior.nestedScrollConnection
         ),
         topBar = {
             WeatherTopAppBar(
-                title = stringResource(id = R.string.app_name),
+                title = addressDataModel?.addressLine ?: stringResource(
+                    id = R.string.app_name
+                ),
                 scrolledContainerColor = MaterialTheme.colorScheme.surface,
                 scrollBehavior = scrollBehavior,
                 navigationIconBlock = onBack,
@@ -71,7 +84,12 @@ fun WeatherActivityBottomNavigationLayout() {
                                 Intent(
                                     context,
                                     MapAddressPickerActivity::class.java
-                                )
+                                ).also { intent ->
+                                    intent.putExtra(
+                                        MapAddressPickerActivity.CURRENT_ADDRESS,
+                                        addressDataModel
+                                    )
+                                }
                             )
                         }
                     ) {
@@ -90,11 +108,21 @@ fun WeatherActivityBottomNavigationLayout() {
             )
         },
         content = { innerPadding ->
-            WeatherActivityNavigation(
-                viewModel = viewModel,
-                navController = navController,
-                contentPadding = innerPadding
+            if (viewModel.locationPermissionState
+                || context.arePermissionsGranted(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                )
             )
+                WeatherActivityNavigation(
+                    viewModel = viewModel,
+                    navController = navController,
+                    contentPadding = innerPadding
+                )
+            else
+                LocationPermissionRequest(
+                    viewModel = viewModel
+                )
         }
     )
 }
@@ -136,8 +164,64 @@ fun WeatherActivityNavigation(
     }
 }
 
+@Composable
+private fun LocationPermissionRequest(
+    viewModel: WeatherViewModel
+) {
+    val context = LocalContext.current
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { locationPermissions ->
+        viewModel.locationPermissionState = locationPermissions.all {
+            it.value
+        }
+        requestLocation(
+            context = context,
+            viewModel = viewModel
+        )
+    }
+    LaunchedEffect(
+        key1 = Unit
+    ) {
+        launch {
+            delay(
+                timeMillis = 1000
+            )
+            permissionLauncher.launch(
+                arrayOf(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            )
+        }
+    }
+}
+
+private fun requestLocation(
+    context: Context,
+    viewModel: WeatherViewModel
+) {
+    if (context.arePermissionsGranted(
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    )
+        LocationHelper(
+            context = context,
+            priority = PRIORITY_HIGH_ACCURACY
+        ) {
+            viewModel.addressDataModelMutableStateFlow.value = viewModel.getAddressFromLocation(
+                context = context,
+                longitude = it.longitude,
+                latitude = it.latitude
+            )
+        }
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun WeatherActivityLayoutPreview() {
-    WeatherActivityBottomNavigationLayout()
+    WeatherActivityBottomNavigationLayout(
+        viewModel = WeatherViewModel()
+    )
 }

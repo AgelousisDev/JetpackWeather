@@ -1,83 +1,59 @@
 package com.agelousis.jetpackweather.mapAddressPicker.viewModel
 
 import android.content.Context
-import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import android.os.CountDownTimer
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.util.*
 
-class MapViewModel : ViewModel()  {
+class MapViewModel: ViewModel()  {
 
-    val location = MutableStateFlow(getInitialLocation())
-    val addressText = mutableStateOf("")
-    var isMapEditable = mutableStateOf(true)
+    val addressDataModelMutableStateFlow = MutableStateFlow<AddressDataModel?>(
+        value = null
+    )
+    val addressDataModelStateFlow = addressDataModelMutableStateFlow.asStateFlow()
+
+    var addressLine by mutableStateOf(
+        value = addressDataModelStateFlow.value?.addressLine
+    )
+
     private var timer: CountDownTimer? = null
 
-    fun getInitialLocation() : Location{
-        val initialLocation = Location("")
-        initialLocation.latitude = 51.506874
-        initialLocation.longitude = -0.139800
-        return initialLocation
-    }
-
-    fun updateLocation(latitude: Double, longitude: Double){
-        if(latitude != location.value.latitude) {
-            val location = Location("")
-            location.latitude = latitude
-            location.longitude = longitude
-            setLocation(location)
-        }
-    }
-
-    fun setLocation(loc: Location) {
-        location.value = loc
-    }
-
-    fun getAddressFromLocation(context: Context): String {
-        val geocoder = Geocoder(context, Locale.getDefault())
-        var addresses: List<Address>? = null
-
-        try {
-            addresses = geocoder.getFromLocation(location.value.latitude, location.value.longitude, 1)
-        } catch(ex: Exception) {
-            ex.printStackTrace()
-        }
-
-        return addresses?.get(0)?.getAddressLine(0) ?: ""
-    }
-
-    fun onTextChanged(context: Context, text: String){
+    fun onTextChanged(
+        context: Context,
+        text: String
+    ) {
         if(text == "")
             return
         timer?.cancel()
         timer = object : CountDownTimer(1000, 1500) {
             override fun onTick(millisUntilFinished: Long) { }
             override fun onFinish() {
-                location.value = getLocationFromAddress(context, text)
+                addressDataModelMutableStateFlow.value = getLocationFromAddress(
+                    context = context,
+                    strAddress = text
+                )
+                addressLine = addressDataModelStateFlow.value?.addressLine
             }
         }.start()
     }
 
-    fun getLocationFromAddress(context: Context, strAddress: String): Location{
+    fun getLocationFromAddress(context: Context, strAddress: String): AddressDataModel {
         val geocoder = Geocoder(context, Locale.getDefault())
-        val address: Address?
-
         val addresses = geocoder.getFromLocationName(strAddress, 1)
-
-        if (addresses.isNotEmpty()) {
-            address = addresses[0]
-
-            var loc = Location("")
-            loc.latitude = address.latitude
-            loc.longitude = address.longitude
-            return loc
-        }
-
-        return location.value
+        return AddressDataModel(
+            countryName = addresses?.firstOrNull()?.countryName,
+            countryCode = addresses?.firstOrNull()?.countryCode,
+            longitude = addresses?.firstOrNull()?.longitude,
+            latitude = addresses?.firstOrNull()?.latitude,
+            addressLine = addresses?.firstOrNull()?.getAddressLine(0)
+        )
     }
 
 }

@@ -1,0 +1,13 @@
+package com.agelousis.jetpackweather.mapAddressPicker
+
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+data class AddressDataModel(
+    val countryName: String? = null,
+    val countryCode: String? = null,
+    val longitude: Double? = null,
+    val latitude: Double? = null,
+    val addressLine: String? = null
+): Parcelable
