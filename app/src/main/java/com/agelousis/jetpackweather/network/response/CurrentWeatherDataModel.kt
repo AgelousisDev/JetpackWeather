@@ -27,4 +27,11 @@ data class CurrentWeatherDataModel(
     @SerializedName(value = "gust_mph") val gustMph: Double?,
     @SerializedName(value = "gust_kph") val gustKph: Double?,
     @SerializedName(value = "air_quality") val airQuality: WeatherAirQualityDataModel?,
-)
+) {
+
+    val celciusTemperature
+        get() = "%d °C".format(
+            tempC?.toInt() ?: 0
+        )
+
+}

@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">JetpackWeather</string>
+    <string name="app_name">Jetpack Weather</string>
     <string name="key_ok_label">OK</string>
     <string name="key_today_label">Today</string>
     <string name="key_tomorrow_label">Tomorrow</string>
     <string name="key_next_days">Next Days</string>
     <string name="key_error_label">Error</string>
+    <string name="key_search_places_label">Search places</string>
+    <string name="key_location_label">Location</string>
 </resources>

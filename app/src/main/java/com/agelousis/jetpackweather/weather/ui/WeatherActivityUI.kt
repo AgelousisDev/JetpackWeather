@@ -1,5 +1,6 @@
 package com.agelousis.jetpackweather.weather.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -58,8 +59,10 @@ fun WeatherActivityBottomNavigationLayout(
     val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
     val mapAddressPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
-    ) {
-
+    ) { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK)
+            viewModel.addressDataModelMutableStateFlow.value =
+                activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
     }
     requestLocation(
         context = context,
@@ -79,6 +82,7 @@ fun WeatherActivityBottomNavigationLayout(
                 navigationIconBlock = onBack,
                 actions = {
                     IconButton(
+                        enabled = addressDataModel != null,
                         onClick = {
                             mapAddressPickerLauncher.launch(
                                 Intent(
@@ -214,6 +218,14 @@ private fun requestLocation(
                 context = context,
                 longitude = it.longitude,
                 latitude = it.latitude
+            )
+            viewModel.requestCurrentWeather(
+                context = context,
+                location = "%f,%f".format(
+                    it.latitude,
+                    it.longitude
+                ),
+                airQualityState = true
             )
         }
 }

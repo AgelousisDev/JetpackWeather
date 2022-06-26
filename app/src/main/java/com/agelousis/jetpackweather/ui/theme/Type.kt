@@ -23,6 +23,12 @@ val textViewAlertTitleFont = TextStyle(
         fontSize = 18.sp
 )
 
+val textViewHeaderFont = TextStyle(
+        fontFamily = fonts,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp
+)
+
 // Set of Material typography styles to start with
 val Typography = Typography(
         bodyLarge = TextStyle(
@@ -47,7 +53,7 @@ val Typography = Typography(
         ),
         displaySmall = TextStyle(
                 fontFamily = fonts,
-                fontStyle = FontStyle.Italic,
+                fontStyle = FontStyle.Normal,
                 fontSize = 14.sp
         )
 )
