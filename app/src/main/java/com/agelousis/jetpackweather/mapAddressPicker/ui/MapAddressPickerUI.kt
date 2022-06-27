@@ -101,7 +101,7 @@ fun MapAddressPickerView(
                 onValueChange = {
                     viewModel.addressLine = it
                 },
-                placeholder = {
+                label = {
                     Text(
                         text = stringResource(id = R.string.key_search_places_label),
                         style = Typography.bodyMedium

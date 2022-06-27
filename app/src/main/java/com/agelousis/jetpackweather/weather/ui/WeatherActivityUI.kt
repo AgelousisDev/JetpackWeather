@@ -63,6 +63,12 @@ fun WeatherActivityBottomNavigationLayout(
         if (activityResult.resultCode == Activity.RESULT_OK)
             viewModel.addressDataModelMutableStateFlow.value =
                 activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
+        requestWeather(
+            context = context,
+            viewModel = viewModel,
+            longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: return@rememberLauncherForActivityResult,
+            latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: return@rememberLauncherForActivityResult
+        )
     }
     requestLocation(
         context = context,
@@ -203,7 +209,7 @@ private fun LocationPermissionRequest(
 
 private fun requestLocation(
     context: Context,
-    viewModel: WeatherViewModel
+    viewModel: WeatherViewModel,
 ) {
     if (context.arePermissionsGranted(
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -219,15 +225,29 @@ private fun requestLocation(
                 longitude = it.longitude,
                 latitude = it.latitude
             )
-            viewModel.requestCurrentWeather(
+            requestWeather(
                 context = context,
-                location = "%f,%f".format(
-                    it.latitude,
-                    it.longitude
-                ),
-                airQualityState = true
+                viewModel = viewModel,
+                longitude = it.longitude,
+                latitude = it.latitude
             )
         }
+}
+
+private fun requestWeather(
+    context: Context,
+    viewModel: WeatherViewModel,
+    longitude: Double,
+    latitude: Double
+) {
+    viewModel.requestCurrentWeather(
+        context = context,
+        location = "%f,%f".format(
+            latitude,
+            longitude
+        ),
+        airQualityState = true
+    )
 }
 
 @Preview(showBackground = true, showSystemUi = true)

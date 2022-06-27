@@ -28,7 +28,7 @@ class WeatherViewModel: ViewModel() {
 
     var alertPair by mutableStateOf<Pair<String?, String?>>(value = null to null)
 
-    fun onOpenDialogClicked() {
+    private fun onOpenDialogClicked() {
         _showDialog.value = true
     }
 
@@ -74,7 +74,12 @@ class WeatherViewModel: ViewModel() {
             countryCode = addresses?.firstOrNull()?.countryCode,
             longitude = addresses?.firstOrNull()?.longitude,
             latitude = addresses?.firstOrNull()?.latitude,
-            addressLine = addresses?.firstOrNull()?.getAddressLine(0)
+            addressLine = addresses?.firstOrNull()?.getAddressLine(0)?.takeIf { addressLine ->
+                addressLine.split(",").size < 3
+            } ?: listOf(
+                addresses?.firstOrNull()?.getAddressLine(0)?.split(",")?.getOrNull(index = 1) ?: "",
+                addresses?.firstOrNull()?.getAddressLine(0)?.split(",")?.getOrNull(index = 1) ?: ""
+            ).joinToString()
         )
     }
 
