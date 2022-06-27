@@ -1,12 +1,10 @@
 package com.agelousis.jetpackweather.weather.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,11 +15,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import coil.compose.rememberAsyncImagePainter
 import com.agelousis.jetpackweather.ui.composableView.SimpleDialog
 import com.agelousis.jetpackweather.ui.composableView.models.SimpleDialogDataModel
-import com.agelousis.jetpackweather.ui.theme.Typography
-import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
+import com.agelousis.jetpackweather.weather.rows.CalendarRowLayout
+import com.agelousis.jetpackweather.weather.rows.CurrentTemperatureRowLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 
 @Composable
@@ -31,6 +28,7 @@ fun TodayWeatherLayout(
 ) {
     val showDialogState by viewModel.showDialog.collectAsState()
     val loaderState by viewModel.loaderStateStateFlow.collectAsState()
+    val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
     SimpleDialog(
         show = showDialogState,
         simpleDialogDataModel = SimpleDialogDataModel(
@@ -63,11 +61,19 @@ fun TodayWeatherLayout(
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints
                     height = Dimension.fillToConstraints
-                }
+                },
+            verticalArrangement = Arrangement.spacedBy(
+                space = 32.dp
+            )
         ) {
             item {
+                CalendarRowLayout(
+                    weatherResponseModel = weatherResponseModel
+                )
+            }
+            item {
                 CurrentTemperatureRowLayout(
-                    viewModel = viewModel
+                    weatherResponseModel = weatherResponseModel
                 )
             }
         }
@@ -81,59 +87,6 @@ fun TodayWeatherLayout(
                         bottom.linkTo(parent.bottom)
                     }
             )
-    }
-}
-
-@Composable
-private fun CurrentTemperatureRowLayout(
-    viewModel: WeatherViewModel
-) {
-    val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        val (temperatureLabelConstrainedReference, iconConstrainedReference,
-            conditionConstrainedReference) = createRefs()
-        Text(
-            text = weatherResponseModel?.currentWeatherDataModel?.celciusTemperature ?: "",
-            style = textViewHeaderFont,
-            modifier = Modifier
-                .constrainAs(temperatureLabelConstrainedReference) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                }
-        )
-
-        Image(
-            painter = rememberAsyncImagePainter(
-                model = weatherResponseModel?.currentWeatherDataModel?.condition?.iconUrl
-            ),
-            contentDescription = null,
-            modifier = Modifier
-                .constrainAs(iconConstrainedReference) {
-                    top.linkTo(temperatureLabelConstrainedReference.top)
-                    start.linkTo(temperatureLabelConstrainedReference.end, 16.dp)
-                    width = Dimension.value(
-                        dp = 35.dp
-                    )
-                    height = Dimension.value(
-                        dp = 35.dp
-                    )
-                }
-        )
-
-        Text(
-            text = weatherResponseModel?.currentWeatherDataModel?.condition?.text ?: "",
-            style = Typography.bodyMedium,
-            modifier = Modifier
-                .constrainAs(conditionConstrainedReference) {
-                    start.linkTo(parent.start)
-                    top.linkTo(iconConstrainedReference.bottom, 8.dp)
-                    end.linkTo(parent.end)
-                }
-        )
     }
 }
 

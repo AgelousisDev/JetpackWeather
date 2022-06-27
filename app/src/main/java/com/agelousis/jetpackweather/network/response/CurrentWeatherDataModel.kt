@@ -8,7 +8,7 @@ data class CurrentWeatherDataModel(
     @SerializedName(value = "temp_c") val tempC: Double?,
     @SerializedName(value = "temp_f") val temp_f: Double?,
     @SerializedName(value = "is_day") val isDay: Int?,
-    @SerializedName(value = "condition") val condition: WeatherConditionDataModel?,
+    @SerializedName(value = "condition") val weatherConditionDataModel: WeatherConditionDataModel?,
     @SerializedName(value = "wind_mph") val windMph: Double?,
     @SerializedName(value = "wind_kph") val windKph: Double?,
     @SerializedName(value = "wind_degree") val windDegree: Int?,
@@ -33,5 +33,8 @@ data class CurrentWeatherDataModel(
         get() = "%d °C".format(
             tempC?.toInt() ?: 0
         )
+
+    val isDayBool
+        get() = isDay == 1
 
 }

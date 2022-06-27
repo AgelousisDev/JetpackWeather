@@ -11,4 +11,12 @@ data class WeatherLocationDataModel(
     @SerializedName(value = "tz_id") val tz_id: String?,
     @SerializedName(value = "localtime_epoch") val localtime_epoch: Long?,
     @SerializedName(value = "localtime") val localtime: String?
-)
+) {
+
+    val regionCountry
+        get() = "%s, %s".format(
+            region ?: "",
+            country ?: ""
+        )
+
+}

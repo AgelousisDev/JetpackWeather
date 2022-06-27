@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -57,6 +58,7 @@ fun WeatherActivityBottomNavigationLayout(
         decayAnimationSpec = decayAnimationSpec
     )
     val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
+    val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
     val mapAddressPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->
@@ -80,7 +82,9 @@ fun WeatherActivityBottomNavigationLayout(
         ),
         topBar = {
             WeatherTopAppBar(
-                title = addressDataModel?.addressLine ?: stringResource(
+                modifier = Modifier
+                    .statusBarsPadding(),
+                title = weatherResponseModel?.weatherLocationDataModel?.regionCountry ?: stringResource(
                     id = R.string.app_name
                 ),
                 scrolledContainerColor = MaterialTheme.colorScheme.surface,

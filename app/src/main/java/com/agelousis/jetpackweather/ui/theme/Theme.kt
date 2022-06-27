@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.agelousis.jetpackweather.mapAddressPicker.MapAddressPickerActivity
 
 private val DarkColorScheme = darkColorScheme(
         primary = Purple80,
@@ -56,10 +55,7 @@ fun JetpackWeatherTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            (view.context as Activity).window?.navigationBarColor = when(view.context) {
-                is MapAddressPickerActivity -> Color.Transparent.toArgb()
-                else -> colorScheme.surfaceVariant.toArgb()
-            }
+            (view.context as Activity).window?.navigationBarColor = Color.Transparent.toArgb()
             (view.context as Activity).window?.statusBarColor = colorScheme.surface.toArgb()
             WindowCompat.getInsetsController((view.context as Activity).window, view).isAppearanceLightStatusBars = !darkTheme
         }

@@ -1,5 +1,7 @@
 package com.agelousis.jetpackweather.ui.composableView
 
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
@@ -7,7 +9,10 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -21,9 +26,21 @@ fun WeatherBottomNavigation(
 ) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-    NavigationBar {
-        items.forEachIndexed { index, weatherNavigationScreen ->
+    NavigationBar(
+        modifier = Modifier
+            .graphicsLayer {
+                clip = true
+                shape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+                shadowElevation = 2.2f
+            }
+            .height(
+                height = 95.dp
+            )
+    ) {
+        items.forEach { weatherNavigationScreen ->
             NavigationBarItem(
+                modifier = Modifier
+                    .navigationBarsPadding(),
                 icon = {
                     Icon(
                         imageVector = Icons.Filled.Favorite,
