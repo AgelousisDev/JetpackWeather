@@ -7,4 +7,5 @@
     <string name="key_error_label">Error</string>
     <string name="key_search_places_label">Search places</string>
     <string name="key_location_label">Location</string>
+    <string name="key_feels_like_label">Feels like %s</string>
 </resources>

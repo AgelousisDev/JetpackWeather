@@ -29,9 +29,14 @@ data class CurrentWeatherDataModel(
     @SerializedName(value = "air_quality") val airQuality: WeatherAirQualityDataModel?,
 ) {
 
-    val celciusTemperature
+    val celsiusTemperature
         get() = "%d °C".format(
             tempC?.toInt() ?: 0
+        )
+
+    val feelsLikeCelsiusTemperature
+        get() = "%d °C".format(
+            feelslikeC?.toInt() ?: 0
         )
 
     val isDayBool

@@ -62,15 +62,16 @@ fun WeatherActivityBottomNavigationLayout(
     val mapAddressPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->
-        if (activityResult.resultCode == Activity.RESULT_OK)
+        if (activityResult.resultCode == Activity.RESULT_OK) {
             viewModel.addressDataModelMutableStateFlow.value =
                 activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
-        requestWeather(
-            context = context,
-            viewModel = viewModel,
-            longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: return@rememberLauncherForActivityResult,
-            latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: return@rememberLauncherForActivityResult
-        )
+            requestWeather(
+                context = context,
+                viewModel = viewModel,
+                longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: return@rememberLauncherForActivityResult,
+                latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: return@rememberLauncherForActivityResult
+            )
+        }
     }
     requestLocation(
         context = context,

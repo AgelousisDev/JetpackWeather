@@ -68,11 +68,15 @@ fun TodayWeatherLayout(
         ) {
             item {
                 CalendarRowLayout(
+                    modifier = Modifier
+                        .animateItemPlacement(),
                     weatherResponseModel = weatherResponseModel
                 )
             }
             item {
                 CurrentTemperatureRowLayout(
+                    modifier = Modifier
+                        .animateItemPlacement(),
                     weatherResponseModel = weatherResponseModel
                 )
             }
