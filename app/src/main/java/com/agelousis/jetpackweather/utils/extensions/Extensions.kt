@@ -6,6 +6,12 @@ import java.util.*
 
 fun Date.toDisplayDate(
     pattern: String = Constants.DISPLAY_DATE_FORMAT
-) = with(SimpleDateFormat(pattern, Locale.getDefault())) {
+): String = with(SimpleDateFormat(pattern, Locale.getDefault())) {
     format(this@toDisplayDate)
+}
+
+fun String.toDate(
+    pattern: String = Constants.DATE_FORMAT
+): Date? = with(SimpleDateFormat(pattern, Locale.getDefault())) {
+    parse(this@toDate)
 }
