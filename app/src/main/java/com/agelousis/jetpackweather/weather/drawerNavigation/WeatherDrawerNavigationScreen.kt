@@ -1,0 +1,25 @@
+package com.agelousis.jetpackweather.weather.drawerNavigation
+
+import androidx.annotation.StringRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.agelousis.jetpackweather.R
+
+sealed class WeatherDrawerNavigationScreen(
+    val route: String,
+    val icon: ImageVector,
+    @StringRes val label: Int
+) {
+    object HomeWeather: WeatherDrawerNavigationScreen(
+        route = "todayRoute",
+        icon = Icons.Filled.Home,
+        label = R.string.key_weather_label
+    )
+    object Settings: WeatherDrawerNavigationScreen(
+        route = "settingsRoute",
+        icon = Icons.Filled.Settings,
+        label = R.string.key_settings_label
+    )
+}

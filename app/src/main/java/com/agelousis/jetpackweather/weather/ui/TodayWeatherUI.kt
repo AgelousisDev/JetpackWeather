@@ -33,7 +33,13 @@ fun TodayWeatherLayout(
         show = showDialogState,
         simpleDialogDataModel = SimpleDialogDataModel(
             title = viewModel.alertPair.first ?: "",
-            message = viewModel.alertPair.second ?: ""
+            message = viewModel.alertPair.second ?: "",
+            positiveButtonBlock = {
+                viewModel.onDialogConfirm()
+            },
+            dismissBlock = {
+                viewModel.onDialogDismiss()
+            }
         )
     )
     ConstraintLayout(

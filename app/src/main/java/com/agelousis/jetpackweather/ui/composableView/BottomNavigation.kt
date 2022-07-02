@@ -17,9 +17,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
+import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 
 @Composable
 fun WeatherBottomNavigation(
+    viewModel: WeatherViewModel,
     navController: NavHostController,
     items: List<WeatherNavigationScreen>
 ) {
@@ -65,6 +67,7 @@ fun WeatherBottomNavigation(
                         launchSingleTop = true
                         restoreState = true
                     }
+                    viewModel.currentNavigationRoute = weatherNavigationScreen.route
                 }
             )
         }

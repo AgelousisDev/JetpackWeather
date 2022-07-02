@@ -13,12 +13,20 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.network.repositories.WeatherRepository
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
+import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.*
 
 class WeatherViewModel: ViewModel() {
+
+    var weatherUiAppBarTitle by mutableStateOf<String?>(
+        value = null
+    )
+    var currentNavigationRoute by mutableStateOf(
+        value = WeatherNavigationScreen.Today.route
+    )
 
     private val loaderStateMutableStateFlow = MutableStateFlow(value = false)
     val loaderStateStateFlow: StateFlow<Boolean> = loaderStateMutableStateFlow.asStateFlow()
@@ -95,6 +103,7 @@ class WeatherViewModel: ViewModel() {
             successBlock = { weatherResponseModel ->
                 loaderStateMutableStateFlow.value = false
                 weatherResponseMutableLiveData.value = weatherResponseModel
+                weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
             },
             failureBlock = {
                 loaderStateMutableStateFlow.value = false
