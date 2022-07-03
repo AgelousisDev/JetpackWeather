@@ -14,6 +14,7 @@ import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.network.repositories.WeatherRepository
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
+import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -62,6 +63,13 @@ class WeatherViewModel: ViewModel() {
     private val weatherResponseMutableLiveData by lazy { MutableLiveData<WeatherResponseModel>() }
     val weatherResponseLiveData: LiveData<WeatherResponseModel>
         get() = weatherResponseMutableLiveData
+
+    infix fun getWeatherSettings(
+        context: Context
+    ) = listOf(
+        WeatherSettings.TemperatureType withOptions context,
+        WeatherSettings.OfflineMode
+    )
 
     fun getAddressFromLocation(
         context: Context,

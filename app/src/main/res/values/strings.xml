@@ -10,4 +10,10 @@
     <string name="key_feels_like_label">Feels like %s</string>
     <string name="key_weather_label">Weather</string>
     <string name="key_settings_label">Settings</string>
+    <string name="key_temperature_unit_label">Temperature Unit</string>
+    <string name="key_load_saved_weather_when_offline_label">Load saved weather/Offline mode</string>
+    <string-array name="key_temperature_unit_types_array">
+        <item>Celsius</item>
+        <item>Fahrenheit</item>
+    </string-array>
 </resources>
