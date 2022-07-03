@@ -14,6 +14,7 @@ val composeMaterialYouVersion = "1.0.0-alpha10"
 val liveDataViewModelVersion = "2.5.0-beta01"
 val playServicesMapsVersion = "18.0.2"
 val playServicesLocationVersion = "19.0.1"
+val materialYouVersion = "1.7.0-alpha02"
 
 android {
     compileSdk = 32
@@ -68,6 +69,9 @@ android {
 }
 
 dependencies {
+    // Native
+    implementation("com.google.android.material:material:$materialYouVersion")
+
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
     implementation("androidx.activity:activity-compose:$composeActivityVersion")

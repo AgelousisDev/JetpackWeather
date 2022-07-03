@@ -12,6 +12,23 @@ sealed class WeatherDrawerNavigationScreen(
     val icon: ImageVector,
     @StringRes val label: Int
 ) {
+
+    companion object {
+
+        val values
+            get() = arrayOf(
+                HomeWeather,
+                Settings
+            )
+
+        infix fun fromRoute(
+            route: String
+        ) = WeatherDrawerNavigationScreen.values.firstOrNull { weatherDrawerNavigationScreen ->
+            weatherDrawerNavigationScreen.route == route
+        }
+
+    }
+
     object HomeWeather: WeatherDrawerNavigationScreen(
         route = "todayRoute",
         icon = Icons.Filled.Home,

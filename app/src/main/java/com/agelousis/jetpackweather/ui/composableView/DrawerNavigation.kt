@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import com.agelousis.jetpackweather.ui.theme.Typography
+import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.drawerNavigation.WeatherDrawerNavigationScreen
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +32,11 @@ fun WeatherDrawerNavigation(
     var selectedItem by remember {
         mutableStateOf(value = weatherDrawerNavigationScreens[0])
     }
+    selectedItem = WeatherNavigationScreen.fromRoute(
+        route = viewModel.currentNavigationRoute
+    )?.weatherDrawerNavigationScreen
+        ?: (WeatherDrawerNavigationScreen fromRoute viewModel.currentNavigationRoute)
+                ?: weatherDrawerNavigationScreens[0]
     ModalNavigationDrawer(
         modifier = modifier,
         scrimColor = Color.Transparent,
@@ -70,7 +76,6 @@ fun WeatherDrawerNavigation(
                             launchSingleTop = true
                             restoreState = true
                         }
-                        viewModel.currentNavigationRoute = weatherDrawerNavigationScreen.route
                     },
                     modifier = Modifier
                         .padding(

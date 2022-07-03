@@ -59,7 +59,6 @@ fun MapAddressPickerView(
         topBar = {
             WeatherSmallTopAppBar(
                 title = stringResource(id = R.string.key_location_label),
-                scrolledContainerColor = MaterialTheme.colorScheme.surface,
                 navigationIcon = Icons.Filled.ArrowBack,
                 navigationIconBlock = {
                     (context as Activity).finish()

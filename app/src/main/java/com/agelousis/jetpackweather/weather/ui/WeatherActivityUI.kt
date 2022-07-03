@@ -3,6 +3,7 @@ package com.agelousis.jetpackweather.weather.ui
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
@@ -61,9 +62,12 @@ fun WeatherActivityBottomNavigationLayout(
 ) {
     val context = LocalContext.current
     val navController = rememberNavController()
-    //val onBack: () -> Unit = {
-        //navController.navigateUp()
-    //}
+    val onBack: () -> Unit = {
+        navController.navigateUp()
+    }
+    BackHandler(
+        onBack = onBack
+    )
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         decayAnimationSpec = decayAnimationSpec
@@ -93,7 +97,7 @@ fun WeatherActivityBottomNavigationLayout(
     WeatherDrawerNavigation(
         modifier = Modifier
             .statusBarsPadding(),
-        viewModel = viewModel,
+        viewModel  = viewModel,
         drawerState = drawerState,
         coroutineScope = scope,
         navController = navController,
@@ -168,7 +172,6 @@ fun WeatherActivityBottomNavigationLayout(
                 ) {
                     if (it != WeatherDrawerNavigationScreen.Settings.route)
                         WeatherBottomNavigation(
-                            viewModel = viewModel,
                             navController = navController,
                             items = bottomNavigationItems
                         )
@@ -239,6 +242,7 @@ fun WeatherActivityNavigation(
         }
     }
     navController.addOnDestinationChangedListener { innerNavController, destination, _ ->
+        viewModel.currentNavigationRoute = destination.route ?: WeatherNavigationScreen.Today.route
         viewModel.weatherUiAppBarTitle = when(destination.route) {
             WeatherDrawerNavigationScreen.Settings.route ->
                 innerNavController.context.resources.getString(R.string.key_settings_label)

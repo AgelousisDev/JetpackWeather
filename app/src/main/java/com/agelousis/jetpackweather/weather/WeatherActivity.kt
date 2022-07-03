@@ -15,7 +15,7 @@ class WeatherActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            window?.statusBarColor = ContextCompat.getColor(this, android.R.color.black)
+            //window?.statusBarColor = ContextCompat.getColor(this, android.R.color.black)
             JetpackWeatherTheme {
                 // A surface container using the 'background' color from the theme
                 val viewModel: WeatherViewModel = viewModel()

@@ -2,12 +2,36 @@ package com.agelousis.jetpackweather.weather.bottomNavigation
 
 import androidx.annotation.StringRes
 import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.weather.drawerNavigation.WeatherDrawerNavigationScreen
 
 sealed class WeatherNavigationScreen(
     val route: String,
     @StringRes val resourceId: Int,
     val icon: Int
 ) {
+
+    companion object {
+
+        private val values
+            get() = arrayOf(
+                Today,
+                Tomorrow,
+                NextDays
+            )
+
+        infix fun fromRoute(
+            route: String
+        ) = values.firstOrNull { weatherNavigationScreen ->
+            weatherNavigationScreen.route == route
+        }
+
+    }
+
+    val weatherDrawerNavigationScreen
+        get() = WeatherDrawerNavigationScreen.values.firstOrNull { weatherDrawerNavigationScreen ->
+            weatherDrawerNavigationScreen.route == route
+        }
+
     object Today: WeatherNavigationScreen(
         route = "todayRoute",
         resourceId = R.string.key_today_label,

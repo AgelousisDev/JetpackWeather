@@ -57,7 +57,6 @@ fun WeatherTopAppBar(
 fun WeatherSmallTopAppBar(
     modifier: Modifier = Modifier,
     title: String,
-    scrolledContainerColor: Color,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     navigationIcon: ImageVector? = null,
     navigationIconTint: Color? = null,
@@ -72,9 +71,6 @@ fun WeatherSmallTopAppBar(
                 style = Typography.displayLarge
             )
         },
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            scrolledContainerColor = scrolledContainerColor
-        ),
         navigationIcon = {
             if (navigationIcon != null)
                 IconButton(
