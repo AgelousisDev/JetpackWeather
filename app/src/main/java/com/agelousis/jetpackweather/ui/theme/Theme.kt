@@ -56,7 +56,7 @@ fun JetpackWeatherTheme(
     if (!view.isInEditMode) {
         SideEffect {
             (view.context as Activity).window?.navigationBarColor = Color.Transparent.toArgb()
-            //(view.context as Activity).window?.statusBarColor = colorScheme.surface.toArgb()
+            (view.context as Activity).window?.statusBarColor = colorScheme.surface.toArgb()
             WindowCompat.getInsetsController((view.context as Activity).window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }

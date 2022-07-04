@@ -68,7 +68,7 @@ class WeatherViewModel: ViewModel() {
         context: Context
     ) = listOf(
         WeatherSettings.TemperatureType withOptions context,
-        WeatherSettings.OfflineMode
+        WeatherSettings.OfflineMode isEnabled context
     )
 
     fun getAddressFromLocation(

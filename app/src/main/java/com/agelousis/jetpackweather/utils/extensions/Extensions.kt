@@ -15,3 +15,6 @@ fun String.toDate(
 ): Date? = with(SimpleDateFormat(pattern, Locale.getDefault())) {
     parse(this@toDate)
 }
+
+inline fun <reified T : Enum<*>> valueEnumOrNull(name: String?): T? =
+    T::class.java.enumConstants?.firstOrNull { it.name.lowercase() == name?.lowercase() }

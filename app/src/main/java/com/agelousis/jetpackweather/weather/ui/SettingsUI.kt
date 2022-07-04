@@ -1,5 +1,6 @@
 package com.agelousis.jetpackweather.weather.ui
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +19,12 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.agelousis.jetpackweather.ui.SelectionInputFieldRowLayout
+import com.agelousis.jetpackweather.ui.rows.SelectionInputFieldRowLayout
+import com.agelousis.jetpackweather.ui.rows.SwitchInputFieldRowLayout
+import com.agelousis.jetpackweather.utils.constants.Constants
+import com.agelousis.jetpackweather.utils.extensions.offlineMode
+import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
+import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 
@@ -28,6 +34,10 @@ fun SettingsLayout(
     contentPadding: PaddingValues
 ) {
     val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences(
+        Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
+        Context.MODE_PRIVATE
+    )
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -63,19 +73,34 @@ fun SettingsLayout(
                         SelectionInputFieldRowLayout(
                             weatherSettings = weatherSettings
                         ) { selectedPosition ->
-
+                            sharedPreferences.temperatureUnitType = TemperatureUnitType.values()[selectedPosition]
                         }
                         Divider(
                             modifier = Modifier
                                 .height(
-                                    height = 1.dp
+                                    height = 0.5.dp
                                 )
                                 .padding(
                                     start = 16.dp
                                 )
                         )
                     }
-                    else -> {}
+                    is WeatherSettings.OfflineMode -> {
+                        SwitchInputFieldRowLayout(
+                            weatherSettings = weatherSettings
+                        ) { isChecked ->
+                            sharedPreferences.offlineMode = isChecked
+                        }
+                        Divider(
+                            modifier = Modifier
+                                .height(
+                                    height = 0.5.dp
+                                )
+                                .padding(
+                                    start = 16.dp
+                                )
+                        )
+                    }
                 }
             }
         }

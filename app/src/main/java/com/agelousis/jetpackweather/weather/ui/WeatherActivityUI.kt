@@ -70,7 +70,8 @@ fun WeatherActivityBottomNavigationLayout(
     )
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
-        decayAnimationSpec = decayAnimationSpec
+        decayAnimationSpec = decayAnimationSpec,
+        state = rememberTopAppBarScrollState()
     )
     val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
     val mapAddressPickerLauncher = rememberLauncherForActivityResult(
@@ -142,26 +143,31 @@ fun WeatherActivityBottomNavigationLayout(
                         }
                     },
                     actions = {
-                        IconButton(
-                            enabled = addressDataModel != null,
-                            onClick = {
-                                mapAddressPickerLauncher.launch(
-                                    Intent(
-                                        context,
-                                        MapAddressPickerActivity::class.java
-                                    ).also { intent ->
-                                        intent.putExtra(
-                                            MapAddressPickerActivity.CURRENT_ADDRESS,
-                                            addressDataModel
+                        Crossfade(
+                            targetState = viewModel.currentNavigationRoute
+                        ) {
+                            if (it != WeatherDrawerNavigationScreen.Settings.route)
+                                IconButton(
+                                    enabled = addressDataModel != null,
+                                    onClick = {
+                                        mapAddressPickerLauncher.launch(
+                                            Intent(
+                                                context,
+                                                MapAddressPickerActivity::class.java
+                                            ).also { intent ->
+                                                intent.putExtra(
+                                                    MapAddressPickerActivity.CURRENT_ADDRESS,
+                                                    addressDataModel
+                                                )
+                                            }
                                         )
                                     }
-                                )
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Edit,
-                                contentDescription = null
-                            )
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Filled.Edit,
+                                        contentDescription = null
+                                    )
+                                }
                         }
                     }
                 )

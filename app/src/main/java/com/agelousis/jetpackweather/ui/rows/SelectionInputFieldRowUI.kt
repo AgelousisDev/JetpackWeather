@@ -1,4 +1,4 @@
-package com.agelousis.jetpackweather.ui
+package com.agelousis.jetpackweather.ui.rows
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,7 +29,7 @@ fun SelectionInputFieldRowLayout(
         mutableStateOf(value = false)
     }
     var selectedItem by remember {
-        mutableStateOf<String?>(value = null)
+        mutableStateOf(value = weatherSettings.selectedOptionModel?.label)
     }
     ConstraintLayout(
         modifier = Modifier
@@ -55,11 +55,7 @@ fun SelectionInputFieldRowLayout(
         if (selectedItem != null)
             Text(
                 text = selectedItem ?: "",
-                style = Typography.labelMedium.merge(
-                    other = TextStyle(
-                        fontWeight = FontWeight.Bold
-                    )
-                ),
+                style = Typography.labelMedium,
                 modifier = Modifier
                     .constrainAs(selectionIconConstrainedReference) {
                         top.linkTo(parent.top, 16.dp)
