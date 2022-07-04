@@ -15,4 +15,14 @@ interface WeatherAPI {
         @Query(value = "aqi") airQualityState: String = "no"
     ): Call<WeatherResponseModel>
 
+    @GET(value = "forecast.json")
+    fun requestForecast(
+        @Query(value = "key") apiKey: String = BuildConfig.WEATHER_API_KEY,
+        @Query(value = "q") location: String,
+        @Query(value = "days") days: Int = 1,
+        @Query(value = "aqi") airQualityState: String = "no",
+        @Query(value = "alerts") alertsState: String = "no"
+    ): Call<WeatherResponseModel>
+
+
 }

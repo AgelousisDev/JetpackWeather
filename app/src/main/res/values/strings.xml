@@ -16,4 +16,5 @@
         <item>Celsius</item>
         <item>Fahrenheit</item>
     </string-array>
+    <string name="key_sun_and_moon_label">Sun &amp; Moon</string>
 </resources>

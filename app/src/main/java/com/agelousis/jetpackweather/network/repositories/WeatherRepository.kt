@@ -46,4 +46,43 @@ object WeatherRepository {
         )
     }
 
+    /**
+     * @param location
+     * @param days
+     * @param airQualityState
+     * @param alertsState
+     */
+    fun requestForecast(
+        location: String,
+        days: Int,
+        airQualityState: Boolean,
+        alertsState: Boolean,
+        successBlock: SuccessBlock<WeatherResponseModel>,
+        failureBlock: FailureBlock
+    ) {
+        NetworkHelper.create<WeatherAPI>()?.requestForecast(
+            location = location,
+            days = days,
+            airQualityState = if (airQualityState) "yes" else "no",
+            alertsState = if (alertsState) "yes" else "no"
+        )?.enqueue(
+            object: Callback<WeatherResponseModel> {
+                override fun onResponse(
+                    call: Call<WeatherResponseModel>,
+                    response: Response<WeatherResponseModel>
+                ) {
+                    successBlock(response.body() ?: return)
+                }
+
+                override fun onFailure(call: Call<WeatherResponseModel>, t: Throwable) {
+                    failureBlock(
+                        ErrorModel(
+                            localizedMessage = t.localizedMessage
+                        )
+                    )
+                }
+            }
+        )
+    }
+
 }

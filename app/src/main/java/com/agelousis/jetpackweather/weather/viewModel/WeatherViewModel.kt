@@ -121,4 +121,30 @@ class WeatherViewModel: ViewModel() {
         )
     }
 
+    fun requestForecast(
+        context: Context,
+        location: String,
+        days: Int,
+        airQualityState: Boolean,
+        alertsState: Boolean
+    ) {
+        loaderStateMutableStateFlow.value = true
+        WeatherRepository.requestForecast(
+            location = location,
+            days = days,
+            airQualityState = airQualityState,
+            alertsState = alertsState,
+            successBlock = { weatherResponseModel ->
+                loaderStateMutableStateFlow.value = false
+                weatherResponseMutableLiveData.value = weatherResponseModel
+                weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
+            },
+            failureBlock = {
+                loaderStateMutableStateFlow.value = false
+                alertPair = context.resources.getString(R.string.key_error_label) to it.localizedMessage
+                onOpenDialogClicked()
+            }
+        )
+    }
+
 }

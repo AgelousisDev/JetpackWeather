@@ -11,15 +11,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.agelousis.jetpackweather.ui.composableView.SimpleDialog
 import com.agelousis.jetpackweather.ui.composableView.models.SimpleDialogDataModel
+import com.agelousis.jetpackweather.ui.rows.HeaderRowLayout
 import com.agelousis.jetpackweather.weather.rows.CalendarRowLayout
 import com.agelousis.jetpackweather.weather.rows.CurrentTemperatureRowLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
+import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.ui.models.HeaderModel
 
 @Composable
 fun TodayWeatherLayout(
@@ -86,6 +90,16 @@ fun TodayWeatherLayout(
                     weatherResponseModel = weatherResponseModel
                 )
             }
+            if (weatherResponseModel != null)
+                item {
+                    HeaderRowLayout(
+                        modifier = Modifier
+                            .animateItemPlacement(),
+                        headerModel = HeaderModel(
+                            header = stringResource(id = R.string.key_sun_and_moon_label)
+                        )
+                    )
+                }
         }
         if (loaderState)
             CircularProgressIndicator(

@@ -325,13 +325,15 @@ private fun requestWeather(
     longitude: Double,
     latitude: Double
 ) {
-    viewModel.requestCurrentWeather(
+    viewModel.requestForecast(
         context = context,
         location = "%f,%f".format(
             latitude,
             longitude
         ),
-        airQualityState = true
+        days = 7,
+        airQualityState = true,
+        alertsState = true
     )
 }
 
