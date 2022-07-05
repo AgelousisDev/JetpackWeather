@@ -36,6 +36,7 @@ fun SwitchInputFieldRowLayout(
             .fillMaxWidth()
             .clickable {
                 isChecked = !isChecked
+                switchInputFieldBlock(isChecked)
             }
     ) {
         val (labelConstrainedReference, switchConstrainedReference)

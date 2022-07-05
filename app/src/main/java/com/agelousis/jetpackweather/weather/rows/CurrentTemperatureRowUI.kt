@@ -1,11 +1,17 @@
 package com.agelousis.jetpackweather.weather.rows
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +36,8 @@ fun CurrentTemperatureRowLayout(
             )
     ) {
         val (temperatureLabelConstrainedReference, iconConstrainedReference,
-            conditionConstrainedReference, feelsLikeLabelConstrainedReference) = createRefs()
+            conditionConstrainedReference, feelsLikeLabelConstrainedReference,
+            windLayoutRow) = createRefs()
         Text(
             text = weatherResponseModel?.currentWeatherDataModel?.celsiusTemperature ?: "",
             style = textViewHeaderFont,
@@ -87,6 +94,47 @@ fun CurrentTemperatureRowLayout(
                         end.linkTo(parent.end)
                     }
             )
+
+        if (weatherResponseModel != null)
+            Row(
+                modifier = Modifier
+                    .constrainAs(windLayoutRow) {
+                        start.linkTo(parent.start)
+                        top.linkTo(feelsLikeLabelConstrainedReference.bottom, 16.dp)
+                        end.linkTo(parent.end)
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 16.dp
+                )
+            ) {
+                Text(
+                    text = weatherResponseModel.currentWeatherDataModel?.windKph?.toInt()?.toString() ?: "",
+                    style = textViewHeaderFont,
+                    color = colorResource(
+                        id = weatherResponseModel.currentWeatherDataModel?.windStateColor ?: R.color.grey
+                    )
+                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 8.dp
+                    )
+                ) {
+                    if (weatherResponseModel.currentWeatherDataModel?.windDirectionIcon != null)
+                        Icon(
+                            painter = painterResource(id = weatherResponseModel.currentWeatherDataModel.windDirectionIcon ?: return@Column),
+                            contentDescription = null,
+                            tint = colorResource(id = R.color.grey)
+                        )
+                    Text(
+                        text = stringResource(id = R.string.key_km_hourly_label),
+                        style = Typography.labelMedium,
+                        color = colorResource(id = R.color.grey)
+                    )
+
+                }
+            }
     }
 }
 

@@ -5,9 +5,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun Date.toDisplayDate(
-    pattern: String = Constants.DISPLAY_DATE_FORMAT
+    pattern: String = Constants.DISPLAY_DATE_FORMAT,
+    plusDays: Int = 0
 ): String = with(SimpleDateFormat(pattern, Locale.getDefault())) {
-    format(this@toDisplayDate)
+    return if (plusDays > 0) {
+        val calendar = Calendar.getInstance()
+        calendar.time = this@toDisplayDate
+        calendar.add(Calendar.DAY_OF_YEAR, plusDays)
+        format(calendar.time)
+    }
+    else
+        format(this@toDisplayDate)
 }
 
 fun String.toDate(

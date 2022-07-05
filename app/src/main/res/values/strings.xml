@@ -21,4 +21,7 @@
     <string name="key_moonrise_label">Moonrise</string>
     <string name="key_sunset_label">Sunset</string>
     <string name="key_moon_set_label">Moonset</string>
+    <string name="key_temperature_label">Temperature</string>
+    <string name="key_wind_label">Wind</string>
+    <string name="key_km_hourly_label">km/h</string>
 </resources>

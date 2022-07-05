@@ -12,13 +12,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.ui.theme.Typography
-import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
-import java.util.*
 import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
+import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
+import java.util.*
 
 @Composable
 fun CalendarRowLayout(
     modifier: Modifier = Modifier,
+    weatherNavigationScreen: WeatherNavigationScreen,
     weatherResponseModel: WeatherResponseModel?
 ) {
     ConstraintLayout(
@@ -30,7 +32,16 @@ fun CalendarRowLayout(
     ) {
         val (dateTimeLabelConstrainedReference, imageConstrainedReference) = createRefs()
         Text(
-            text = Date().toDisplayDate(),
+            text =
+                when(weatherNavigationScreen) {
+                    is WeatherNavigationScreen.Today ->
+                        weatherResponseModel?.currentWeatherDataModel?.lastUpdated ?: ""
+                    is WeatherNavigationScreen.Tomorrow ->
+                        Date().toDisplayDate(
+                            plusDays = 1
+                        )
+                    else -> ""
+                },
             style = Typography.labelMedium,
             modifier = Modifier
                 .constrainAs(dateTimeLabelConstrainedReference) {
@@ -66,6 +77,7 @@ fun CalendarRowLayout(
 @Composable
 fun CalendarRowLayoutPreview() {
     CalendarRowLayout(
-        weatherResponseModel = null
+        weatherNavigationScreen = WeatherNavigationScreen.Today,
+        weatherResponseModel = null,
     )
 }

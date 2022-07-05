@@ -24,6 +24,7 @@ import com.agelousis.jetpackweather.weather.rows.CurrentTemperatureRowLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.ui.models.HeaderModel
+import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.enumerations.SunAndMoonState
 import com.agelousis.jetpackweather.weather.rows.SunAndMoonRowLayout
 
@@ -76,12 +77,16 @@ fun TodayWeatherLayout(
                 },
             verticalArrangement = Arrangement.spacedBy(
                 space = 32.dp
+            ),
+            contentPadding = PaddingValues(
+                bottom = 170.dp
             )
         ) {
             item {
                 CalendarRowLayout(
                     modifier = Modifier
                         .animateItemPlacement(),
+                    weatherNavigationScreen = WeatherNavigationScreen.Today,
                     weatherResponseModel = weatherResponseModel
                 )
             }
@@ -108,6 +113,16 @@ fun TodayWeatherLayout(
                      weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherAstroDataModel
                  )
              }
+            if (weatherResponseModel != null)
+                item {
+                    HeaderRowLayout(
+                        modifier = Modifier
+                            .animateItemPlacement(),
+                        headerModel = HeaderModel(
+                            header = stringResource(id = R.string.key_temperature_label)
+                        )
+                    )
+                }
         }
         if (loaderState)
             CircularProgressIndicator(

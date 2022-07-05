@@ -37,7 +37,7 @@ fun SunAndMoonStateLayout(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .width(
-                    width = 90.dp
+                    width = 100.dp
                 )
                 .padding(
                     all = 16.dp

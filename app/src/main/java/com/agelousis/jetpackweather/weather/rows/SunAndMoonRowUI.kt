@@ -1,6 +1,7 @@
 package com.agelousis.jetpackweather.weather.rows
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -20,6 +21,9 @@ fun SunAndMoonRowLayout(
         horizontalArrangement = Arrangement.spacedBy(
             space = 8.dp
         ),
+        contentPadding = PaddingValues(
+            horizontal = 16.dp
+        )
     ) {
         items(
             items = sunAndMoonStates

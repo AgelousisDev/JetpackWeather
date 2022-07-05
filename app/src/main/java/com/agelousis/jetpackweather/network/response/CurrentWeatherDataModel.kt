@@ -1,5 +1,6 @@
 package com.agelousis.jetpackweather.network.response
 
+import com.agelousis.jetpackweather.R
 import com.google.gson.annotations.SerializedName
 
 data class CurrentWeatherDataModel(
@@ -41,5 +42,33 @@ data class CurrentWeatherDataModel(
 
     val isDayBool
         get() = isDay == 1
+
+    val windStateColor
+        get() = when(windKph?.toInt() ?: 0) {
+            in 0 until 20 ->
+                R.color.blue
+            in 20 until 30 ->
+                R.color.teal_700
+            in 30 until 50 ->
+                R.color.green
+            in 50 until 100 ->
+                R.color.yellowDarker
+            else ->
+                R.color.red
+        }
+
+    val windDirectionIcon
+        get() = when(windDir) {
+            "N" ->
+                R.drawable.ic_baseline_keyboard_arrow_down_24
+            "S" ->
+                R.drawable.ic_baseline_keyboard_arrow_up_24
+            "W" ->
+                R.drawable.ic_baseline_keyboard_arrow_left_24
+            "E" ->
+                R.drawable.ic_baseline_keyboard_arrow_right_24
+            else ->
+                null
+        }
 
 }
