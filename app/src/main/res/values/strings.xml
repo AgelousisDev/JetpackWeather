@@ -17,4 +17,8 @@
         <item>Fahrenheit</item>
     </string-array>
     <string name="key_sun_and_moon_label">Sun &amp; Moon</string>
+    <string name="key_sunrise_label">Sunrise</string>
+    <string name="key_moonrise_label">Moonrise</string>
+    <string name="key_sunset_label">Sunset</string>
+    <string name="key_moon_set_label">Moonset</string>
 </resources>

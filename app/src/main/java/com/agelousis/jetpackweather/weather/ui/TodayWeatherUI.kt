@@ -24,6 +24,8 @@ import com.agelousis.jetpackweather.weather.rows.CurrentTemperatureRowLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.ui.models.HeaderModel
+import com.agelousis.jetpackweather.weather.enumerations.SunAndMoonState
+import com.agelousis.jetpackweather.weather.rows.SunAndMoonRowLayout
 
 @Composable
 fun TodayWeatherLayout(
@@ -100,6 +102,12 @@ fun TodayWeatherLayout(
                         )
                     )
                 }
+             item {
+                 SunAndMoonRowLayout(
+                     sunAndMoonStates = SunAndMoonState.values().toList(),
+                     weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherAstroDataModel
+                 )
+             }
         }
         if (loaderState)
             CircularProgressIndicator(
