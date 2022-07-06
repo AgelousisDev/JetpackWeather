@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,15 +28,19 @@ import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.enumerations.SunAndMoonState
 import com.agelousis.jetpackweather.weather.rows.SunAndMoonRowLayout
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun TodayWeatherLayout(
     viewModel: WeatherViewModel,
     contentPadding: PaddingValues
 ) {
+    val context = LocalContext.current
     val showDialogState by viewModel.showDialog.collectAsState()
     val loaderState by viewModel.loaderStateStateFlow.collectAsState()
     val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
+    val isRefreshing by viewModel.swipeRefreshStateFlow.collectAsState()
     SimpleDialog(
         show = showDialogState,
         simpleDialogDataModel = SimpleDialogDataModel(
@@ -49,6 +54,13 @@ fun TodayWeatherLayout(
             }
         )
     )
+    if (isRefreshing)
+        requestWeather(
+            context = context,
+            viewModel = viewModel,
+            longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: 0.0,
+            latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: 0.0
+        )
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -65,7 +77,11 @@ fun TodayWeatherLayout(
             )
     ) {
         val (lazyColumnConstrainedReference, progressIndicatorConstrainedReference) = createRefs()
-        LazyColumn(
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+            onRefresh = {
+                viewModel.swipeRefreshMutableStateFlow.value = true
+            },
             modifier = Modifier
                 .constrainAs(lazyColumnConstrainedReference) {
                     start.linkTo(parent.start)
@@ -74,55 +90,59 @@ fun TodayWeatherLayout(
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints
                     height = Dimension.fillToConstraints
-                },
-            verticalArrangement = Arrangement.spacedBy(
-                space = 32.dp
-            ),
-            contentPadding = PaddingValues(
-                bottom = 170.dp
-            )
+                }
         ) {
-            item {
-                CalendarRowLayout(
-                    modifier = Modifier
-                        .animateItemPlacement(),
-                    weatherNavigationScreen = WeatherNavigationScreen.Today,
-                    weatherResponseModel = weatherResponseModel
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(
+                    space = 32.dp
+                ),
+                contentPadding = PaddingValues(
+                    bottom = 170.dp
                 )
-            }
-            item {
-                CurrentTemperatureRowLayout(
-                    modifier = Modifier
-                        .animateItemPlacement(),
-                    weatherResponseModel = weatherResponseModel
-                )
-            }
-            if (weatherResponseModel != null)
+            ) {
                 item {
-                    HeaderRowLayout(
+                    CalendarRowLayout(
                         modifier = Modifier
                             .animateItemPlacement(),
-                        headerModel = HeaderModel(
-                            header = stringResource(id = R.string.key_sun_and_moon_label)
-                        )
+                        weatherNavigationScreen = WeatherNavigationScreen.Today,
+                        weatherResponseModel = weatherResponseModel
                     )
                 }
-             item {
-                 SunAndMoonRowLayout(
-                     sunAndMoonStates = SunAndMoonState.values().toList(),
-                     weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherAstroDataModel
-                 )
-             }
-            if (weatherResponseModel != null)
                 item {
-                    HeaderRowLayout(
+                    CurrentTemperatureRowLayout(
                         modifier = Modifier
                             .animateItemPlacement(),
-                        headerModel = HeaderModel(
-                            header = stringResource(id = R.string.key_temperature_label)
-                        )
+                        weatherResponseModel = weatherResponseModel
                     )
                 }
+                if (weatherResponseModel != null)
+                    item {
+                        HeaderRowLayout(
+                            modifier = Modifier
+                                .animateItemPlacement(),
+                            headerModel = HeaderModel(
+                                header = stringResource(id = R.string.key_sun_and_moon_label)
+                            )
+                        )
+                    }
+                item {
+                    SunAndMoonRowLayout(
+                        sunAndMoonStates = SunAndMoonState.values().toList(),
+                        weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherAstroDataModel
+                    )
+                }
+                if (weatherResponseModel != null)
+                    item {
+                        HeaderRowLayout(
+                            modifier = Modifier
+                                .animateItemPlacement(),
+                            headerModel = HeaderModel(
+                                header = stringResource(id = R.string.key_temperature_label)
+                            )
+                        )
+                    }
+            }
         }
         if (loaderState)
             CircularProgressIndicator(

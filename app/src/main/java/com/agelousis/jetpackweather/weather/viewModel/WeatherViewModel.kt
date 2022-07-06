@@ -41,6 +41,9 @@ class WeatherViewModel: ViewModel() {
         _showDialog.value = true
     }
 
+    val swipeRefreshMutableStateFlow = MutableStateFlow(value = false)
+    val swipeRefreshStateFlow: StateFlow<Boolean> = swipeRefreshMutableStateFlow.asStateFlow()
+
     fun onDialogConfirm() {
         alertPair = null to null
         _showDialog.value = false
@@ -135,6 +138,7 @@ class WeatherViewModel: ViewModel() {
             airQualityState = airQualityState,
             alertsState = alertsState,
             successBlock = { weatherResponseModel ->
+                swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
                 weatherResponseMutableLiveData.value = weatherResponseModel
                 weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry

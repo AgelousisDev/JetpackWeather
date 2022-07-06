@@ -319,7 +319,7 @@ private fun requestLocation(
         }
 }
 
-private fun requestWeather(
+fun requestWeather(
     context: Context,
     viewModel: WeatherViewModel,
     longitude: Double,

@@ -91,13 +91,16 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     // Google Maps
     implementation("com.google.android.gms:play-services-location:$playServicesLocationVersion")
     implementation("com.google.android.gms:play-services-maps:$playServicesMapsVersion")
     implementation("com.google.maps.android:maps-compose:2.2.1")
+
+    // Accompanist
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.24.11-rc")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
