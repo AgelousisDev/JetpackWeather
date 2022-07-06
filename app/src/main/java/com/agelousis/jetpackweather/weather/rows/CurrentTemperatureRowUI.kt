@@ -1,15 +1,15 @@
 package com.agelousis.jetpackweather.weather.rows
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +28,7 @@ fun CurrentTemperatureRowLayout(
     modifier: Modifier = Modifier,
     weatherResponseModel: WeatherResponseModel?
 ) {
+    val context = LocalContext.current
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -121,19 +122,61 @@ fun CurrentTemperatureRowLayout(
                         space = 8.dp
                     )
                 ) {
-                    if (weatherResponseModel.currentWeatherDataModel?.windDirectionIcon != null)
+                    if (weatherResponseModel.currentWeatherDataModel?.windDegree != null)
                         Icon(
-                            painter = painterResource(id = weatherResponseModel.currentWeatherDataModel.windDirectionIcon ?: return@Column),
+                            painter = painterResource(
+                                id = R.drawable.ic_arrow_direction_down
+                            ),
                             contentDescription = null,
-                            tint = colorResource(id = R.color.grey)
+                            tint = colorResource(id = R.color.grey),
+                            modifier = Modifier
+                                .size(
+                                    size = 15.dp
+                                )
+                                .rotate(
+                                    degrees = weatherResponseModel.currentWeatherDataModel.windDegree.toFloat()
+                                )
                         )
                     Text(
                         text = stringResource(id = R.string.key_km_hourly_label),
                         style = Typography.labelMedium,
                         color = colorResource(id = R.color.grey)
                     )
-
                 }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 8.dp
+                    )
+                ) {
+                    Text(
+                        text = weatherResponseModel.currentWeatherDataModel?.getWindStateWarning(
+                            context = context
+                        ) ?: "",
+                        style = Typography.displayMedium,
+                        color = colorResource(
+                            id = weatherResponseModel.currentWeatherDataModel?.windStateColor ?: R.color.grey
+                        )
+                    )
+                    Text(
+                        text = stringResource(
+                            id = R.string.key_now_with_value_label,
+                            weatherResponseModel.currentWeatherDataModel?.getWindDirection(
+                                context = context
+                            ) ?: ""
+                        ),
+                        style = Typography.bodyMedium
+                    )
+                }
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_wind),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.surfaceTint,
+                    modifier = Modifier
+                        .size(
+                            size = 35.dp
+                        )
+                )
             }
     }
 }

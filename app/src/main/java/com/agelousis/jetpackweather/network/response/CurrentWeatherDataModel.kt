@@ -1,7 +1,9 @@
 package com.agelousis.jetpackweather.network.response
 
+import android.content.Context
 import com.agelousis.jetpackweather.R
 import com.google.gson.annotations.SerializedName
+import java.lang.StringBuilder
 
 data class CurrentWeatherDataModel(
     @SerializedName(value = "last_updated_epoch") val valpdatedEpoch: Long?,
@@ -57,18 +59,38 @@ data class CurrentWeatherDataModel(
                 R.color.red
         }
 
-    val windDirectionIcon
-        get() = when(windDir) {
-            "N" ->
-                R.drawable.ic_baseline_keyboard_arrow_down_24
-            "S" ->
-                R.drawable.ic_baseline_keyboard_arrow_up_24
-            "W" ->
-                R.drawable.ic_baseline_keyboard_arrow_left_24
-            "E" ->
-                R.drawable.ic_baseline_keyboard_arrow_right_24
+    fun getWindStateWarning(
+        context: Context
+    ): String = with(context.resources.getStringArray(R.array.key_wind_speed_warnings_array)) {
+        when (windKph?.toInt() ?: 0) {
+            in 0 until 20 ->
+                first()
+            in 20 until 30 ->
+                this[1]
+            in 30 until 50 ->
+                this[2]
+            in 50 until 100 ->
+                this[3]
             else ->
-                null
+                this[4]
         }
+    }
+
+    infix fun getWindDirection(
+        context: Context
+    ) = with(windDir) {
+        val windDirectionsArray = context.resources.getStringArray(R.array.key_wind_directions_array)
+        val windDirectionsBuilder = StringBuilder()
+        for (windDirection in (windDir?.toCharArray()?.take(n = 2)?.distinct() ?: listOf()))
+            windDirectionsBuilder.append(
+                windDirectionsArray.firstOrNull {
+                    it.startsWith(
+                        prefix = windDirection.toString(),
+                        ignoreCase = true
+                    )
+                }
+            )
+        windDirectionsBuilder.toString()
+    }
 
 }

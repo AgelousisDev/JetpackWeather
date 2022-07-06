@@ -24,4 +24,19 @@
     <string name="key_temperature_label">Temperature</string>
     <string name="key_wind_label">Wind</string>
     <string name="key_km_hourly_label">km/h</string>
+    <string-array name="key_wind_directions_array">
+        <item>North</item>
+        <item>West</item>
+        <item>South</item>
+        <item>East</item>
+    </string-array>
+    <string name="key_now_with_value_label">Now • From %s</string>
+    <string-array name="key_wind_speed_warnings_array">
+        <item>Light</item>
+        <item>Moderate</item>
+        <item>Strong</item>
+        <item>Storm</item>
+        <item>Hurricane</item>
+        <item>Cyclone</item>
+    </string-array>
 </resources>
