@@ -8,6 +8,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+typealias SuccessUnitBlock = () -> Unit
 typealias SuccessBlock<T> = (T) -> Unit
 typealias FailureBlock = (ErrorModel) -> Unit
 

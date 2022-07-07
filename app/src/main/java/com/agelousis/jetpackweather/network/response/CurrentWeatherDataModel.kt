@@ -2,6 +2,9 @@ package com.agelousis.jetpackweather.network.response
 
 import android.content.Context
 import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.utils.constants.Constants
+import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
+import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.google.gson.annotations.SerializedName
 import java.lang.StringBuilder
 
@@ -9,7 +12,7 @@ data class CurrentWeatherDataModel(
     @SerializedName(value = "last_updated_epoch") val valpdatedEpoch: Long?,
     @SerializedName(value = "last_updated") val lastUpdated: String?,
     @SerializedName(value = "temp_c") val tempC: Double?,
-    @SerializedName(value = "temp_f") val temp_f: Double?,
+    @SerializedName(value = "temp_f") val tempF: Double?,
     @SerializedName(value = "is_day") val isDay: Int?,
     @SerializedName(value = "condition") val weatherConditionDataModel: WeatherConditionDataModel?,
     @SerializedName(value = "wind_mph") val windMph: Double?,
@@ -22,8 +25,8 @@ data class CurrentWeatherDataModel(
     @SerializedName(value = "precip_in") val precipIn: Double?,
     @SerializedName(value = "humidity") val humidity: Int?,
     @SerializedName(value = "cloud") val cloud: Int?,
-    @SerializedName(value = "feelslike_c") val feelslikeC: Double?,
-    @SerializedName(value = "feelslike_f") val feelslikeF: Double?,
+    @SerializedName(value = "feelslike_c") val feelsLikeC: Double?,
+    @SerializedName(value = "feelslike_f") val feelsLikeF: Double?,
     @SerializedName(value = "vis_km") val visKm: Double?,
     @SerializedName(value = "vis_miles") val visMiles: Double?,
     @SerializedName(value = "uv") val uv: Double?,
@@ -32,15 +35,29 @@ data class CurrentWeatherDataModel(
     @SerializedName(value = "air_quality") val airQuality: WeatherAirQualityDataModel?,
 ) {
 
-    val celsiusTemperature
-        get() = "%d °C".format(
-            tempC?.toInt() ?: 0
-        )
+    fun currentTemperatureUnitFormatted(context: Context) =
+        when(context.getSharedPreferences(Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE).temperatureUnitType) {
+            TemperatureUnitType.FAHRENHEIT ->
+                "%d °F".format(
+                    tempF?.toInt() ?: 0
+                )
+            else ->
+                "%d °C".format(
+                    tempC?.toInt() ?: 0
+                )
+        }
 
-    val feelsLikeCelsiusTemperature
-        get() = "%d °C".format(
-            feelslikeC?.toInt() ?: 0
-        )
+    fun feelsLikeTemperatureUnitFormatted(context: Context) =
+        when(context.getSharedPreferences(Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE).temperatureUnitType) {
+            TemperatureUnitType.FAHRENHEIT ->
+                "%d °F".format(
+                    feelsLikeF?.toInt() ?: 0
+                )
+            else ->
+                "%d °C".format(
+                    feelsLikeC?.toInt() ?: 0
+                )
+        }
 
     val isDayBool
         get() = isDay == 1

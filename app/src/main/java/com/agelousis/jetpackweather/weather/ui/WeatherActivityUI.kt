@@ -7,7 +7,6 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -15,11 +14,9 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,9 +28,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.MapAddressPickerActivity
+import com.agelousis.jetpackweather.network.repositories.SuccessUnitBlock
+import com.agelousis.jetpackweather.ui.composableView.SimpleDialog
 import com.agelousis.jetpackweather.ui.composableView.WeatherBottomNavigation
 import com.agelousis.jetpackweather.ui.composableView.WeatherDrawerNavigation
-import com.agelousis.jetpackweather.ui.composableView.WeatherTopAppBar
+import com.agelousis.jetpackweather.ui.composableView.WeatherSmallTopAppBar
+import com.agelousis.jetpackweather.ui.composableView.models.SimpleDialogDataModel
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
 import com.agelousis.jetpackweather.utils.helpers.LocationHelper
@@ -62,17 +62,34 @@ fun WeatherActivityBottomNavigationLayout(
 ) {
     val context = LocalContext.current
     val navController = rememberNavController()
+    val showDialogState by viewModel.showDialog.collectAsState()
+    var requestLocationOnStartupState by remember {
+        mutableStateOf(value = true)
+    }
     val onBack: () -> Unit = {
         navController.navigateUp()
     }
     BackHandler(
         onBack = onBack
     )
-    val decayAnimationSpec = rememberSplineBasedDecay<Float>()
+    SimpleDialog(
+        show = showDialogState,
+        simpleDialogDataModel = SimpleDialogDataModel(
+            title = viewModel.alertPair.first ?: "",
+            message = viewModel.alertPair.second ?: "",
+            positiveButtonBlock = {
+                viewModel.onDialogConfirm()
+            },
+            dismissBlock = {
+                viewModel.onDialogDismiss()
+            }
+        )
+    )
+    /*val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
         decayAnimationSpec = decayAnimationSpec,
         state = rememberTopAppBarScrollState()
-    )
+    )*/
     val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
     val mapAddressPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -90,9 +107,11 @@ fun WeatherActivityBottomNavigationLayout(
     }
     requestLocation(
         context = context,
+        state = requestLocationOnStartupState,
         viewModel = viewModel
-    )
-
+    ) {
+        requestLocationOnStartupState = false
+    }
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     WeatherDrawerNavigation(
@@ -126,16 +145,16 @@ fun WeatherActivityBottomNavigationLayout(
         }
     ) {
         Scaffold(
-            modifier = Modifier.nestedScroll(
+            /*modifier = Modifier.nestedScroll(
                 connection = scrollBehavior.nestedScrollConnection
-            ),
+            ),*/
             topBar = {
-                WeatherTopAppBar(
+                WeatherSmallTopAppBar(
                     title = viewModel.weatherUiAppBarTitle ?: stringResource(
                         id = R.string.app_name
                     ),
-                    scrolledContainerColor = MaterialTheme.colorScheme.surface,
-                    scrollBehavior = scrollBehavior,
+                    //scrolledContainerColor = MaterialTheme.colorScheme.surface,
+                    //scrollBehavior = scrollBehavior,
                     navigationIcon = Icons.Filled.Menu,
                     navigationIconBlock = {
                         scope.launch {
@@ -294,12 +313,15 @@ private fun LocationPermissionRequest(
 
 private fun requestLocation(
     context: Context,
+    state: Boolean = true,
     viewModel: WeatherViewModel,
+    successUnitBlock: SuccessUnitBlock = {}
 ) {
     if (context.arePermissionsGranted(
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
             android.Manifest.permission.ACCESS_FINE_LOCATION
         )
+        && state
     )
         LocationHelper(
             context = context,
@@ -316,6 +338,7 @@ private fun requestLocation(
                 longitude = it.longitude,
                 latitude = it.latitude
             )
+            successUnitBlock()
         }
 }
 

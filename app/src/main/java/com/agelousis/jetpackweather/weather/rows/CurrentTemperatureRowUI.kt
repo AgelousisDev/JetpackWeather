@@ -40,7 +40,9 @@ fun CurrentTemperatureRowLayout(
             conditionConstrainedReference, feelsLikeLabelConstrainedReference,
             windLayoutRow) = createRefs()
         Text(
-            text = weatherResponseModel?.currentWeatherDataModel?.celsiusTemperature ?: "",
+            text = weatherResponseModel?.currentWeatherDataModel?.currentTemperatureUnitFormatted(
+                context = context
+            ) ?: "",
             style = textViewHeaderFont,
             modifier = Modifier
                 .constrainAs(temperatureLabelConstrainedReference) {
@@ -84,7 +86,9 @@ fun CurrentTemperatureRowLayout(
             Text(
                 text = stringResource(
                     id = R.string.key_feels_like_label,
-                    weatherResponseModel.currentWeatherDataModel?.feelsLikeCelsiusTemperature ?: ""
+                    weatherResponseModel.currentWeatherDataModel?.feelsLikeTemperatureUnitFormatted(
+                        context = context
+                    ) ?: ""
                 ),
                 style = Typography.bodyMedium,
                 color = colorResource(id = R.color.grey),

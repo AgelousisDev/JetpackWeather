@@ -131,7 +131,7 @@ class WeatherViewModel: ViewModel() {
         airQualityState: Boolean,
         alertsState: Boolean
     ) {
-        loaderStateMutableStateFlow.value = true
+        loaderStateMutableStateFlow.value = !swipeRefreshStateFlow.value
         WeatherRepository.requestForecast(
             location = location,
             days = days,

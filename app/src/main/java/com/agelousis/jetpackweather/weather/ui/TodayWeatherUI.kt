@@ -37,23 +37,11 @@ fun TodayWeatherLayout(
     contentPadding: PaddingValues
 ) {
     val context = LocalContext.current
-    val showDialogState by viewModel.showDialog.collectAsState()
     val loaderState by viewModel.loaderStateStateFlow.collectAsState()
     val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
     val isRefreshing by viewModel.swipeRefreshStateFlow.collectAsState()
-    SimpleDialog(
-        show = showDialogState,
-        simpleDialogDataModel = SimpleDialogDataModel(
-            title = viewModel.alertPair.first ?: "",
-            message = viewModel.alertPair.second ?: "",
-            positiveButtonBlock = {
-                viewModel.onDialogConfirm()
-            },
-            dismissBlock = {
-                viewModel.onDialogDismiss()
-            }
-        )
-    )
+
+
     if (isRefreshing)
         requestWeather(
             context = context,
@@ -61,6 +49,7 @@ fun TodayWeatherLayout(
             longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: 0.0,
             latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: 0.0
         )
+
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -144,7 +133,7 @@ fun TodayWeatherLayout(
                     }
             }
         }
-        if (loaderState)
+        if (loaderState && !isRefreshing)
             CircularProgressIndicator(
                 modifier = Modifier
                     .constrainAs(progressIndicatorConstrainedReference) {
