@@ -3,6 +3,7 @@ package com.agelousis.jetpackweather.weather.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -17,8 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.agelousis.jetpackweather.ui.composableView.SimpleDialog
-import com.agelousis.jetpackweather.ui.composableView.models.SimpleDialogDataModel
 import com.agelousis.jetpackweather.ui.rows.HeaderRowLayout
 import com.agelousis.jetpackweather.weather.rows.CalendarRowLayout
 import com.agelousis.jetpackweather.weather.rows.CurrentTemperatureRowLayout
@@ -29,6 +28,7 @@ import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationSc
 import com.agelousis.jetpackweather.weather.enumerations.SunAndMoonState
 import com.agelousis.jetpackweather.weather.rows.SunAndMoonRowLayout
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
@@ -70,6 +70,18 @@ fun TodayWeatherLayout(
             state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
             onRefresh = {
                 viewModel.swipeRefreshMutableStateFlow.value = true
+            },
+            indicator = { state, trigger ->
+                SwipeRefreshIndicator(
+                    // Pass the SwipeRefreshState + trigger through
+                    state = state,
+                    refreshTriggerDistance = trigger,
+                    // Enable the scale animation
+                    scale = true,
+                    // Change the color and shape
+                    backgroundColor = MaterialTheme.colorScheme.primary,
+                    shape = CircleShape,
+                )
             },
             modifier = Modifier
                 .constrainAs(lazyColumnConstrainedReference) {
