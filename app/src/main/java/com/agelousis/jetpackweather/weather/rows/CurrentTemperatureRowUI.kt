@@ -217,7 +217,7 @@ fun CurrentTemperatureRowLayout(
                 )
             ) {
                 VerticalProgress(
-                    progress = weatherResponseModel.currentWeatherDataModel?.uv?.toFloat() ?: 0f,
+                    progress = (weatherResponseModel.currentWeatherDataModel?.uv?.toFloat() ?: 0f) * 10,
                     color = colorResource(
                         id = weatherResponseModel.currentWeatherDataModel?.uvIndexColor
                             ?: R.color.green
