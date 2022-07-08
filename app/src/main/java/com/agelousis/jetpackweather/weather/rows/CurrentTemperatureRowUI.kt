@@ -3,9 +3,9 @@ package com.agelousis.jetpackweather.weather.rows
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -20,8 +21,10 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberAsyncImagePainter
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
+import com.agelousis.jetpackweather.ui.composableView.VerticalProgress
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
+import com.airbnb.lottie.compose.*
 
 @Composable
 fun CurrentTemperatureRowLayout(
@@ -38,7 +41,8 @@ fun CurrentTemperatureRowLayout(
     ) {
         val (temperatureLabelConstrainedReference, iconConstrainedReference,
             conditionConstrainedReference, feelsLikeLabelConstrainedReference,
-            windLayoutRow) = createRefs()
+            windLayoutRow, uvIndexLayoutConstrainedReference) = createRefs()
+        // C
         Text(
             text = weatherResponseModel?.currentWeatherDataModel?.currentTemperatureUnitFormatted(
                 context = context
@@ -52,6 +56,7 @@ fun CurrentTemperatureRowLayout(
                 }
         )
 
+        // Condition Icon
         Image(
             painter = rememberAsyncImagePainter(
                 model = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.iconUrl
@@ -62,14 +67,15 @@ fun CurrentTemperatureRowLayout(
                     top.linkTo(temperatureLabelConstrainedReference.top)
                     start.linkTo(temperatureLabelConstrainedReference.end, 16.dp)
                     width = Dimension.value(
-                        dp = 35.dp
+                        dp = 40.dp
                     )
                     height = Dimension.value(
-                        dp = 35.dp
+                        dp = 40.dp
                     )
                 }
         )
 
+        // Condition Text
         Text(
             text = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.text ?: "",
             style = Typography.bodyMedium,
@@ -83,6 +89,7 @@ fun CurrentTemperatureRowLayout(
         )
 
         if (weatherResponseModel != null)
+            // Feels Like
             Text(
                 text = stringResource(
                     id = R.string.key_feels_like_label,
@@ -101,6 +108,7 @@ fun CurrentTemperatureRowLayout(
             )
 
         if (weatherResponseModel != null)
+            // Wind Layout
             Row(
                 modifier = Modifier
                     .constrainAs(windLayoutRow) {
@@ -172,13 +180,97 @@ fun CurrentTemperatureRowLayout(
                         style = Typography.bodyMedium
                     )
                 }
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_wind),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.surfaceTint,
+                val windLottieComposition by rememberLottieComposition(
+                    LottieCompositionSpec.RawRes(
+                        resId = R.raw.wind_animation
+                    )
+                )
+                val windLottieProgress by animateLottieCompositionAsState(
+                    windLottieComposition,
+                    iterations = LottieConstants.IterateForever,
+                    restartOnPlay = false
+                )
+                LottieAnimation(
+                    composition = windLottieComposition,
+                    progress = {
+                        windLottieProgress
+                    },
                     modifier = Modifier
                         .size(
-                            size = 35.dp
+                            size = 50.dp
+                        )
+                )
+            }
+
+        if (weatherResponseModel != null)
+            // UV Index Layout
+            Row(
+                modifier = Modifier
+                    .constrainAs(uvIndexLayoutConstrainedReference) {
+                        start.linkTo(parent.start)
+                        top.linkTo(windLayoutRow.bottom, 16.dp)
+                        end.linkTo(parent.end)
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 16.dp
+                )
+            ) {
+                VerticalProgress(
+                    progress = weatherResponseModel.currentWeatherDataModel?.uv?.toFloat() ?: 0f,
+                    color = colorResource(
+                        id = weatherResponseModel.currentWeatherDataModel?.uvIndexColor
+                            ?: R.color.green
+                    ),
+                    modifier = Modifier
+                        .height(
+                            height = 100.dp
+                        )
+                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 8.dp
+                    )
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.key_uv_index_label),
+                        style = Typography.displayMedium
+                    )
+                    Text(
+                        text = stringResource(
+                            id = R.string.key_uv_index_value_label,
+                            weatherResponseModel.currentWeatherDataModel?.getUvIndexExposureLevel(
+                                context = context
+                            ) ?: "",
+                            weatherResponseModel.currentWeatherDataModel?.uv?.toInt() ?: 0
+                        ),
+                        color = colorResource(
+                            id = weatherResponseModel.currentWeatherDataModel?.uvIndexColor
+                                ?: R.color.green
+                        ),
+                        textAlign = TextAlign.Center,
+                        style = Typography.bodyMedium
+                    )
+                }
+                val uvIndexLottieComposition by rememberLottieComposition(
+                    LottieCompositionSpec.RawRes(
+                        resId = R.raw.sun_uv_animation
+                    )
+                )
+                val uvIndexLottieProgress by animateLottieCompositionAsState(
+                    uvIndexLottieComposition,
+                    iterations = LottieConstants.IterateForever,
+                    restartOnPlay = false
+                )
+                LottieAnimation(
+                    composition = uvIndexLottieComposition,
+                    progress = {
+                        uvIndexLottieProgress
+                    },
+                    modifier = Modifier
+                        .size(
+                            size = 50.dp
                         )
                 )
             }

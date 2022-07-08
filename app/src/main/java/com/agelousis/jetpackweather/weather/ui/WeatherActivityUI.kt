@@ -63,6 +63,7 @@ fun WeatherActivityBottomNavigationLayout(
     val context = LocalContext.current
     val navController = rememberNavController()
     val showDialogState by viewModel.showDialog.collectAsState()
+    val isRefreshing by viewModel.swipeRefreshStateFlow.collectAsState()
     var requestLocationOnStartupState by remember {
         mutableStateOf(value = true)
     }
@@ -112,6 +113,13 @@ fun WeatherActivityBottomNavigationLayout(
     ) {
         requestLocationOnStartupState = false
     }
+    if (isRefreshing)
+        requestWeather(
+            context = context,
+            viewModel = viewModel,
+            longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: 0.0,
+            latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: 0.0
+        )
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     WeatherDrawerNavigation(

@@ -12,7 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,19 +36,9 @@ fun TodayWeatherLayout(
     viewModel: WeatherViewModel,
     contentPadding: PaddingValues
 ) {
-    val context = LocalContext.current
     val loaderState by viewModel.loaderStateStateFlow.collectAsState()
     val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
     val isRefreshing by viewModel.swipeRefreshStateFlow.collectAsState()
-
-
-    if (isRefreshing)
-        requestWeather(
-            context = context,
-            viewModel = viewModel,
-            longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: 0.0,
-            latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: 0.0
-        )
 
     ConstraintLayout(
         modifier = Modifier
@@ -81,12 +71,13 @@ fun TodayWeatherLayout(
                     // Change the color and shape
                     backgroundColor = MaterialTheme.colorScheme.primary,
                     shape = CircleShape,
+                    contentColor = Color.White
                 )
             },
             modifier = Modifier
                 .constrainAs(lazyColumnConstrainedReference) {
                     start.linkTo(parent.start)
-                    top.linkTo(parent.top, 32.dp)
+                    top.linkTo(parent.top, 8.dp)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints

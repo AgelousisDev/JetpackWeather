@@ -1,6 +1,7 @@
 package com.agelousis.jetpackweather.network.response
 
 import android.content.Context
+import androidx.core.util.rangeTo
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
@@ -59,8 +60,11 @@ data class CurrentWeatherDataModel(
                 )
         }
 
-    val isDayBool
+    private val isDayBool
         get() = isDay == 1
+
+    val dayStateAnimationResourceId
+        get() = if (isDayBool) R.raw.day_animation else R.raw.night_animation
 
     val windStateColor
         get() = when(windKph?.toInt() ?: 0) {
@@ -108,6 +112,38 @@ data class CurrentWeatherDataModel(
                 }
             )
         windDirectionsBuilder.toString()
+    }
+
+    val uvIndexColor
+        get() = when(uv?.toInt() ?: 0) {
+            in 0..2 ->
+                R.color.green
+            in 3..5 ->
+                R.color.yellowDarker
+            in 6..7 ->
+                R.color.orange
+            in 8..10 ->
+                R.color.red
+            else ->
+                R.color.violet
+        }
+
+    infix fun getUvIndexExposureLevel(
+        context: Context
+    ) = with(context.resources.getStringArray(R.array.key_uv_index_levels_array)) {
+        val exposureLevel = when(uv?.toInt() ?: 0) {
+            in 0..2 ->
+                0
+            in 3..5 ->
+                1
+            in 6..7 ->
+                2
+            in 8..10 ->
+                3
+            else ->
+                4
+        }
+        this[exposureLevel]
     }
 
 }

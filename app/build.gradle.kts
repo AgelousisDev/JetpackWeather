@@ -15,6 +15,7 @@ val liveDataViewModelVersion = "2.5.0-beta01"
 val playServicesMapsVersion = "18.0.2"
 val playServicesLocationVersion = "19.0.1"
 val materialYouVersion = "1.7.0-alpha02"
+val lottieComposeVersion = "5.2.0"
 
 android {
     compileSdk = 32
@@ -101,6 +102,9 @@ dependencies {
 
     // Accompanist
     implementation("com.google.accompanist:accompanist-swiperefresh:0.24.11-rc")
+
+    // Lottie
+    implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")

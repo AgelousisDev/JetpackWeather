@@ -39,4 +39,13 @@
         <item>Hurricane</item>
         <item>Cyclone</item>
     </string-array>
+    <string name="key_uv_index_label">UV index</string>
+    <string name="key_uv_index_value_label">%s • %d</string>
+    <string-array name="key_uv_index_levels_array">
+        <item>Low</item>
+        <item>Moderate</item>
+        <item>High</item>
+        <item>Very High	</item>
+        <item>Extreme</item>
+    </string-array>
 </resources>
