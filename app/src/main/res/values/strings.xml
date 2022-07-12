@@ -48,4 +48,6 @@
         <item>Very High	</item>
         <item>Extreme</item>
     </string-array>
+    <string name="key_humidity_label">Humidity</string>
+    <string name="key_value_with_percent_label">%d%%</string>
 </resources>

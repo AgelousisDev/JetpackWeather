@@ -2,6 +2,7 @@ package com.agelousis.jetpackweather.weather.rows
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberAsyncImagePainter
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
+import com.agelousis.jetpackweather.ui.composableView.CircularProgressbar
 import com.agelousis.jetpackweather.ui.composableView.VerticalProgress
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
@@ -41,7 +43,8 @@ fun CurrentTemperatureRowLayout(
     ) {
         val (temperatureLabelConstrainedReference, iconConstrainedReference,
             conditionConstrainedReference, feelsLikeLabelConstrainedReference,
-            windLayoutRow, uvIndexLayoutConstrainedReference) = createRefs()
+            windLayoutRow, uvIndexLayoutConstrainedReference,
+            humidityLayoutConstrainedReference) = createRefs()
         // C
         Text(
             text = weatherResponseModel?.currentWeatherDataModel?.currentTemperatureUnitFormatted(
@@ -256,6 +259,79 @@ fun CurrentTemperatureRowLayout(
                 val uvIndexLottieComposition by rememberLottieComposition(
                     LottieCompositionSpec.RawRes(
                         resId = R.raw.sun_uv_animation
+                    )
+                )
+                val uvIndexLottieProgress by animateLottieCompositionAsState(
+                    uvIndexLottieComposition,
+                    iterations = LottieConstants.IterateForever,
+                    restartOnPlay = false
+                )
+                LottieAnimation(
+                    composition = uvIndexLottieComposition,
+                    progress = {
+                        uvIndexLottieProgress
+                    },
+                    modifier = Modifier
+                        .size(
+                            size = 50.dp
+                        )
+                )
+            }
+
+        if (weatherResponseModel != null)
+            // Humidity
+            Row(
+                modifier = Modifier
+                    .constrainAs(humidityLayoutConstrainedReference) {
+                        start.linkTo(parent.start)
+                        top.linkTo(uvIndexLayoutConstrainedReference.bottom, 16.dp)
+                        end.linkTo(parent.end)
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(
+                    space = 16.dp
+                )
+            ) {
+                CircularProgressbar(
+                    size = 100.dp,
+                    foregroundIndicatorColor = colorResource(id = R.color.fateBlue),
+                    dataUsage = weatherResponseModel.currentWeatherDataModel?.humidity?.toFloat() ?: 0f
+                )
+                /*VerticalProgress(
+                    progress = weatherResponseModel.currentWeatherDataModel?.humidity?.toFloat() ?: 0f,
+                    color = colorResource(
+                        id = R.color.blue
+                    ),
+                    modifier = Modifier
+                        .height(
+                            height = 100.dp
+                        )
+                )*/
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 8.dp
+                    )
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.key_humidity_label),
+                        style = Typography.displayMedium
+                    )
+                    Text(
+                        text = stringResource(
+                            id = R.string.key_value_with_percent_label,
+                            weatherResponseModel.currentWeatherDataModel?.humidity ?: 0
+                        ),
+                        color = colorResource(
+                            id = R.color.fateBlue
+                        ),
+                        textAlign = TextAlign.Center,
+                        style = Typography.bodyMedium
+                    )
+                }
+                val uvIndexLottieComposition by rememberLottieComposition(
+                    LottieCompositionSpec.RawRes(
+                        resId = R.raw.humidity_animation
                     )
                 )
                 val uvIndexLottieProgress by animateLottieCompositionAsState(
