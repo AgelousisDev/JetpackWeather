@@ -3,6 +3,7 @@ package com.agelousis.jetpackweather.weather.rows
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -110,6 +111,8 @@ fun CurrentTemperatureRowLayout(
                     }
             )
 
+        Divider()
+
         if (weatherResponseModel != null)
             // Wind Layout
             Row(
@@ -205,6 +208,8 @@ fun CurrentTemperatureRowLayout(
                 )
             }
 
+        Divider()
+
         if (weatherResponseModel != null)
             // UV Index Layout
             Row(
@@ -277,6 +282,8 @@ fun CurrentTemperatureRowLayout(
                         )
                 )
             }
+
+        Divider()
 
         if (weatherResponseModel != null)
             // Humidity

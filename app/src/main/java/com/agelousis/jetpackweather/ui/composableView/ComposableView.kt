@@ -82,6 +82,7 @@ fun VerticalProgress(
 @Composable
 fun CircularProgressbar(
     size: Dp = 260.dp,
+    useInnerCircle: Boolean = false,
     foregroundIndicatorColor: Color = Color(0xFF35898f),
     shadowColor: Color = Color.LightGray,
     indicatorThickness: Dp = 12.dp,
@@ -120,32 +121,55 @@ fun CircularProgressbar(
             ),
         contentAlignment = Alignment.Center
     ) {
-
+        val surfaceColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
+            elevation = 20.dp
+        )
         Canvas(
             modifier = Modifier
                 .size(size)
         ) {
 
-            // For shadow
-            drawCircle(
-                brush = Brush.radialGradient(
-                    colors = listOf(
-                        shadowColor,
-                        WhiteTwo
+            if (useInnerCircle) {
+                // For shadow
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            shadowColor,
+                            WhiteTwo
+                        ),
+                        center = Offset(x = this.size.width / 2, y = this.size.height / 2),
+                        radius = this.size.height / 2
                     ),
-                    center = Offset(x = this.size.width / 2, y = this.size.height / 2),
-                    radius = this.size.height / 2
-                ),
-                radius = this.size.height / 2,
-                center = Offset(x = this.size.width / 2, y = this.size.height / 2)
-            )
+                    radius = this.size.height / 2,
+                    center = Offset(x = this.size.width / 2, y = this.size.height / 2)
+                )
 
-            // This is the white circle that appears on the top of the shadow circle
-            drawCircle(
-                color = Color.Transparent,
-                radius = (size / 2 - indicatorThickness).toPx(),
-                center = Offset(x = this.size.width / 2, y = this.size.height / 2)
-            )
+                // This is the white circle that appears on the top of the shadow circle
+                drawCircle(
+                    color = Color.Transparent,
+                    radius = (size / 2 - indicatorThickness).toPx(),
+                    center = Offset(x = this.size.width / 2, y = this.size.height / 2)
+                )
+            }
+            else
+                drawArc(
+                    color = surfaceColor,
+                    startAngle = 0f,
+                    sweepAngle = 360f,
+                    useCenter = false,
+                    style = Stroke(
+                        width = indicatorThickness.toPx(),
+                        cap = StrokeCap.Round
+                    ),
+                    size = Size(
+                        width = (size - indicatorThickness).toPx(),
+                        height = (size - indicatorThickness).toPx()
+                    ),
+                    topLeft = Offset(
+                        x = (indicatorThickness / 2).toPx(),
+                        y = (indicatorThickness / 2).toPx()
+                    )
+                )
 
             // Convert the dataUsage to angle
             val sweepAngle = (dataUsageAnimate.value) * 360 / 100
