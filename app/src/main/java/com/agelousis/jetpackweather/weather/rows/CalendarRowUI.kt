@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -11,6 +12,8 @@ import androidx.constraintlayout.compose.Dimension
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.ui.theme.Typography
+import com.agelousis.jetpackweather.utils.constants.Constants
+import com.agelousis.jetpackweather.utils.extensions.toDate
 import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.airbnb.lottie.compose.*
@@ -32,16 +35,25 @@ fun CalendarRowLayout(
         val (dateTimeLabelConstrainedReference, imageConstrainedReference) = createRefs()
         Text(
             text =
-                when(weatherNavigationScreen) {
-                    is WeatherNavigationScreen.Today ->
-                        weatherResponseModel?.currentWeatherDataModel?.lastUpdated ?: ""
-                    is WeatherNavigationScreen.Tomorrow ->
-                        Date().toDisplayDate(
-                            plusDays = 1
+            when (weatherNavigationScreen) {
+                is WeatherNavigationScreen.Today ->
+                    weatherResponseModel?.currentWeatherDataModel?.lastUpdated?.toDate(
+                        pattern = Constants.SERVER_DATE_TIME_FORMAT
+                    )?.toDisplayDate(
+                        pattern = Constants.DISPLAY_DATE_TIME_FORMAT
+                    )?.let {
+                        stringResource(
+                            id = R.string.key_last_updated_with_date_label,
+                            it
                         )
-                    else -> ""
-                },
-            style = Typography.labelMedium,
+                    } ?: ""
+                is WeatherNavigationScreen.Tomorrow ->
+                    Date().toDisplayDate(
+                        plusDays = 1
+                    )
+                else -> ""
+            },
+            style = Typography.labelLarge,
             modifier = Modifier
                 .constrainAs(dateTimeLabelConstrainedReference) {
                     start.linkTo(parent.start, 16.dp)

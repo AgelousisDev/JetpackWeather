@@ -85,7 +85,7 @@ fun CircularProgressbar(
     useInnerCircle: Boolean = false,
     foregroundIndicatorColor: Color = Color(0xFF35898f),
     shadowColor: Color = Color.LightGray,
-    indicatorThickness: Dp = 12.dp,
+    indicatorThickness: Dp = 10.dp,
     dataUsage: Float = 60f,
     animationDuration: Int = 1000,
     dataText: String? = null,

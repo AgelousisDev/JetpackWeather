@@ -50,4 +50,5 @@
     </string-array>
     <string name="key_humidity_label">Humidity</string>
     <string name="key_value_with_percent_label">%d%%</string>
+    <string name="key_last_updated_with_date_label">Last Updated\n%s</string>
 </resources>

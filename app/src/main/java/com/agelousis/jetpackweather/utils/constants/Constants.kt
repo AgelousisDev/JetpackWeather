@@ -1,8 +1,9 @@
 package com.agelousis.jetpackweather.utils.constants
 
 object Constants {
-    const val DISPLAY_DATE_FORMAT = "E, dd MMM yyyy"
+    const val DISPLAY_DATE_TIME_FORMAT = "E, dd MMM yyyy HH:mm"
     const val DATE_FORMAT = "yyyy-MM-dd HH:mm"
+    const val SERVER_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm"
 
     object SharedPreferencesKeys {
         const val WEATHER_SHARED_PREFERENCES_KEY = "weatherSharedPreferences"

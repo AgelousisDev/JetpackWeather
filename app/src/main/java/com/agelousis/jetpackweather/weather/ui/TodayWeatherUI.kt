@@ -105,11 +105,11 @@ fun TodayWeatherLayout(
                     CurrentTemperatureRowLayout(
                         modifier = Modifier
                             .animateItemPlacement(),
-                        weatherResponseModel = weatherResponseModel
+                        weatherResponseModel = weatherResponseModel ?: return@item
                     )
                 }
-                if (weatherResponseModel != null)
-                    item {
+                item {
+                    if (weatherResponseModel != null)
                         HeaderRowLayout(
                             modifier = Modifier
                                 .animateItemPlacement(),
@@ -117,15 +117,17 @@ fun TodayWeatherLayout(
                                 header = stringResource(id = R.string.key_sun_and_moon_label)
                             )
                         )
-                    }
+                }
                 item {
                     SunAndMoonRowLayout(
+                        modifier = Modifier
+                            .animateItemPlacement(),
                         sunAndMoonStates = SunAndMoonState.values().toList(),
                         weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherAstroDataModel
                     )
                 }
-                if (weatherResponseModel != null)
-                    item {
+                item {
+                    if (weatherResponseModel != null)
                         HeaderRowLayout(
                             modifier = Modifier
                                 .animateItemPlacement(),
@@ -133,7 +135,7 @@ fun TodayWeatherLayout(
                                 header = stringResource(id = R.string.key_temperature_label)
                             )
                         )
-                    }
+                }
             }
         }
         if (loaderState && !isRefreshing)
