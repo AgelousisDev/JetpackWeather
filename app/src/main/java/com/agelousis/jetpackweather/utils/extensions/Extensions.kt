@@ -26,3 +26,8 @@ fun String.toDate(
 
 inline fun <reified T : Enum<*>> valueEnumOrNull(name: String?): T? =
     T::class.java.enumConstants?.firstOrNull { it.name.lowercase() == name?.lowercase() }
+
+val Date.fullTime: String
+    get() = with(SimpleDateFormat(Constants.FULL_TIME_FORMAT, Locale.getDefault())) {
+        format(this@fullTime)
+    }

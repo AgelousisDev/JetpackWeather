@@ -17,6 +17,9 @@ import androidx.compose.ui.unit.dp
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.WeatherAstroDataModel
 import com.agelousis.jetpackweather.ui.theme.Typography
+import com.agelousis.jetpackweather.utils.constants.Constants
+import com.agelousis.jetpackweather.utils.extensions.fullTime
+import com.agelousis.jetpackweather.utils.extensions.toDate
 import com.agelousis.jetpackweather.weather.enumerations.SunAndMoonState
 
 @Composable
@@ -58,13 +61,21 @@ fun SunAndMoonStateLayout(
             Text(
                 text = when(sunAndMoonState) {
                     SunAndMoonState.SUNRISE ->
-                        weatherAstroDataModel.sunrise ?: ""
+                        weatherAstroDataModel.sunrise?.toDate(
+                            pattern = Constants.SMALL_TIME_FORMAT
+                        )?.fullTime ?: ""
                     SunAndMoonState.MOONRISE ->
-                        weatherAstroDataModel.moonrise ?: ""
+                        weatherAstroDataModel.moonrise?.toDate(
+                            pattern = Constants.SMALL_TIME_FORMAT
+                        )?.fullTime ?: ""
                     SunAndMoonState.SUNSET ->
-                        weatherAstroDataModel.sunset ?: ""
+                        weatherAstroDataModel.sunset?.toDate(
+                            pattern = Constants.SMALL_TIME_FORMAT
+                        )?.fullTime ?: ""
                     SunAndMoonState.MOON_SET ->
-                        weatherAstroDataModel.moonSet ?: ""
+                        weatherAstroDataModel.moonSet?.toDate(
+                            pattern = Constants.SMALL_TIME_FORMAT
+                        )?.fullTime ?: ""
                 },
                 style = Typography.labelMedium,
                 color = colorResource(id = R.color.grey)
