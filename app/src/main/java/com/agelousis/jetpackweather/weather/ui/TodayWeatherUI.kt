@@ -26,6 +26,7 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.enumerations.SunAndMoonState
+import com.agelousis.jetpackweather.weather.rows.HourlyWeatherConditionsRowLayout
 import com.agelousis.jetpackweather.weather.rows.SunAndMoonRowLayout
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -135,6 +136,14 @@ fun TodayWeatherLayout(
                                 header = stringResource(id = R.string.key_temperature_label)
                             )
                         )
+                }
+                item {
+                    HourlyWeatherConditionsRowLayout(
+                        modifier = Modifier
+                            .animateItemPlacement(),
+                        weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherHourlyDataModelList
+                            ?: listOf()
+                    )
                 }
             }
         }
