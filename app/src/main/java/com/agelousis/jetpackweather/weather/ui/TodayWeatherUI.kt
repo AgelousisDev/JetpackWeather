@@ -141,7 +141,7 @@ fun TodayWeatherLayout(
                     HourlyWeatherConditionsRowLayout(
                         modifier = Modifier
                             .animateItemPlacement(),
-                        weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherHourlyDataModelList
+                        weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList
                             ?: listOf()
                     )
                 }

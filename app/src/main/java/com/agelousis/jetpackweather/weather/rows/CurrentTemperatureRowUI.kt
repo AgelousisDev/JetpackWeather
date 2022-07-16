@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -121,7 +122,7 @@ fun CurrentTemperatureRowLayout(
                     height = Dimension.value(dp = 6.dp)
                 }
                 .background(
-                    color = colorResource(id = R.color.dayNightTextOnBackground),
+                    color = MaterialTheme.colorScheme.surfaceTint,
                     shape = CircleShape
                 )
         )
@@ -233,7 +234,7 @@ fun CurrentTemperatureRowLayout(
                     height = Dimension.value(dp = 6.dp)
                 }
                 .background(
-                    color = colorResource(id = R.color.dayNightTextOnBackground),
+                    color = MaterialTheme.colorScheme.surfaceTint,
                     shape = CircleShape
                 )
         )
@@ -320,7 +321,7 @@ fun CurrentTemperatureRowLayout(
                     height = Dimension.value(dp = 6.dp)
                 }
                 .background(
-                    color = colorResource(id = R.color.dayNightTextOnBackground),
+                    color = MaterialTheme.colorScheme.surfaceTint,
                     shape = CircleShape
                 )
         )

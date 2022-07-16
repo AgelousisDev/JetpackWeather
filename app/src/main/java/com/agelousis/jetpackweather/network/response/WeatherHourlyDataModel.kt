@@ -1,10 +1,14 @@
 package com.agelousis.jetpackweather.network.response
 
 import android.content.Context
+import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
+import com.agelousis.jetpackweather.utils.extensions.toDate
+import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.google.gson.annotations.SerializedName
+import java.lang.StringBuilder
 
 data class WeatherHourlyDataModel(
     @SerializedName(value = "time_epoch") val timeEpoch: Long? = null,
@@ -23,14 +27,14 @@ data class WeatherHourlyDataModel(
     @SerializedName(value = "precip_in") val precipIn: Double? = null,
     @SerializedName(value = "humidity") val humidity: Double? = null,
     @SerializedName(value = "cloud") val cloud: Double? = null,
-    @SerializedName(value = "feelslike_c") val feelslikeC: Double? = null,
-    @SerializedName(value = "feelslike_f") val feelslikeF: Double? = null,
+    @SerializedName(value = "feelslike_c") val feelsLikeC: Double? = null,
+    @SerializedName(value = "feelslike_f") val feelsLikeF: Double? = null,
     @SerializedName(value = "windchill_c") val windchillC: Double? = null,
     @SerializedName(value = "windchill_f") val windchillF: Double? = null,
-    @SerializedName(value = "heatindex_c") val heatindexC: Double? = null,
-    @SerializedName(value = "heatindex_f") val heatindexF: Double? = null,
-    @SerializedName(value = "dewpoint_c") val dewpointC: Double? = null,
-    @SerializedName(value = "dewpoint_f") val dewpointF: Double? = null,
+    @SerializedName(value = "heatindex_c") val heatIndexC: Double? = null,
+    @SerializedName(value = "heatindex_f") val heatIndexF: Double? = null,
+    @SerializedName(value = "dewpoint_c") val dewPointC: Double? = null,
+    @SerializedName(value = "dewpoint_f") val dewPointF: Double? = null,
     @SerializedName(value = "will_it_rain") val willItRain: Int? = null,
     @SerializedName(value = "chance_of_rain") val chanceOfRain: Int? = null,
     @SerializedName(value = "will_it_snow") val willItSnow: Int? = null,
@@ -53,5 +57,72 @@ data class WeatherHourlyDataModel(
                     tempC?.toInt() ?: 0
                 )
         }
+
+    fun feelsLikeTemperatureUnitFormatted(context: Context) =
+        when(context.getSharedPreferences(Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE).temperatureUnitType) {
+            TemperatureUnitType.FAHRENHEIT ->
+                "%d °F".format(
+                    feelsLikeF?.toInt() ?: 0
+                )
+            else ->
+                "%d °C".format(
+                    feelsLikeC?.toInt() ?: 0
+                )
+        }
+
+    val displayTime
+        get() = time?.toDate(
+            pattern = Constants.SERVER_DATE_TIME_FORMAT
+        )?.toDisplayDate(
+            pattern = Constants.FULL_TIME_FORMAT
+        )
+
+    val windStateColor
+        get() = when(windKph?.toInt() ?: 0) {
+            in 0 until 20 ->
+                R.color.blue
+            in 20 until 30 ->
+                R.color.teal_700
+            in 30 until 50 ->
+                R.color.green
+            in 50 until 100 ->
+                R.color.yellowDarker
+            else ->
+                R.color.red
+        }
+
+    fun getWindStateWarning(
+        context: Context
+    ): String = with(context.resources.getStringArray(R.array.key_wind_speed_warnings_array)) {
+        when (windKph?.toInt() ?: 0) {
+            in 0 until 20 ->
+                first()
+            in 20 until 30 ->
+                this[1]
+            in 30 until 50 ->
+                this[2]
+            in 50 until 100 ->
+                this[3]
+            else ->
+                this[4]
+        }
+    }
+
+    infix fun getWindDirection(
+        context: Context
+    ) = with(windDir) {
+        val windDirectionsArray = context.resources.getStringArray(R.array.key_wind_directions_array)
+        val windDirectionsBuilder = StringBuilder()
+        for (windDirection in (windDir?.toCharArray()?.take(n = 2)?.distinct() ?: listOf()))
+            windDirectionsBuilder.append(
+                windDirectionsArray.firstOrNull {
+                    it.startsWith(
+                        prefix = windDirection.toString(),
+                        ignoreCase = true
+                    )
+                }
+            )
+        windDirectionsBuilder.toString()
+    }
 
 }

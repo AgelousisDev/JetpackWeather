@@ -28,13 +28,29 @@ import com.agelousis.jetpackweather.ui.theme.WhiteTwo
 
 @Composable
 fun VerticalProgress(
+    modifier: Modifier = Modifier,
     progress: Float,
     color: Color,
-    modifier: Modifier = Modifier
+    animationDuration: Int = 1000
 ) {
-    val mProgress = animateFloatAsState(
-        targetValue = progress / 100
+    var progressStateRemember by remember {
+        mutableStateOf(value = 0.1f)
+    }
+
+    // This is to animate the foreground indicator
+    val progressStateAnimate = animateFloatAsState(
+        targetValue = progressStateRemember,
+        animationSpec = tween(
+            durationMillis = animationDuration
+        )
     )
+
+    // This is to start the animation when the activity is opened
+    LaunchedEffect(
+        key1 = Unit
+    ) {
+        progressStateRemember = progress / 100
+    }
     Column(
         modifier = Modifier
             .width(
@@ -57,7 +73,7 @@ fun VerticalProgress(
         Box(
             modifier = Modifier
                 .weight(
-                    weight = if ((1 - mProgress.value) == 0f) 0.0001f else 1 - mProgress.value
+                    weight = if ((1 - progressStateAnimate.value) == 0f) 0.0001f else 1 - progressStateAnimate.value
                 )
                 .fillMaxWidth()
         )
@@ -69,7 +85,7 @@ fun VerticalProgress(
                     )
                 )
                 .weight(
-                    weight = mProgress.value
+                    weight = progressStateAnimate.value
                 )
                 .fillMaxWidth()
                 .background(

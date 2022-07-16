@@ -19,7 +19,7 @@ fun Date.toDisplayDate(
 }
 
 fun String.toDate(
-    pattern: String = Constants.DATE_FORMAT
+    pattern: String = Constants.SERVER_DATE_TIME_FORMAT
 ): Date? = with(SimpleDateFormat(pattern, Locale.getDefault())) {
     parse(this@toDate)
 }

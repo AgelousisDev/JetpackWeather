@@ -1,7 +1,6 @@
 package com.agelousis.jetpackweather.network.response
 
 import android.content.Context
-import androidx.core.util.rangeTo
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
@@ -130,7 +129,7 @@ data class CurrentWeatherDataModel(
 
     infix fun getUvIndexExposureLevel(
         context: Context
-    ) = with(context.resources.getStringArray(R.array.key_uv_index_levels_array)) {
+    ): String = with(context.resources.getStringArray(R.array.key_uv_index_levels_array)) {
         val exposureLevel = when(uv?.toInt() ?: 0) {
             in 0..2 ->
                 0
