@@ -18,6 +18,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -65,6 +66,7 @@ fun MapAddressPickerView(
                 },
                 actions = {
                     IconButton(
+                        enabled = !viewModel.addressLine.isNullOrEmpty(),
                         onClick = {
                             (context as Activity).setResult(
                                 Activity.RESULT_OK, Intent().also { intent ->
@@ -79,7 +81,12 @@ fun MapAddressPickerView(
                     ) {
                         Icon(
                             imageVector = Icons.Filled.CheckCircle,
-                            contentDescription = null
+                            contentDescription = null,
+                            tint =
+                                if (!viewModel.addressLine.isNullOrEmpty())
+                                    MaterialTheme.colorScheme.surfaceTint
+                                else
+                                    colorResource(id = R.color.steel)
                         )
                     }
                 }

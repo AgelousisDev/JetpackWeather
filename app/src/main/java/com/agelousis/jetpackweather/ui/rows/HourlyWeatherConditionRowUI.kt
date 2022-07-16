@@ -75,7 +75,8 @@ fun HourlyWeatherConditionRowLayout(
             Text(
                 text = weatherHourlyDataModel.weatherConditionDataModel?.text ?: "",
                 style = Typography.bodyMedium,
-                color = colorResource(id = R.color.grey)
+                color = colorResource(id = R.color.grey),
+                textAlign = TextAlign.Center
             )
 
             // Feels Like
@@ -87,7 +88,8 @@ fun HourlyWeatherConditionRowLayout(
                     )
                 ),
                 style = Typography.bodyMedium,
-                color = colorResource(id = R.color.grey)
+                color = colorResource(id = R.color.grey),
+                textAlign = TextAlign.Center
             )
 
             // Wind Layout

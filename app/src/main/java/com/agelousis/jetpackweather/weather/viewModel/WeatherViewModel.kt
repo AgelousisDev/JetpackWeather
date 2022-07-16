@@ -13,6 +13,10 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.network.repositories.WeatherRepository
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
+import com.agelousis.jetpackweather.ui.models.HeaderModel
+import com.agelousis.jetpackweather.utils.constants.Constants
+import com.agelousis.jetpackweather.utils.extensions.toDate
+import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,6 +73,28 @@ class WeatherViewModel: ViewModel() {
     private val weatherResponseMutableLiveData by lazy { MutableLiveData<WeatherResponseModel>() }
     val weatherResponseLiveData: LiveData<WeatherResponseModel>
         get() = weatherResponseMutableLiveData
+
+    val nextDaysForecastDataList: List<Any>
+        get() {
+            val items = mutableListOf<Any>()
+            for (weatherForecastDayDataModel in (weatherResponseLiveData.value?.weatherForecastDataModel?.nextWeatherForecastDayDataModelList ?: listOf())) {
+                if (weatherForecastDayDataModel?.weatherHourlyDataModelList == null)
+                    continue
+                items.add(
+                    HeaderModel(
+                        header = weatherForecastDayDataModel.date?.toDate(
+                            pattern = Constants.SERVER_DATE_FORMAT
+                        )?.toDisplayDate(
+                            pattern = Constants.DISPLAY_DATE_FORMAT
+                        ) ?: ""
+                    )
+                )
+                items.add(
+                    weatherForecastDayDataModel.weatherHourlyDataModelList
+                )
+            }
+            return items
+        }
 
     infix fun getWeatherSettings(
         context: Context
