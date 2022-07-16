@@ -21,7 +21,12 @@ fun Date.toDisplayDate(
 fun String.toDate(
     pattern: String = Constants.SERVER_DATE_TIME_FORMAT
 ): Date? = with(SimpleDateFormat(pattern, Locale.getDefault())) {
-    parse(this@toDate)
+    try {
+        parse(this@toDate)
+    }
+    catch (e: Exception) {
+        null
+    }
 }
 
 inline fun <reified T : Enum<*>> valueEnumOrNull(name: String?): T? =

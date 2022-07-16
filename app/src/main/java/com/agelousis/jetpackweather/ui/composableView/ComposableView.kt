@@ -33,6 +33,13 @@ fun VerticalProgress(
     color: Color,
     animationDuration: Int = 1000
 ) {
+    var verticalProgressStateChanged by remember {
+        mutableStateOf(
+            value = progress
+        )
+    }
+    if (verticalProgressStateChanged != progress)
+        verticalProgressStateChanged = progress
     var progressStateRemember by remember {
         mutableStateOf(value = 0.1f)
     }
@@ -47,7 +54,7 @@ fun VerticalProgress(
 
     // This is to start the animation when the activity is opened
     LaunchedEffect(
-        key1 = Unit
+        key1 = verticalProgressStateChanged
     ) {
         progressStateRemember = progress / 100
     }
@@ -109,7 +116,13 @@ fun CircularProgressbar(
     remainingText: String? = null,
     remainingTextStyle: TextStyle = Typography.labelMedium
 ) {
-
+    var circularProgressStateChanged by remember {
+        mutableStateOf(
+            value = dataUsage
+        )
+    }
+    if (circularProgressStateChanged != dataUsage)
+        circularProgressStateChanged = dataUsage
     // It remembers the data usage value
     var dataUsageRemember by remember {
         mutableStateOf(value = -1f)
@@ -125,7 +138,7 @@ fun CircularProgressbar(
 
     // This is to start the animation when the activity is opened
     LaunchedEffect(
-        key1 = Unit
+        key1 = circularProgressStateChanged
     ) {
         dataUsageRemember = dataUsage
     }

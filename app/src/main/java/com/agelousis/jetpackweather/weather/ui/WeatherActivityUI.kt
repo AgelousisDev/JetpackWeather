@@ -91,21 +91,6 @@ fun WeatherActivityBottomNavigationLayout(
         decayAnimationSpec = decayAnimationSpec,
         state = rememberTopAppBarScrollState()
     )*/
-    val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
-    val mapAddressPickerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { activityResult ->
-        if (activityResult.resultCode == Activity.RESULT_OK) {
-            viewModel.addressDataModelMutableStateFlow.value =
-                activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
-            requestWeather(
-                context = context,
-                viewModel = viewModel,
-                longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: return@rememberLauncherForActivityResult,
-                latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: return@rememberLauncherForActivityResult
-            )
-        }
-    }
     requestLocation(
         context = context,
         state = requestLocationOnStartupState,
@@ -115,7 +100,6 @@ fun WeatherActivityBottomNavigationLayout(
     }
     if (isRefreshing)
         requestWeather(
-            context = context,
             viewModel = viewModel,
             longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: 0.0,
             latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: 0.0
@@ -170,32 +154,10 @@ fun WeatherActivityBottomNavigationLayout(
                         }
                     },
                     actions = {
-                        Crossfade(
-                            targetState = viewModel.currentNavigationRoute
-                        ) {
-                            if (it != WeatherDrawerNavigationScreen.Settings.route)
-                                IconButton(
-                                    enabled = addressDataModel != null,
-                                    onClick = {
-                                        mapAddressPickerLauncher.launch(
-                                            Intent(
-                                                context,
-                                                MapAddressPickerActivity::class.java
-                                            ).also { intent ->
-                                                intent.putExtra(
-                                                    MapAddressPickerActivity.CURRENT_ADDRESS,
-                                                    addressDataModel
-                                                )
-                                            }
-                                        )
-                                    }
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Edit,
-                                        contentDescription = null
-                                    )
-                                }
-                        }
+                        WeatherAppBarActions(
+                            viewModel = viewModel,
+                            rowScope = this
+                        )
                     }
                 )
             },
@@ -287,6 +249,76 @@ fun WeatherActivityNavigation(
 }
 
 @Composable
+fun WeatherAppBarActions(
+    rowScope: RowScope,
+    viewModel: WeatherViewModel
+) {
+    val context = LocalContext.current
+    val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
+    val mapAddressPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_OK) {
+            viewModel.addressDataModelMutableStateFlow.value =
+                activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
+            requestWeather(
+                viewModel = viewModel,
+                longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: return@rememberLauncherForActivityResult,
+                latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: return@rememberLauncherForActivityResult
+            )
+        }
+    }
+    rowScope.apply {
+        Crossfade(
+            targetState = viewModel.currentNavigationRoute
+        ) {
+            if (it != WeatherDrawerNavigationScreen.Settings.route)
+            // Current Location
+                IconButton(
+                    onClick = {
+                        requestLocation(
+                            context = context,
+                            viewModel = viewModel
+                        )
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.LocationOn,
+                        contentDescription = null
+                    )
+                }
+        }
+        Crossfade(
+            targetState = viewModel.currentNavigationRoute
+        ) {
+            if (it != WeatherDrawerNavigationScreen.Settings.route)
+            // Edit
+                IconButton(
+                    enabled = addressDataModel != null,
+                    onClick = {
+                        mapAddressPickerLauncher.launch(
+                            Intent(
+                                context,
+                                MapAddressPickerActivity::class.java
+                            ).also { intent ->
+                                intent.putExtra(
+                                    MapAddressPickerActivity.CURRENT_ADDRESS,
+                                    addressDataModel
+                                )
+                            }
+                        )
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = null
+                    )
+                }
+        }
+    }
+}
+
+@Composable
 private fun LocationPermissionRequest(
     viewModel: WeatherViewModel
 ) {
@@ -341,7 +373,6 @@ private fun requestLocation(
                 latitude = it.latitude
             )
             requestWeather(
-                context = context,
                 viewModel = viewModel,
                 longitude = it.longitude,
                 latitude = it.latitude
@@ -351,13 +382,11 @@ private fun requestLocation(
 }
 
 fun requestWeather(
-    context: Context,
     viewModel: WeatherViewModel,
     longitude: Double,
     latitude: Double
 ) {
     viewModel.requestForecast(
-        context = context,
         location = "%f,%f".format(
             latitude,
             longitude

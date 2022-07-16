@@ -1,5 +1,8 @@
 package com.agelousis.jetpackweather.network.response
 
+import com.agelousis.jetpackweather.utils.constants.Constants
+import com.agelousis.jetpackweather.utils.extensions.toDate
+import com.agelousis.jetpackweather.weather.enumerations.SunAndMoonState
 import com.google.gson.annotations.SerializedName
 
 data class WeatherAstroDataModel(
@@ -9,4 +12,34 @@ data class WeatherAstroDataModel(
     @SerializedName(value = "moonset") val moonSet: String?,
     @SerializedName(value = "moon_phase") val moonPhase: String?,
     @SerializedName(value = "moon_illumination") val moonIllumination: String?
-)
+) {
+
+    val availableSunAndMoonStates
+        get() = listOfNotNull(
+            if (sunrise?.toDate(
+                pattern = Constants.SMALL_TIME_FORMAT
+            ) != null)
+                SunAndMoonState.SUNRISE
+            else
+                null,
+            if (moonrise?.toDate(
+                    pattern = Constants.SMALL_TIME_FORMAT
+                ) != null)
+                SunAndMoonState.MOONRISE
+            else
+                null,
+            if (sunset?.toDate(
+                    pattern = Constants.SMALL_TIME_FORMAT
+                ) != null)
+                SunAndMoonState.SUNSET
+            else
+                null,
+            if (moonSet?.toDate(
+                    pattern = Constants.SMALL_TIME_FORMAT
+                ) != null)
+                SunAndMoonState.MOON_SET
+            else
+                null,
+        )
+
+}

@@ -29,6 +29,20 @@ val textViewHeaderFont = TextStyle(
         fontSize = 24.sp
 )
 
+val TextStyle.medium
+        get() = merge(
+                other = TextStyle(
+                        fontWeight = FontWeight.Medium
+                )
+        )
+
+val TextStyle.bold
+        get() = merge(
+                other = TextStyle(
+                        fontWeight = FontWeight.Bold
+                )
+        )
+
 // Set of Material typography styles to start with
 val Typography = Typography(
         bodyLarge = TextStyle(

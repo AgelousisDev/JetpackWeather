@@ -1,6 +1,7 @@
 package com.agelousis.jetpackweather.weather.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -25,7 +26,6 @@ import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
-import com.agelousis.jetpackweather.weather.enumerations.SunAndMoonState
 import com.agelousis.jetpackweather.weather.rows.HourlyWeatherConditionsRowLayout
 import com.agelousis.jetpackweather.weather.rows.SunAndMoonRowLayout
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -40,6 +40,7 @@ fun TodayWeatherLayout(
     val loaderState by viewModel.loaderStateStateFlow.collectAsState()
     val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
     val isRefreshing by viewModel.swipeRefreshStateFlow.collectAsState()
+    val networkErrorState by viewModel.networkErrorStateFlow.collectAsState()
 
     ConstraintLayout(
         modifier = Modifier
@@ -56,97 +57,99 @@ fun TodayWeatherLayout(
                 )
             )
     ) {
-        val (lazyColumnConstrainedReference, progressIndicatorConstrainedReference) = createRefs()
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-            onRefresh = {
-                viewModel.swipeRefreshMutableStateFlow.value = true
-            },
-            indicator = { state, trigger ->
-                SwipeRefreshIndicator(
-                    // Pass the SwipeRefreshState + trigger through
-                    state = state,
-                    refreshTriggerDistance = trigger,
-                    // Enable the scale animation
-                    scale = true,
-                    // Change the color and shape
-                    backgroundColor = MaterialTheme.colorScheme.primary,
-                    shape = CircleShape,
-                    contentColor = Color.White
-                )
-            },
-            modifier = Modifier
-                .constrainAs(lazyColumnConstrainedReference) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top, 8.dp)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                    height = Dimension.fillToConstraints
-                }
-        ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(
-                    space = 32.dp
-                ),
-                contentPadding = PaddingValues(
-                    bottom = 170.dp
-                )
+        val (lazyColumnConstrainedReference, progressIndicatorConstrainedReference,
+            networkErrorAnimationConstrainedReference) = createRefs()
+        if (!networkErrorState)
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+                onRefresh = {
+                    viewModel.swipeRefreshMutableStateFlow.value = true
+                },
+                indicator = { state, trigger ->
+                    SwipeRefreshIndicator(
+                        // Pass the SwipeRefreshState + trigger through
+                        state = state,
+                        refreshTriggerDistance = trigger,
+                        // Enable the scale animation
+                        scale = true,
+                        // Change the color and shape
+                        backgroundColor = MaterialTheme.colorScheme.primary,
+                        shape = CircleShape,
+                        contentColor = Color.White
+                    )
+                },
+                modifier = Modifier
+                    .constrainAs(lazyColumnConstrainedReference) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top, 8.dp)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        width = Dimension.fillToConstraints
+                        height = Dimension.fillToConstraints
+                    }
             ) {
-                item {
-                    CalendarRowLayout(
-                        modifier = Modifier
-                            .animateItemPlacement(),
-                        weatherNavigationScreen = WeatherNavigationScreen.Today,
-                        weatherResponseModel = weatherResponseModel
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 32.dp
+                    ),
+                    contentPadding = PaddingValues(
+                        bottom = 170.dp
                     )
-                }
-                item {
-                    CurrentTemperatureRowLayout(
-                        modifier = Modifier
-                            .animateItemPlacement(),
-                        weatherResponseModel = weatherResponseModel ?: return@item
-                    )
-                }
-                item {
-                    if (weatherResponseModel != null)
-                        HeaderRowLayout(
+                ) {
+                    item {
+                        CalendarRowLayout(
                             modifier = Modifier
                                 .animateItemPlacement(),
-                            headerModel = HeaderModel(
-                                header = stringResource(id = R.string.key_sun_and_moon_label)
-                            )
+                            weatherNavigationScreen = WeatherNavigationScreen.Today,
+                            weatherResponseModel = weatherResponseModel
                         )
-                }
-                item {
-                    SunAndMoonRowLayout(
-                        modifier = Modifier
-                            .animateItemPlacement(),
-                        sunAndMoonStates = SunAndMoonState.values().toList(),
-                        weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherAstroDataModel
-                    )
-                }
-                item {
-                    if (weatherResponseModel != null)
-                        HeaderRowLayout(
+                    }
+                    item {
+                        CurrentTemperatureRowLayout(
                             modifier = Modifier
                                 .animateItemPlacement(),
-                            headerModel = HeaderModel(
-                                header = stringResource(id = R.string.key_temperature_label)
-                            )
+                            weatherResponseModel = weatherResponseModel ?: return@item
                         )
-                }
-                item {
-                    HourlyWeatherConditionsRowLayout(
-                        modifier = Modifier
-                            .animateItemPlacement(),
-                        weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList
-                            ?: listOf()
-                    )
+                    }
+                    item {
+                        if (weatherResponseModel != null)
+                            HeaderRowLayout(
+                                modifier = Modifier
+                                    .animateItemPlacement(),
+                                headerModel = HeaderModel(
+                                    header = stringResource(id = R.string.key_sun_and_moon_label)
+                                )
+                            )
+                    }
+                    item {
+                        SunAndMoonRowLayout(
+                            modifier = Modifier
+                                .animateItemPlacement(),
+                            sunAndMoonStates = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherAstroDataModel?.availableSunAndMoonStates ?: listOf(),
+                            weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherAstroDataModel
+                        )
+                    }
+                    item {
+                        if (weatherResponseModel != null)
+                            HeaderRowLayout(
+                                modifier = Modifier
+                                    .animateItemPlacement(),
+                                headerModel = HeaderModel(
+                                    header = stringResource(id = R.string.key_temperature_label)
+                                )
+                            )
+                    }
+                    item {
+                        HourlyWeatherConditionsRowLayout(
+                            modifier = Modifier
+                                .animateItemPlacement(),
+                            weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList
+                                ?: listOf()
+                        )
+                    }
                 }
             }
-        }
         if (loaderState && !isRefreshing)
             CircularProgressIndicator(
                 modifier = Modifier
@@ -157,6 +160,22 @@ fun TodayWeatherLayout(
                         bottom.linkTo(parent.bottom)
                     }
             )
+
+        NetworkErrorLayout(
+            state = networkErrorState,
+            modifier = Modifier
+                .constrainAs(networkErrorAnimationConstrainedReference) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                }
+                .clickable {
+                    viewModel.swipeRefreshMutableStateFlow.value = true
+                }
+        )
     }
 }
 

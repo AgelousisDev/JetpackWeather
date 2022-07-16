@@ -32,6 +32,9 @@ class WeatherViewModel: ViewModel() {
     private val loaderStateMutableStateFlow = MutableStateFlow(value = false)
     val loaderStateStateFlow: StateFlow<Boolean> = loaderStateMutableStateFlow.asStateFlow()
 
+    private val networkErrorMutableStateFlow = MutableStateFlow(value = false)
+    val networkErrorStateFlow: StateFlow<Boolean> = networkErrorMutableStateFlow.asStateFlow()
+
     private val _showDialog = MutableStateFlow(value = false)
     val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
 
@@ -112,12 +115,16 @@ class WeatherViewModel: ViewModel() {
             location = location,
             airQualityState = airQualityState,
             successBlock = { weatherResponseModel ->
+                swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
+                networkErrorMutableStateFlow.value = false
                 weatherResponseMutableLiveData.value = weatherResponseModel
                 weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
             },
             failureBlock = {
+                swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
+                networkErrorMutableStateFlow.value = true
                 alertPair = context.resources.getString(R.string.key_error_label) to it.localizedMessage
                 onOpenDialogClicked()
             }
@@ -125,7 +132,6 @@ class WeatherViewModel: ViewModel() {
     }
 
     fun requestForecast(
-        context: Context,
         location: String,
         days: Int,
         airQualityState: Boolean,
@@ -140,13 +146,16 @@ class WeatherViewModel: ViewModel() {
             successBlock = { weatherResponseModel ->
                 swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
+                networkErrorMutableStateFlow.value = false
                 weatherResponseMutableLiveData.value = weatherResponseModel
                 weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
             },
             failureBlock = {
+                swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
-                alertPair = context.resources.getString(R.string.key_error_label) to it.localizedMessage
-                onOpenDialogClicked()
+                networkErrorMutableStateFlow.value = true
+                //alertPair = context.resources.getString(R.string.key_error_label) to it.localizedMessage
+                //onOpenDialogClicked()
             }
         )
     }

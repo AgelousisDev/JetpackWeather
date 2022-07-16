@@ -27,6 +27,7 @@ import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.ui.composableView.CircularProgressbar
 import com.agelousis.jetpackweather.ui.composableView.VerticalProgress
 import com.agelousis.jetpackweather.ui.theme.Typography
+import com.agelousis.jetpackweather.ui.theme.medium
 import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
 import com.airbnb.lottie.compose.*
 
@@ -286,7 +287,7 @@ fun CurrentTemperatureRowLayout(
                             ?: R.color.green
                     ),
                     textAlign = TextAlign.Center,
-                    style = Typography.bodyMedium
+                    style = Typography.bodyMedium.medium
                 )
             }
             val uvIndexLottieComposition by rememberLottieComposition(
@@ -363,7 +364,7 @@ fun CurrentTemperatureRowLayout(
                         id = R.color.fateBlue
                     ),
                     textAlign = TextAlign.Center,
-                    style = Typography.bodyMedium
+                    style = Typography.bodyMedium.medium
                 )
             }
             val humidityLottieComposition by rememberLottieComposition(
