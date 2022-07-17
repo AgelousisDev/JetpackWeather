@@ -16,6 +16,7 @@ val playServicesMapsVersion = "18.0.2"
 val playServicesLocationVersion = "19.0.1"
 val materialYouVersion = "1.7.0-alpha02"
 val lottieComposeVersion = "5.2.0"
+val browserVersion = "1.3.0"
 
 android {
     compileSdk = 32
@@ -36,6 +37,8 @@ android {
             isDebuggable = true
             buildConfigField(type = "String", name = "WEATHER_BASE_URL", value = "\"https://api.weatherapi.com/v1/\"")
             buildConfigField(type ="String", name = "WEATHER_API_KEY", value = "\"3299b75bd83b4133b1e52728221706\"")
+            buildConfigField(type = "String", name = "WEATHER_API_LOGO_URL", value = "\"https://cdn.weatherapi.com/v4/images/weatherapi_logo.png\"")
+            buildConfigField(type = "String", name = "WEATHER_API_WEB_URL", value = "\"https://www.weatherapi.com/\"")
         }
         release {
             isMinifyEnabled = false
@@ -47,6 +50,8 @@ android {
             )
             buildConfigField(type = "String", name = "WEATHER_BASE_URL", value = "\"https://api.weatherapi.com/v1/\"")
             buildConfigField(type ="String", name = "WEATHER_API_KEY", value = "\"3299b75bd83b4133b1e52728221706\"")
+            buildConfigField(type = "String", name = "WEATHER_API_LOGO_URL", value = "\"https://cdn.weatherapi.com/v4/images/weatherapi_logo.png\"")
+            buildConfigField(type = "String", name = "WEATHER_API_WEB_URL", value = "\"https://www.weatherapi.com/\"")
         }
     }
     compileOptions {
@@ -72,6 +77,9 @@ android {
 dependencies {
     // Native
     implementation("com.google.android.material:material:$materialYouVersion")
+
+    // Browser
+    implementation("androidx.browser:browser:$browserVersion")
 
     implementation("androidx.compose.ui:ui:$composeVersion")
     implementation("androidx.compose.material:material:$composeVersion")
