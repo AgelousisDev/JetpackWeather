@@ -172,7 +172,7 @@ fun HourlyWeatherConditionRowLayoutPreview() {
         weatherHourlyDataModel = WeatherHourlyDataModel(
             tempC = 20.0,
             tempF = 30.0,
-            humidity = 60.0,
+            humidity = 60,
             uv = 8.0
         )
     )

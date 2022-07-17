@@ -9,6 +9,11 @@ data class WeatherForecastDataModel(
     val currentWeatherForecastDayDataModel
         get() = weatherForecastDayDataModelList?.firstOrNull()
 
+    val nextWeatherForecastDayDataModel
+        get() = weatherForecastDayDataModelList?.getOrNull(
+            index = 1
+        )
+
     val nextWeatherForecastDayDataModelList
         get() = weatherForecastDayDataModelList?.drop(
             n = 1

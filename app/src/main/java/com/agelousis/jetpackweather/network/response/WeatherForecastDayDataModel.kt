@@ -1,5 +1,6 @@
 package com.agelousis.jetpackweather.network.response
 
+import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.toDate
 import com.google.gson.annotations.SerializedName
 import java.util.*
@@ -16,5 +17,46 @@ data class WeatherForecastDayDataModel(
         get() = weatherHourlyDataModelList?.filter { weatherHourlyDataModel ->
             (weatherHourlyDataModel.time?.toDate() ?: Date()) > Date()
         }
+
+    private val currentWeatherHourlyDataModel
+        get() = weatherHourlyDataModelList?.firstOrNull { weatherHourlyDataModel ->
+            val nowCalendar= Calendar.getInstance()
+            nowCalendar.time = Date()
+
+            val weatherHourlyCalendar = Calendar.getInstance()
+            weatherHourlyCalendar.time = weatherHourlyDataModel.time?.toDate(
+                pattern = Constants.SERVER_DATE_TIME_FORMAT
+            ) ?: Date()
+
+            nowCalendar.get(Calendar.HOUR_OF_DAY) == weatherHourlyCalendar.get(Calendar.HOUR_OF_DAY)
+        }
+
+    val currentWeatherDataModel
+        get() = CurrentWeatherDataModel(
+            valpdatedEpoch = null,
+            lastUpdated = currentWeatherHourlyDataModel?.time,
+            tempC = currentWeatherHourlyDataModel?.tempC,
+            tempF = currentWeatherHourlyDataModel?.tempF,
+            isDay = currentWeatherHourlyDataModel?.isDay,
+            weatherConditionDataModel = currentWeatherHourlyDataModel?.weatherConditionDataModel,
+            windMph = currentWeatherHourlyDataModel?.windMph,
+            windKph = currentWeatherHourlyDataModel?.windKph,
+            windDegree = currentWeatherHourlyDataModel?.windDegree,
+            windDir = currentWeatherHourlyDataModel?.windDir,
+            pressureMb = currentWeatherHourlyDataModel?.pressureMb,
+            pressureIn = currentWeatherHourlyDataModel?.pressureIn,
+            precipIn = currentWeatherHourlyDataModel?.precipIn,
+            precipMm = currentWeatherHourlyDataModel?.precipMm,
+            humidity = currentWeatherHourlyDataModel?.humidity,
+            cloud = currentWeatherHourlyDataModel?.cloud,
+            feelsLikeC = currentWeatherHourlyDataModel?.feelsLikeC,
+            feelsLikeF = currentWeatherHourlyDataModel?.feelsLikeF,
+            visMiles = currentWeatherHourlyDataModel?.visMiles,
+            visKm = currentWeatherHourlyDataModel?.visKm,
+            uv = currentWeatherHourlyDataModel?.uv,
+            gustMph = currentWeatherHourlyDataModel?.gustMph,
+            gustKph = currentWeatherHourlyDataModel?.gustKph,
+            airQuality = null
+        )
 
 }

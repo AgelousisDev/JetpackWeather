@@ -23,7 +23,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberAsyncImagePainter
 import com.agelousis.jetpackweather.R
-import com.agelousis.jetpackweather.network.response.WeatherResponseModel
+import com.agelousis.jetpackweather.network.response.CurrentWeatherDataModel
 import com.agelousis.jetpackweather.ui.composableView.CircularProgressbar
 import com.agelousis.jetpackweather.ui.composableView.VerticalProgress
 import com.agelousis.jetpackweather.ui.theme.Typography
@@ -34,7 +34,7 @@ import com.airbnb.lottie.compose.*
 @Composable
 fun CurrentTemperatureRowLayout(
     modifier: Modifier = Modifier,
-    weatherResponseModel: WeatherResponseModel
+    currentWeatherDataModel: CurrentWeatherDataModel
 ) {
     val context = LocalContext.current
     ConstraintLayout(
@@ -51,9 +51,9 @@ fun CurrentTemperatureRowLayout(
             humidityLayoutDividerConstrainedReference, humidityLayoutConstrainedReference) = createRefs()
         // C
         Text(
-            text = weatherResponseModel.currentWeatherDataModel?.currentTemperatureUnitFormatted(
+            text = currentWeatherDataModel.currentTemperatureUnitFormatted(
                 context = context
-            ) ?: "",
+            ),
             style = textViewHeaderFont,
             modifier = Modifier
                 .constrainAs(temperatureLabelConstrainedReference) {
@@ -66,7 +66,7 @@ fun CurrentTemperatureRowLayout(
         // Condition Icon
         Image(
             painter = rememberAsyncImagePainter(
-                model = weatherResponseModel.currentWeatherDataModel?.weatherConditionDataModel?.iconUrl
+                model = currentWeatherDataModel.weatherConditionDataModel?.iconUrl
             ),
             contentDescription = null,
             modifier = Modifier
@@ -84,7 +84,7 @@ fun CurrentTemperatureRowLayout(
 
         // Condition Text
         Text(
-            text = weatherResponseModel.currentWeatherDataModel?.weatherConditionDataModel?.text ?: "",
+            text = currentWeatherDataModel.weatherConditionDataModel?.text ?: "",
             style = Typography.bodyMedium,
             color = colorResource(id = R.color.grey),
             modifier = Modifier
@@ -99,9 +99,9 @@ fun CurrentTemperatureRowLayout(
         Text(
             text = stringResource(
                 id = R.string.key_feels_like_label,
-                weatherResponseModel.currentWeatherDataModel?.feelsLikeTemperatureUnitFormatted(
+                currentWeatherDataModel.feelsLikeTemperatureUnitFormatted(
                     context = context
-                ) ?: ""
+                )
             ),
             style = Typography.bodyMedium,
             color = colorResource(id = R.color.grey),
@@ -142,12 +142,11 @@ fun CurrentTemperatureRowLayout(
             )
         ) {
             Text(
-                text = weatherResponseModel.currentWeatherDataModel?.windKph?.toInt()?.toString()
+                text = currentWeatherDataModel.windKph?.toInt()?.toString()
                     ?: "",
                 style = textViewHeaderFont,
                 color = colorResource(
-                    id = weatherResponseModel.currentWeatherDataModel?.windStateColor
-                        ?: R.color.grey
+                    id = currentWeatherDataModel.windStateColor
                 )
             )
             Column(
@@ -156,7 +155,7 @@ fun CurrentTemperatureRowLayout(
                     space = 8.dp
                 )
             ) {
-                if (weatherResponseModel.currentWeatherDataModel?.windDegree != null)
+                if (currentWeatherDataModel.windDegree != null)
                     Icon(
                         painter = painterResource(
                             id = R.drawable.ic_arrow_direction_down
@@ -168,7 +167,7 @@ fun CurrentTemperatureRowLayout(
                                 size = 15.dp
                             )
                             .rotate(
-                                degrees = weatherResponseModel.currentWeatherDataModel.windDegree.toFloat()
+                                degrees = currentWeatherDataModel.windDegree.toFloat()
                             )
                     )
                 Text(
@@ -184,21 +183,20 @@ fun CurrentTemperatureRowLayout(
                 )
             ) {
                 Text(
-                    text = weatherResponseModel.currentWeatherDataModel?.getWindStateWarning(
+                    text = currentWeatherDataModel.getWindStateWarning(
                         context = context
-                    ) ?: "",
+                    ),
                     style = Typography.displayMedium,
                     color = colorResource(
-                        id = weatherResponseModel.currentWeatherDataModel?.windStateColor
-                            ?: R.color.grey
+                        id = currentWeatherDataModel.windStateColor
                     )
                 )
                 Text(
                     text = stringResource(
                         id = R.string.key_now_with_value_label,
-                        weatherResponseModel.currentWeatherDataModel?.getWindDirection(
+                        currentWeatherDataModel.getWindDirection(
                             context = context
-                        ) ?: ""
+                        )
                     ),
                     style = Typography.bodyMedium
                 )
@@ -254,10 +252,9 @@ fun CurrentTemperatureRowLayout(
             )
         ) {
             VerticalProgress(
-                progress = (weatherResponseModel.currentWeatherDataModel?.uv?.toFloat()?.takeIf { it > 0.0 } ?: 0.1f) * 10,
+                progress = (currentWeatherDataModel.uv?.toFloat()?.takeIf { it > 0.0 } ?: 0.1f) * 10,
                 color = colorResource(
-                    id = weatherResponseModel.currentWeatherDataModel?.uvIndexColor
-                        ?: R.color.green
+                    id = currentWeatherDataModel.uvIndexColor
                 ),
                 modifier = Modifier
                     .height(
@@ -277,14 +274,13 @@ fun CurrentTemperatureRowLayout(
                 Text(
                     text = stringResource(
                         id = R.string.key_uv_index_value_label,
-                        weatherResponseModel.currentWeatherDataModel?.getUvIndexExposureLevel(
+                        currentWeatherDataModel.getUvIndexExposureLevel(
                             context = context
-                        ) ?: "",
-                        weatherResponseModel.currentWeatherDataModel?.uv?.toInt() ?: 0
+                        ),
+                        currentWeatherDataModel.uv?.toInt() ?: 0
                     ),
                     color = colorResource(
-                        id = weatherResponseModel.currentWeatherDataModel?.uvIndexColor
-                            ?: R.color.green
+                        id = currentWeatherDataModel.uvIndexColor
                     ),
                     textAlign = TextAlign.Center,
                     style = Typography.bodyMedium.medium
@@ -343,7 +339,7 @@ fun CurrentTemperatureRowLayout(
             CircularProgressbar(
                 size = 80.dp,
                 foregroundIndicatorColor = colorResource(id = R.color.fateBlue),
-                dataUsage = weatherResponseModel.currentWeatherDataModel?.humidity?.toFloat() ?: 0f
+                dataUsage = currentWeatherDataModel.humidity?.toFloat() ?: 0f
             )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -358,7 +354,7 @@ fun CurrentTemperatureRowLayout(
                 Text(
                     text = stringResource(
                         id = R.string.key_value_with_percent_label,
-                        weatherResponseModel.currentWeatherDataModel?.humidity ?: 0
+                        currentWeatherDataModel.humidity ?: 0
                     ),
                     color = colorResource(
                         id = R.color.fateBlue
@@ -395,6 +391,6 @@ fun CurrentTemperatureRowLayout(
 @Composable
 fun CurrentTemperatureRowLayoutPreview() {
     CurrentTemperatureRowLayout(
-        weatherResponseModel = WeatherResponseModel()
+        currentWeatherDataModel = CurrentWeatherDataModel()
     )
 }

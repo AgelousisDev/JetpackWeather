@@ -35,23 +35,24 @@ fun CalendarRowLayout(
         val (dateTimeLabelConstrainedReference, imageConstrainedReference) = createRefs()
         Text(
             text =
-            when (weatherNavigationScreen) {
-                is WeatherNavigationScreen.Today ->
-                    weatherResponseModel?.currentWeatherDataModel?.lastUpdated?.toDate(
-                        pattern = Constants.SERVER_DATE_TIME_FORMAT
-                    )?.toDisplayDate(
-                        pattern = Constants.DISPLAY_DATE_TIME_FORMAT
-                    )?.let {
-                        stringResource(
-                            id = R.string.key_last_updated_with_date_label,
-                            it
+                when (weatherNavigationScreen) {
+                    is WeatherNavigationScreen.Today ->
+                        weatherResponseModel?.currentWeatherDataModel?.lastUpdated?.toDate(
+                            pattern = Constants.SERVER_DATE_TIME_FORMAT
+                        )?.toDisplayDate(
+                            pattern = Constants.DISPLAY_DATE_TIME_FORMAT
+                        )?.let {
+                            stringResource(
+                                id = R.string.key_last_updated_with_date_label,
+                                it
+                            )
+                        } ?: ""
+                    is WeatherNavigationScreen.Tomorrow ->
+                        Date().toDisplayDate(
+                            pattern = Constants.DISPLAY_DATE_TIME_FORMAT,
+                            plusDays = 1
                         )
-                    } ?: ""
-                is WeatherNavigationScreen.Tomorrow ->
-                    Date().toDisplayDate(
-                        plusDays = 1
-                    )
-                else -> ""
+                    else -> ""
             },
             style = Typography.labelLarge,
             modifier = Modifier

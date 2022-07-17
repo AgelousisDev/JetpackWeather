@@ -109,7 +109,7 @@ fun TodayWeatherLayout(
                         CurrentTemperatureRowLayout(
                             modifier = Modifier
                                 .animateItemPlacement(),
-                            weatherResponseModel = weatherResponseModel ?: return@item
+                            currentWeatherDataModel = weatherResponseModel?.currentWeatherDataModel ?: return@item
                         )
                     }
                     item {
