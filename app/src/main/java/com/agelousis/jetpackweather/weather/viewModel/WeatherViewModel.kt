@@ -15,8 +15,10 @@ import com.agelousis.jetpackweather.network.repositories.WeatherRepository
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.utils.constants.Constants
+import com.agelousis.jetpackweather.utils.extensions.offlineMode
 import com.agelousis.jetpackweather.utils.extensions.toDate
 import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
+import com.agelousis.jetpackweather.utils.extensions.weatherResponseModel
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -158,11 +160,13 @@ class WeatherViewModel: ViewModel() {
     }
 
     fun requestForecast(
+        context: Context,
         location: String,
         days: Int,
         airQualityState: Boolean,
         alertsState: Boolean
     ) {
+        val sharedPreferences = context.getSharedPreferences(Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
         loaderStateMutableStateFlow.value = !swipeRefreshStateFlow.value
         WeatherRepository.requestForecast(
             location = location,
@@ -175,11 +179,19 @@ class WeatherViewModel: ViewModel() {
                 networkErrorMutableStateFlow.value = false
                 weatherResponseMutableLiveData.value = weatherResponseModel
                 weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
+                sharedPreferences.weatherResponseModel = weatherResponseModel
             },
             failureBlock = {
                 swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
-                networkErrorMutableStateFlow.value = true
+                if (sharedPreferences.offlineMode
+                    && sharedPreferences.weatherResponseModel != null
+                ) {
+                    weatherResponseMutableLiveData.value = sharedPreferences.weatherResponseModel
+                    weatherUiAppBarTitle = sharedPreferences.weatherResponseModel?.weatherLocationDataModel?.regionCountry
+                }
+                else
+                    networkErrorMutableStateFlow.value = true
                 //alertPair = context.resources.getString(R.string.key_error_label) to it.localizedMessage
                 //onOpenDialogClicked()
             }

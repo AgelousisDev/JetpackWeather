@@ -27,6 +27,7 @@ fun WeatherDrawerNavigation(
     navController: NavController,
     weatherDrawerNavigationScreens: List<WeatherDrawerNavigationScreen>,
     headerContent: @Composable ColumnScope.() -> Unit = {},
+    footerContent: @Composable ColumnScope.() -> Unit = {},
     content: @Composable () -> Unit
 ) {
     var selectedItem by remember {
@@ -83,6 +84,13 @@ fun WeatherDrawerNavigation(
                         )
                 )
             }
+            Spacer(
+                modifier = Modifier
+                    .weight(
+                        weight = 1f
+                    )
+            )
+            footerContent()
         },
         content = content
     )

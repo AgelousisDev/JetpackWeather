@@ -118,13 +118,6 @@ fun NextDaysWeatherLayout(
                                 )
                         }
                     }
-                    item {
-                        if (weatherResponseModel != null)
-                            TrademarkLayout(
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                            )
-                    }
                 }
             }
         if (loaderState && !isRefreshing)

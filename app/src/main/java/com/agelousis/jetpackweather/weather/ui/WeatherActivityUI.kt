@@ -100,6 +100,7 @@ fun WeatherActivityBottomNavigationLayout(
     }
     if (isRefreshing)
         requestWeather(
+            context = context,
             viewModel = viewModel,
             longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: 0.0,
             latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: 0.0
@@ -132,6 +133,19 @@ fun WeatherActivityBottomNavigationLayout(
                 modifier = Modifier
                     .align(
                         alignment = Alignment.CenterHorizontally
+                    )
+            )
+        },
+        footerContent = {
+            TrademarkLayout(
+                modifier = Modifier
+                    .navigationBarsPadding()
+                    .size(
+                        width = 70.dp,
+                        height = 50.dp
+                    )
+                    .align(
+                        alignment = Alignment.End
                     )
             )
         }
@@ -262,6 +276,7 @@ fun WeatherAppBarActions(
             viewModel.addressDataModelMutableStateFlow.value =
                 activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
             requestWeather(
+                context = context,
                 viewModel = viewModel,
                 longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: return@rememberLauncherForActivityResult,
                 latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: return@rememberLauncherForActivityResult
@@ -373,6 +388,7 @@ private fun requestLocation(
                 latitude = it.latitude
             )
             requestWeather(
+                context = context,
                 viewModel = viewModel,
                 longitude = it.longitude,
                 latitude = it.latitude
@@ -382,11 +398,13 @@ private fun requestLocation(
 }
 
 fun requestWeather(
+    context: Context,
     viewModel: WeatherViewModel,
     longitude: Double,
     latitude: Double
 ) {
     viewModel.requestForecast(
+        context = context,
         location = "%f,%f".format(
             latitude,
             longitude

@@ -153,13 +153,6 @@ fun TomorrowWeatherLayout(
                                 ?: listOf()
                         )
                     }
-                    item {
-                        if (weatherResponseModel != null)
-                            TrademarkLayout(
-                                modifier = Modifier
-                                    .animateItemPlacement()
-                            )
-                    }
                 }
             }
         if (loaderState && !isRefreshing)
