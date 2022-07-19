@@ -92,6 +92,9 @@ class WeatherViewModel: ViewModel() {
                     )
                 )
                 items.add(
+                    weatherForecastDayDataModel.currentDayWeatherDataModel ?: continue
+                )
+                items.add(
                     weatherForecastDayDataModel.weatherHourlyDataModelList
                 )
             }

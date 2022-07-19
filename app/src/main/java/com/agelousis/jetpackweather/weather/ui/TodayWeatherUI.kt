@@ -131,7 +131,9 @@ fun TodayWeatherLayout(
                         )
                     }
                     item {
-                        if (weatherResponseModel != null)
+                        if (weatherResponseModel != null
+                            && weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList?.isNotEmpty() == true
+                        )
                             HeaderRowLayout(
                                 modifier = Modifier
                                     .animateItemPlacement(),

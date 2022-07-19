@@ -22,9 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.agelousis.jetpackweather.network.response.CurrentDayWeatherDataModel
 import com.agelousis.jetpackweather.network.response.WeatherHourlyDataModel
 import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.ui.rows.HeaderRowLayout
+import com.agelousis.jetpackweather.weather.rows.ForecastDayWeatherLayout
 import com.agelousis.jetpackweather.weather.rows.HourlyWeatherConditionsRowLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -109,6 +111,10 @@ fun NextDaysWeatherLayout(
                                     modifier = Modifier
                                         .animateItemPlacement(),
                                     headerModel = forecastItem
+                                )
+                            is CurrentDayWeatherDataModel ->
+                                ForecastDayWeatherLayout(
+                                    currentDayWeatherDataModel = forecastItem
                                 )
                             is List<*> ->
                                 HourlyWeatherConditionsRowLayout(
