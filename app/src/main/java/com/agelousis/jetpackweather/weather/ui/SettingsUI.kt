@@ -1,6 +1,7 @@
 package com.agelousis.jetpackweather.weather.ui
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import com.agelousis.jetpackweather.ui.rows.SwitchInputFieldRowLayout
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.offlineMode
 import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
+import com.agelousis.jetpackweather.utils.extensions.weatherNotificationsState
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
@@ -73,7 +75,11 @@ fun SettingsLayout(
                         SelectionInputFieldRowLayout(
                             weatherSettings = weatherSettings
                         ) { selectedPosition ->
-                            sharedPreferences.temperatureUnitType = TemperatureUnitType.values()[selectedPosition]
+                            configureSelectionInputFieldResult(
+                                sharedPreferences = sharedPreferences,
+                                weatherSettings = weatherSettings,
+                                selectedPosition = selectedPosition
+                            )
                         }
                         Divider(
                             modifier = Modifier
@@ -85,11 +91,16 @@ fun SettingsLayout(
                                 )
                         )
                     }
-                    is WeatherSettings.OfflineMode -> {
+                    is WeatherSettings.OfflineMode,
+                    is WeatherSettings.WeatherNotifications -> {
                         SwitchInputFieldRowLayout(
                             weatherSettings = weatherSettings
                         ) { isChecked ->
-                            sharedPreferences.offlineMode = isChecked
+                            configureSwitchInputFieldEvent(
+                                sharedPreferences = sharedPreferences,
+                                weatherSettings = weatherSettings,
+                                isChecked = isChecked
+                            )
                         }
                         Divider(
                             modifier = Modifier
@@ -104,6 +115,32 @@ fun SettingsLayout(
                 }
             }
         }
+    }
+}
+
+private fun configureSelectionInputFieldResult(
+    sharedPreferences: SharedPreferences,
+    weatherSettings: WeatherSettings,
+    selectedPosition: Int
+) {
+    when(weatherSettings) {
+        WeatherSettings.TemperatureType ->
+            sharedPreferences.temperatureUnitType = TemperatureUnitType.values()[selectedPosition]
+        else -> {}
+    }
+}
+
+private fun configureSwitchInputFieldEvent(
+    sharedPreferences: SharedPreferences,
+    weatherSettings: WeatherSettings,
+    isChecked: Boolean
+) {
+    when(weatherSettings) {
+        WeatherSettings.OfflineMode ->
+            sharedPreferences.offlineMode = isChecked
+        WeatherSettings.WeatherNotifications ->
+            sharedPreferences.weatherNotificationsState = isChecked
+        else -> {}
     }
 }
 

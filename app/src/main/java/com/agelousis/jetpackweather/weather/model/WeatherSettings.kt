@@ -6,6 +6,7 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.offlineMode
 import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
+import com.agelousis.jetpackweather.utils.extensions.weatherNotificationsState
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 
 sealed class WeatherSettings(
@@ -53,4 +54,20 @@ sealed class WeatherSettings(
         }
 
     }
+
+    object WeatherNotifications: WeatherSettings(
+        label = R.string.key_weather_notifications_label
+    ) {
+
+        infix fun isEnabled(
+            context: Context
+        ) = this.apply {
+            optionIsChecked = context.getSharedPreferences(
+                Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
+                Context.MODE_PRIVATE
+            ).weatherNotificationsState
+        }
+
+    }
+
 }

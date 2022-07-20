@@ -41,8 +41,9 @@ infix fun Context.openWebViewIntent(urlString: String) {
     }
 }
 
-fun Context.schedulePushNotifications(
-    hourToShowPush: Int = 22
+fun Context.schedulePushNotificationsEvery(
+    scheduleState: Boolean,
+    alarmManagerType: Long
 ) {
     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val alarmPendingIntent = PendingIntent.getBroadcast(
@@ -51,21 +52,13 @@ fun Context.schedulePushNotifications(
         Intent(this, WeatherAlarmReceiver::class.java),
         PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
     )
-    val calendar = GregorianCalendar.getInstance().apply {
-        if (get(Calendar.HOUR_OF_DAY) >= hourToShowPush) {
-            add(Calendar.DAY_OF_MONTH, 1)
-        }
-
-        set(Calendar.HOUR_OF_DAY, hourToShowPush)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }
-
-    alarmManager.setRepeating(
-        AlarmManager.RTC_WAKEUP,
-        calendar.timeInMillis,
-        AlarmManager.INTERVAL_DAY,
-        alarmPendingIntent
-    )
+    if (scheduleState)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            Calendar.getInstance().timeInMillis,
+            alarmManagerType,
+            alarmPendingIntent
+        )
+    else
+        alarmManager.cancel(alarmPendingIntent)
 }

@@ -52,4 +52,5 @@
     <string name="key_value_with_percent_label">%d%%</string>
     <string name="key_last_updated_with_date_label">Last Updated\n%s</string>
     <string name="key_notifications_channel_name">Jetpack Weather Notifications</string>
+    <string name="key_weather_notifications_label">Weather notifications</string>
 </resources>

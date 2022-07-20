@@ -65,3 +65,17 @@ var SharedPreferences.weatherResponseModel: WeatherResponseModel?
         catch (e: Exception) {
             null
         }
+
+var SharedPreferences.weatherNotificationsState: Boolean
+    set(value) {
+        edit {
+            putBoolean(
+                Constants.SharedPreferencesKeys.WEATHER_NOTIFICATIONS_SHARED_PREFERENCES_KEY,
+                value
+            )
+        }
+    }
+    get() = getBoolean(
+        Constants.SharedPreferencesKeys.WEATHER_NOTIFICATIONS_SHARED_PREFERENCES_KEY,
+        false
+    )
