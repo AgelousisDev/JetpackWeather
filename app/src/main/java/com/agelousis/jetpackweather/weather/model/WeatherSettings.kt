@@ -13,7 +13,7 @@ sealed class WeatherSettings(
 ) {
     var optionModelList: List<OptionModel>? = null
     var selectedOptionModel: OptionModel? = null
-    var optionIsEnabled = false
+    var optionIsChecked = false
 
     object TemperatureType: WeatherSettings(
         label = R.string.key_temperature_unit_label
@@ -34,16 +34,10 @@ sealed class WeatherSettings(
             )?.temperatureUnitType?.let { temperatureUnitType ->
                 OptionModel(
                     label = context.resources.getStringArray(R.array.key_temperature_unit_types_array)[TemperatureUnitType.values().indexOf(temperatureUnitType)],
-                    icon = when(temperatureUnitType) {
-                        TemperatureUnitType.CELSIUS ->
-                            R.drawable.ic_celsius
-                        TemperatureUnitType.FAHRENHEIT ->
-                            R.drawable.ic_fahrenheit
-                    }
+                    icon = temperatureUnitType.icon
                 )
             }
         }
-
     }
     object OfflineMode: WeatherSettings(
         label = R.string.key_load_saved_weather_when_offline_label
@@ -52,7 +46,7 @@ sealed class WeatherSettings(
         infix fun isEnabled(
             context: Context
         ) = this.apply {
-            optionIsEnabled = context.getSharedPreferences(
+            optionIsChecked = context.getSharedPreferences(
                 Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
                 Context.MODE_PRIVATE
             ).offlineMode

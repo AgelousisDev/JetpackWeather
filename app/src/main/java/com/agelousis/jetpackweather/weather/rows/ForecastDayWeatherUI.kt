@@ -10,8 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import coil.compose.rememberAsyncImagePainter
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.CurrentDayWeatherDataModel
@@ -25,68 +23,51 @@ fun ForecastDayWeatherLayout(
     currentDayWeatherDataModel: CurrentDayWeatherDataModel
 ) {
     val context = LocalContext.current
-    ConstraintLayout(
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
             .then(
                 other = modifier
             )
     ) {
-        val (temperatureLabelConstrainedReference, iconConstrainedReference,
-            conditionConstrainedReference, windLayoutConstrainedReference
-        ) = createRefs()
-        // C
-        Text(
-            text = currentDayWeatherDataModel currentMinMaxTemperatureUnitFormatted context,
-            style = textViewHeaderFont,
-            modifier = Modifier
-                .constrainAs(temperatureLabelConstrainedReference) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                }
-        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(
+                space = 16.dp
+            )
+        ) {
+            // C
+            Text(
+                text = currentDayWeatherDataModel currentMinMaxTemperatureUnitFormatted context,
+                style = textViewHeaderFont
+            )
 
-        // Condition Icon
-        Image(
-            painter = rememberAsyncImagePainter(
-                model = currentDayWeatherDataModel.weatherConditionDataModel?.iconUrl
-            ),
-            contentDescription = null,
-            modifier = Modifier
-                .constrainAs(iconConstrainedReference) {
-                    top.linkTo(temperatureLabelConstrainedReference.top)
-                    start.linkTo(temperatureLabelConstrainedReference.end, 16.dp)
-                    width = Dimension.value(
-                        dp = 40.dp
+            // Condition Icon
+            Image(
+                painter = rememberAsyncImagePainter(
+                    model = currentDayWeatherDataModel.weatherConditionDataModel?.iconUrl
+                ),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(
+                        size = 40.dp
                     )
-                    height = Dimension.value(
-                        dp = 40.dp
-                    )
-                }
-        )
+            )
+        }
 
         // Condition Text
         Text(
             text = currentDayWeatherDataModel.weatherConditionDataModel?.text ?: "",
             style = Typography.bodyMedium,
-            color = colorResource(id = R.color.grey),
-            modifier = Modifier
-                .constrainAs(conditionConstrainedReference) {
-                    start.linkTo(parent.start)
-                    top.linkTo(iconConstrainedReference.bottom, 0.dp)
-                    end.linkTo(parent.end)
-                }
+            color = colorResource(id = R.color.grey)
         )
 
         // Wind Layout
         Row(
             modifier = Modifier
-                .constrainAs(windLayoutConstrainedReference) {
-                    start.linkTo(parent.start)
-                    top.linkTo(conditionConstrainedReference.bottom, 16.dp)
-                    end.linkTo(parent.end)
-                },
+                .padding(
+                    top = 16.dp
+                ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(
                 space = 16.dp

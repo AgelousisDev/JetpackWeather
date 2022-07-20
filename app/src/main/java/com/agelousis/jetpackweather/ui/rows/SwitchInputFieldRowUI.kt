@@ -28,7 +28,7 @@ fun SwitchInputFieldRowLayout(
 ) {
     var isChecked by remember {
         mutableStateOf(
-            value = weatherSettings.optionIsEnabled
+            value = weatherSettings.optionIsChecked
         )
     }
     ConstraintLayout(

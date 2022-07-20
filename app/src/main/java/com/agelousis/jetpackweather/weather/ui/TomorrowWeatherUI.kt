@@ -94,7 +94,7 @@ fun TomorrowWeatherLayout(
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(
-                        space = 32.dp
+                        space = 16.dp
                     ),
                     contentPadding = PaddingValues(
                         bottom = 170.dp
