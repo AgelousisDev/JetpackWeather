@@ -14,6 +14,7 @@ object Constants {
         const val OFFLINE_MODE_SHARED_PREFERENCES_KEY = "offlineMode"
         const val WEATHER_RESPONSE_DATA_SHARED_PREFERENCES_KEY = "weatherResponseModelData"
         const val WEATHER_NOTIFICATIONS_SHARED_PREFERENCES_KEY = "weatherNotifications"
+        const val CURRENT_ADDRESS_DATA_SHARED_PREFERENCES_KEY = "currentAddressData"
     }
 
 }

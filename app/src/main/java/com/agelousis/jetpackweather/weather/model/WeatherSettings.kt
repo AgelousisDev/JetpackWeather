@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.StringRes
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.utils.constants.Constants
+import com.agelousis.jetpackweather.utils.extensions.addressDataModel
 import com.agelousis.jetpackweather.utils.extensions.offlineMode
 import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
 import com.agelousis.jetpackweather.utils.extensions.weatherNotificationsState
@@ -15,6 +16,7 @@ sealed class WeatherSettings(
     var optionModelList: List<OptionModel>? = null
     var selectedOptionModel: OptionModel? = null
     var optionIsChecked = false
+    var optionIsEnabled = true
 
     object TemperatureType: WeatherSettings(
         label = R.string.key_temperature_unit_label
@@ -62,10 +64,12 @@ sealed class WeatherSettings(
         infix fun isEnabled(
             context: Context
         ) = this.apply {
-            optionIsChecked = context.getSharedPreferences(
+            val sharedPreferences = context.getSharedPreferences(
                 Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
                 Context.MODE_PRIVATE
-            ).weatherNotificationsState
+            )
+            optionIsChecked = sharedPreferences.weatherNotificationsState
+            optionIsEnabled = sharedPreferences.addressDataModel != null
         }
 
     }

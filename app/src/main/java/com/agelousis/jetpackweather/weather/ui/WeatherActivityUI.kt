@@ -35,6 +35,8 @@ import com.agelousis.jetpackweather.ui.composableView.WeatherDrawerNavigation
 import com.agelousis.jetpackweather.ui.composableView.WeatherSmallTopAppBar
 import com.agelousis.jetpackweather.ui.composableView.models.SimpleDialogDataModel
 import com.agelousis.jetpackweather.ui.theme.Typography
+import com.agelousis.jetpackweather.utils.constants.Constants
+import com.agelousis.jetpackweather.utils.extensions.addressDataModel
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
 import com.agelousis.jetpackweather.utils.helpers.LocationHelper
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
@@ -275,6 +277,10 @@ fun WeatherAppBarActions(
         if (activityResult.resultCode == Activity.RESULT_OK) {
             viewModel.addressDataModelMutableStateFlow.value =
                 activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
+            context.getSharedPreferences(
+                Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
+                Context.MODE_PRIVATE
+            ).addressDataModel = viewModel.addressDataModelStateFlow.value
             requestWeather(
                 context = context,
                 viewModel = viewModel,
@@ -387,6 +393,10 @@ private fun requestLocation(
                 longitude = it.longitude,
                 latitude = it.latitude
             )
+            context.getSharedPreferences(
+                Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
+                Context.MODE_PRIVATE
+            ).addressDataModel = viewModel.addressDataModelStateFlow.value
             requestWeather(
                 context = context,
                 viewModel = viewModel,

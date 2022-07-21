@@ -34,7 +34,9 @@ fun SwitchInputFieldRowLayout(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
+            .clickable(
+                enabled = weatherSettings.optionIsEnabled
+            ) {
                 isChecked = !isChecked
                 switchInputFieldBlock(isChecked)
             }
@@ -71,6 +73,7 @@ fun SwitchInputFieldRowLayout(
                 isChecked = it
                 switchInputFieldBlock(it)
             },
+            enabled = weatherSettings.optionIsEnabled,
             thumbContent = icon,
             modifier = Modifier
                 .constrainAs(switchConstrainedReference) {

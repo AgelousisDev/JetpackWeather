@@ -1,5 +1,6 @@
 package com.agelousis.jetpackweather.weather.ui
 
+import android.app.AlarmManager
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.compose.foundation.background
@@ -24,6 +25,7 @@ import com.agelousis.jetpackweather.ui.rows.SelectionInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.rows.SwitchInputFieldRowLayout
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.offlineMode
+import com.agelousis.jetpackweather.utils.extensions.schedulePushNotificationsEvery
 import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
 import com.agelousis.jetpackweather.utils.extensions.weatherNotificationsState
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
@@ -97,6 +99,7 @@ fun SettingsLayout(
                             weatherSettings = weatherSettings
                         ) { isChecked ->
                             configureSwitchInputFieldEvent(
+                                context = context,
                                 sharedPreferences = sharedPreferences,
                                 weatherSettings = weatherSettings,
                                 isChecked = isChecked
@@ -131,6 +134,7 @@ private fun configureSelectionInputFieldResult(
 }
 
 private fun configureSwitchInputFieldEvent(
+    context: Context,
     sharedPreferences: SharedPreferences,
     weatherSettings: WeatherSettings,
     isChecked: Boolean
@@ -138,8 +142,13 @@ private fun configureSwitchInputFieldEvent(
     when(weatherSettings) {
         WeatherSettings.OfflineMode ->
             sharedPreferences.offlineMode = isChecked
-        WeatherSettings.WeatherNotifications ->
+        WeatherSettings.WeatherNotifications -> {
             sharedPreferences.weatherNotificationsState = isChecked
+            context.schedulePushNotificationsEvery(
+                scheduleState = isChecked,
+                alarmManagerType = AlarmManager.INTERVAL_HOUR
+            )
+        }
         else -> {}
     }
 }

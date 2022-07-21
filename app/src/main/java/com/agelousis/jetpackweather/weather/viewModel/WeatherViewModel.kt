@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
+import com.agelousis.jetpackweather.network.repositories.SuccessBlock
 import com.agelousis.jetpackweather.network.repositories.WeatherRepository
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.ui.models.HeaderModel
@@ -140,7 +141,8 @@ class WeatherViewModel: ViewModel() {
     fun requestCurrentWeather(
         context: Context,
         location: String,
-        airQualityState: Boolean
+        airQualityState: Boolean,
+        successBlock: SuccessBlock<WeatherResponseModel>? = null
     ) {
         loaderStateMutableStateFlow.value = true
         WeatherRepository.requestCurrentWeather(
@@ -152,6 +154,7 @@ class WeatherViewModel: ViewModel() {
                 networkErrorMutableStateFlow.value = false
                 weatherResponseMutableLiveData.value = weatherResponseModel
                 weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
+                successBlock?.invoke(weatherResponseModel)
             },
             failureBlock = {
                 swipeRefreshMutableStateFlow.value = false
