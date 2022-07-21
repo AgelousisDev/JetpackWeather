@@ -34,7 +34,7 @@ object NotificationHelper {
         mBuilder.setContentTitle(notificationDataModel.title)
         mBuilder.setContentText(notificationDataModel.body)
         mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-        mBuilder.setSmallIcon(R.drawable.app_icon_foreground)
+        mBuilder.setSmallIcon(R.drawable.ic_weather_partly_cloudy_day)
         notificationDataModel.largeImageBitmap?.let {
             mBuilder.setLargeIcon(it)
         }
