@@ -147,8 +147,6 @@ fun TomorrowWeatherLayout(
                     }
                     item {
                         HourlyWeatherConditionsRowLayout(
-                            modifier = Modifier
-                                .animateItemPlacement(),
                             weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.nextWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList
                                 ?: listOf()
                         )

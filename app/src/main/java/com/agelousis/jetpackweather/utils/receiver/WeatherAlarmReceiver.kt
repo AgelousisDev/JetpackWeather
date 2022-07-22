@@ -52,8 +52,11 @@ class WeatherAlarmReceiver: BroadcastReceiver() {
                     context = context,
                     notificationDataModel = NotificationDataModel(
                         notificationId = 1,
-                        title = weatherResponseModel.currentWeatherDataModel.currentTemperatureUnitFormatted(
-                            context = context
+                        title = "%s - %s".format(
+                            weatherResponseModel.weatherLocationDataModel?.regionCountry,
+                            weatherResponseModel.currentWeatherDataModel.currentTemperatureUnitFormatted(
+                                context = context
+                            )
                         ),
                         body = weatherResponseModel.currentWeatherDataModel.weatherConditionDataModel.text,
                         largeImageBitmap = iconBitmap
