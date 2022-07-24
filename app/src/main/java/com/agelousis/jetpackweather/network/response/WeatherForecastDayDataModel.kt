@@ -20,7 +20,7 @@ data class WeatherForecastDayDataModel(
 
     private val currentWeatherHourlyDataModel
         get() = weatherHourlyDataModelList?.firstOrNull { weatherHourlyDataModel ->
-            val nowCalendar= Calendar.getInstance()
+            val nowCalendar = Calendar.getInstance()
             nowCalendar.time = Date()
 
             val weatherHourlyCalendar = Calendar.getInstance()

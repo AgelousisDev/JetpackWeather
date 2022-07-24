@@ -2,6 +2,7 @@ package com.agelousis.jetpackweather.ui.rows
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -22,6 +23,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.WeatherHourlyDataModel
 import com.agelousis.jetpackweather.ui.theme.Typography
+import com.agelousis.jetpackweather.ui.theme.bold
 import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
 
 @Composable
@@ -36,132 +38,154 @@ fun HourlyWeatherConditionRowLayout(
         )
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(
-                space = 8.dp
-            ),
-            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .width(
                     width = 130.dp
                 )
-                .padding(
-                    all = 16.dp
-                )
         ) {
-            //Current Hour
-            Text(
-                text = weatherHourlyDataModel.displayTime ?: "",
-                style = Typography.bodyMedium
-            )
-            // Condition Icon
-            Image(
-                painter = rememberAsyncImagePainter(
-                    model = weatherHourlyDataModel.weatherConditionDataModel?.iconUrl
-                ),
-                contentDescription = null,
+            //Current Hour Box
+            Box(
                 modifier = Modifier
-                    .size(
-                        size = 40.dp
+                    .fillMaxWidth()
+                    .height(
+                        height = 30.dp
                     )
-            )
-            // C
-            Text(
-                text = weatherHourlyDataModel.currentTemperatureUnitFormatted(
-                    context = context
-                ),
-                style = textViewHeaderFont
-            )
-            // Condition Text
-            Text(
-                text = weatherHourlyDataModel.weatherConditionDataModel?.text ?: "",
-                style = Typography.bodyMedium,
-                color = colorResource(id = R.color.grey),
-                textAlign = TextAlign.Center
-            )
-
-            // Feels Like
-            Text(
-                text = stringResource(
-                    id = R.string.key_feels_like_label,
-                    weatherHourlyDataModel.feelsLikeTemperatureUnitFormatted(
-                        context = context
-                    )
-                ),
-                style = Typography.bodyMedium,
-                color = colorResource(id = R.color.grey),
-                textAlign = TextAlign.Center
-            )
-
-            // Wind Layout
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(
-                    space = 16.dp
-                ),
-                modifier = Modifier
-                    .padding(
-                        top = 16.dp
+                    .background(
+                        color = MaterialTheme.colorScheme.surface
                     )
             ) {
                 Text(
-                    text = weatherHourlyDataModel.windKph?.toInt()
-                        ?.toString()
-                        ?: "",
-                    style = textViewHeaderFont,
+                    text = weatherHourlyDataModel.displayTime ?: "",
+                    style = Typography.bodyMedium.bold,
+                    modifier = Modifier
+                        .align(
+                            alignment = Alignment.Center
+                        )
+                )
+            }
+
+            // Main Content
+            Column(
+                verticalArrangement = Arrangement.spacedBy(
+                    space = 8.dp
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        bottom = 16.dp
+                    )
+            ) {
+                // Condition Icon
+                Image(
+                    painter = rememberAsyncImagePainter(
+                        model = weatherHourlyDataModel.weatherConditionDataModel?.iconUrl
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(
+                            size = 40.dp
+                        )
+                )
+                // C
+                Text(
+                    text = weatherHourlyDataModel.currentTemperatureUnitFormatted(
+                        context = context
+                    ),
+                    style = textViewHeaderFont
+                )
+                // Condition Text
+                Text(
+                    text = weatherHourlyDataModel.weatherConditionDataModel?.text ?: "",
+                    style = Typography.bodyMedium,
+                    color = colorResource(id = R.color.grey),
+                    textAlign = TextAlign.Center
+                )
+
+                // Feels Like
+                Text(
+                    text = stringResource(
+                        id = R.string.key_feels_like_label,
+                        weatherHourlyDataModel.feelsLikeTemperatureUnitFormatted(
+                            context = context
+                        )
+                    ),
+                    style = Typography.bodyMedium,
+                    color = colorResource(id = R.color.grey),
+                    textAlign = TextAlign.Center
+                )
+
+                // Wind Layout
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(
+                        space = 16.dp
+                    ),
+                    modifier = Modifier
+                        .padding(
+                            top = 16.dp
+                        )
+                ) {
+                    Text(
+                        text = weatherHourlyDataModel.windKph?.toInt()
+                            ?.toString()
+                            ?: "",
+                        style = textViewHeaderFont,
+                        color = colorResource(
+                            id = weatherHourlyDataModel.windStateColor
+                        )
+                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(
+                            space = 8.dp
+                        )
+                    ) {
+                        if (weatherHourlyDataModel.windDegree != null)
+                            Icon(
+                                painter = painterResource(
+                                    id = R.drawable.ic_arrow_direction_down
+                                ),
+                                contentDescription = null,
+                                tint = colorResource(id = R.color.grey),
+                                modifier = Modifier
+                                    .size(
+                                        size = 15.dp
+                                    )
+                                    .rotate(
+                                        degrees = weatherHourlyDataModel.windDegree.toFloat()
+                                    )
+                            )
+                        Text(
+                            text = stringResource(id = R.string.key_km_hourly_label),
+                            style = Typography.labelMedium,
+                            color = colorResource(id = R.color.grey)
+                        )
+                    }
+                }
+                Text(
+                    text = weatherHourlyDataModel.getWindStateWarning(
+                        context = context
+                    ),
+                    style = Typography.displayMedium,
                     color = colorResource(
                         id = weatherHourlyDataModel.windStateColor
                     )
                 )
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(
-                        space = 8.dp
-                    )
-                ) {
-                    if (weatherHourlyDataModel.windDegree != null)
-                        Icon(
-                            painter = painterResource(
-                                id = R.drawable.ic_arrow_direction_down
-                            ),
-                            contentDescription = null,
-                            tint = colorResource(id = R.color.grey),
-                            modifier = Modifier
-                                .size(
-                                    size = 15.dp
-                                )
-                                .rotate(
-                                    degrees = weatherHourlyDataModel.windDegree.toFloat()
-                                )
+                Text(
+                    text = stringResource(
+                        id = R.string.key_now_with_value_label,
+                        weatherHourlyDataModel.getWindDirection(
+                            context = context
                         )
-                    Text(
-                        text = stringResource(id = R.string.key_km_hourly_label),
-                        style = Typography.labelMedium,
-                        color = colorResource(id = R.color.grey)
-                    )
-                }
-            }
-
-            Text(
-                text = weatherHourlyDataModel.getWindStateWarning(
-                    context = context
-                ),
-                style = Typography.displayMedium,
-                color = colorResource(
-                    id = weatherHourlyDataModel.windStateColor
+                    ),
+                    style = Typography.bodyMedium,
+                    textAlign = TextAlign.Center
                 )
-            )
-            Text(
-                text = stringResource(
-                    id = R.string.key_now_with_value_label,
-                    weatherHourlyDataModel.getWindDirection(
-                        context = context
-                    )
-                ),
-                style = Typography.bodyMedium,
-                textAlign = TextAlign.Center
-            )
+                // End of Wind Layout
+            }
         }
-        // End of Wind Layout
     }
 }
 
@@ -170,6 +194,7 @@ fun HourlyWeatherConditionRowLayout(
 fun HourlyWeatherConditionRowLayoutPreview() {
     HourlyWeatherConditionRowLayout(
         weatherHourlyDataModel = WeatherHourlyDataModel(
+            time = "2022-07-24 20:00",
             tempC = 20.0,
             tempF = 30.0,
             humidity = 60,

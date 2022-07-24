@@ -126,13 +126,13 @@ fun TodayWeatherLayout(
                         SunAndMoonRowLayout(
                             modifier = Modifier
                                 .animateItemPlacement(),
-                            sunAndMoonStates = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherAstroDataModel?.availableSunAndMoonStates ?: listOf(),
-                            weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.weatherAstroDataModel
+                            sunAndMoonStates = weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.weatherAstroDataModel?.availableSunAndMoonStates ?: listOf(),
+                            weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.weatherAstroDataModel
                         )
                     }
                     item {
                         if (weatherResponseModel != null
-                            && weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList?.isNotEmpty() == true
+                            && weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList?.isNotEmpty() == true
                         )
                             HeaderRowLayout(
                                 modifier = Modifier
@@ -144,7 +144,7 @@ fun TodayWeatherLayout(
                     }
                     item {
                         HourlyWeatherConditionsRowLayout(
-                            weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.currentWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList
+                            weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList
                                 ?: listOf()
                         )
                     }
