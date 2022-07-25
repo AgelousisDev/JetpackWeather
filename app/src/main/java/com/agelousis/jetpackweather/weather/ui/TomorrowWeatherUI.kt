@@ -100,6 +100,7 @@ fun TomorrowWeatherLayout(
                         bottom = 170.dp
                     )
                 ) {
+                    // Calendar Item
                     item {
                         CalendarRowLayout(
                             modifier = Modifier
@@ -108,6 +109,7 @@ fun TomorrowWeatherLayout(
                             weatherResponseModel = weatherResponseModel
                         )
                     }
+                    // Current Temperature
                     item {
                         CurrentTemperatureRowLayout(
                             modifier = Modifier
@@ -117,6 +119,24 @@ fun TomorrowWeatherLayout(
                                 ?: return@item
                         )
                     }
+                    // Day Hourly Temperature
+                    item {
+                        if (weatherResponseModel != null)
+                            HeaderRowLayout(
+                                modifier = Modifier
+                                    .animateItemPlacement(),
+                                headerModel = HeaderModel(
+                                    header = stringResource(id = R.string.key_temperature_label)
+                                )
+                            )
+                    }
+                    item {
+                        HourlyWeatherConditionsRowLayout(
+                            weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.nextWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList
+                                ?: listOf()
+                        )
+                    }
+                    // Sun & Moon
                     item {
                         if (weatherResponseModel != null)
                             HeaderRowLayout(
@@ -133,22 +153,6 @@ fun TomorrowWeatherLayout(
                                 .animateItemPlacement(),
                             sunAndMoonStates = weatherResponseModel?.weatherForecastDataModel?.nextWeatherForecastDayDataModel?.weatherAstroDataModel?.availableSunAndMoonStates ?: listOf(),
                             weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.nextWeatherForecastDayDataModel?.weatherAstroDataModel
-                        )
-                    }
-                    item {
-                        if (weatherResponseModel != null)
-                            HeaderRowLayout(
-                                modifier = Modifier
-                                    .animateItemPlacement(),
-                                headerModel = HeaderModel(
-                                    header = stringResource(id = R.string.key_temperature_label)
-                                )
-                            )
-                    }
-                    item {
-                        HourlyWeatherConditionsRowLayout(
-                            weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.nextWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList
-                                ?: listOf()
                         )
                     }
                 }

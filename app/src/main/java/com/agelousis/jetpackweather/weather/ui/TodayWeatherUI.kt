@@ -97,6 +97,7 @@ fun TodayWeatherLayout(
                         bottom = 170.dp
                     )
                 ) {
+                    // Calendar Item
                     item {
                         CalendarRowLayout(
                             modifier = Modifier
@@ -105,6 +106,7 @@ fun TodayWeatherLayout(
                             weatherResponseModel = weatherResponseModel
                         )
                     }
+                    // Current Temperature
                     item {
                         CurrentTemperatureRowLayout(
                             modifier = Modifier
@@ -112,24 +114,7 @@ fun TodayWeatherLayout(
                             currentWeatherDataModel = weatherResponseModel?.currentWeatherDataModel ?: return@item
                         )
                     }
-                    item {
-                        if (weatherResponseModel != null)
-                            HeaderRowLayout(
-                                modifier = Modifier
-                                    .animateItemPlacement(),
-                                headerModel = HeaderModel(
-                                    header = stringResource(id = R.string.key_sun_and_moon_label)
-                                )
-                            )
-                    }
-                    item {
-                        SunAndMoonRowLayout(
-                            modifier = Modifier
-                                .animateItemPlacement(),
-                            sunAndMoonStates = weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.weatherAstroDataModel?.availableSunAndMoonStates ?: listOf(),
-                            weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.weatherAstroDataModel
-                        )
-                    }
+                    // Day Hourly Temperature
                     item {
                         if (weatherResponseModel != null
                             && weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList?.isNotEmpty() == true
@@ -146,6 +131,25 @@ fun TodayWeatherLayout(
                         HourlyWeatherConditionsRowLayout(
                             weatherHourlyDataModelList = weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.remainingWeatherHourlyDataModelList
                                 ?: listOf()
+                        )
+                    }
+                    // Sun & Moon
+                    item {
+                        if (weatherResponseModel != null)
+                            HeaderRowLayout(
+                                modifier = Modifier
+                                    .animateItemPlacement(),
+                                headerModel = HeaderModel(
+                                    header = stringResource(id = R.string.key_sun_and_moon_label)
+                                )
+                            )
+                    }
+                    item {
+                        SunAndMoonRowLayout(
+                            modifier = Modifier
+                                .animateItemPlacement(),
+                            sunAndMoonStates = weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.weatherAstroDataModel?.availableSunAndMoonStates ?: listOf(),
+                            weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.weatherAstroDataModel
                         )
                     }
                 }
