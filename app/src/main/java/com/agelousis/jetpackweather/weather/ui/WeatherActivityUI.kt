@@ -33,6 +33,7 @@ import com.agelousis.jetpackweather.ui.composableView.SimpleDialog
 import com.agelousis.jetpackweather.ui.composableView.WeatherBottomNavigation
 import com.agelousis.jetpackweather.ui.composableView.WeatherDrawerNavigation
 import com.agelousis.jetpackweather.ui.composableView.WeatherSmallTopAppBar
+import com.agelousis.jetpackweather.ui.composableView.models.PositiveButtonBlock
 import com.agelousis.jetpackweather.ui.composableView.models.SimpleDialogDataModel
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.utils.constants.Constants
@@ -69,6 +70,7 @@ fun WeatherActivityBottomNavigationLayout(
     var requestLocationOnStartupState by remember {
         mutableStateOf(value = true)
     }
+    val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
     val onBack: () -> Unit = {
         navController.navigateUp()
     }
@@ -172,7 +174,6 @@ fun WeatherActivityBottomNavigationLayout(
                     actions = {
                         WeatherAppBarActions(
                             viewModel = viewModel,
-                            rowScope = this
                         )
                     }
                 )
@@ -194,6 +195,7 @@ fun WeatherActivityBottomNavigationLayout(
                         android.Manifest.permission.ACCESS_COARSE_LOCATION,
                         android.Manifest.permission.ACCESS_FINE_LOCATION
                     )
+                    || addressDataModel != null
                 )
                     WeatherActivityNavigation(
                         viewModel = viewModel,
@@ -266,7 +268,6 @@ fun WeatherActivityNavigation(
 
 @Composable
 fun WeatherAppBarActions(
-    rowScope: RowScope,
     viewModel: WeatherViewModel
 ) {
     val context = LocalContext.current
@@ -284,58 +285,58 @@ fun WeatherAppBarActions(
             requestWeather(
                 context = context,
                 viewModel = viewModel,
-                longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: return@rememberLauncherForActivityResult,
-                latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: return@rememberLauncherForActivityResult
+                longitude = viewModel.addressDataModelStateFlow.value?.longitude
+                    ?: return@rememberLauncherForActivityResult,
+                latitude = viewModel.addressDataModelStateFlow.value?.latitude
+                    ?: return@rememberLauncherForActivityResult
             )
         }
     }
-    rowScope.apply {
-        Crossfade(
-            targetState = viewModel.currentNavigationRoute
-        ) {
-            if (it != WeatherDrawerNavigationScreen.Settings.route)
-            // Current Location
-                IconButton(
-                    onClick = {
-                        requestLocation(
-                            context = context,
-                            viewModel = viewModel
-                        )
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.LocationOn,
-                        contentDescription = null
+    Crossfade(
+        targetState = viewModel.currentNavigationRoute
+    ) {
+        if (it != WeatherDrawerNavigationScreen.Settings.route)
+        // Current Location
+            IconButton(
+                enabled = viewModel.locationPermissionState,
+                onClick = {
+                    requestLocation(
+                        context = context,
+                        viewModel = viewModel
                     )
                 }
-        }
-        Crossfade(
-            targetState = viewModel.currentNavigationRoute
-        ) {
-            if (it != WeatherDrawerNavigationScreen.Settings.route)
-            // Edit
-                IconButton(
-                    enabled = addressDataModel != null,
-                    onClick = {
-                        mapAddressPickerLauncher.launch(
-                            Intent(
-                                context,
-                                MapAddressPickerActivity::class.java
-                            ).also { intent ->
-                                intent.putExtra(
-                                    MapAddressPickerActivity.CURRENT_ADDRESS,
-                                    addressDataModel
-                                )
-                            }
-                        )
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Edit,
-                        contentDescription = null
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.LocationOn,
+                    contentDescription = null
+                )
+            }
+    }
+    Crossfade(
+        targetState = viewModel.currentNavigationRoute
+    ) {
+        if (it != WeatherDrawerNavigationScreen.Settings.route)
+        // Edit
+            IconButton(
+                onClick = {
+                    mapAddressPickerLauncher.launch(
+                        Intent(
+                            context,
+                            MapAddressPickerActivity::class.java
+                        ).also { intent ->
+                            intent.putExtra(
+                                MapAddressPickerActivity.CURRENT_ADDRESS,
+                                addressDataModel
+                            )
+                        }
                     )
                 }
-        }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = null
+                )
+            }
     }
 }
 
@@ -344,10 +345,16 @@ private fun LocationPermissionRequest(
     viewModel: WeatherViewModel
 ) {
     val context = LocalContext.current
+    var locationPermissionDialogState by remember {
+        mutableStateOf(value = false)
+    }
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestMultiplePermissions()
     ) { locationPermissions ->
         viewModel.locationPermissionState = locationPermissions.all {
+            it.value
+        }
+        locationPermissionDialogState = locationPermissions.none {
             it.value
         }
         requestLocation(
@@ -355,6 +362,23 @@ private fun LocationPermissionRequest(
             viewModel = viewModel
         )
     }
+
+    LocationPermissionDialog(
+        state = locationPermissionDialogState,
+        positiveButtonBlock = {
+            locationPermissionDialogState = false
+            permissionLauncher.launch(
+                arrayOf(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            )
+        },
+        dismissBlock = {
+            locationPermissionDialogState = false
+        }
+    )
+
     LaunchedEffect(
         key1 = Unit
     ) {
@@ -370,6 +394,23 @@ private fun LocationPermissionRequest(
             )
         }
     }
+}
+
+@Composable
+private fun LocationPermissionDialog(
+    state: Boolean,
+    positiveButtonBlock: PositiveButtonBlock,
+    dismissBlock: PositiveButtonBlock
+) {
+    SimpleDialog(
+        show = state,
+        simpleDialogDataModel = SimpleDialogDataModel(
+            title = stringResource(id = R.string.key_warning_label),
+            message = stringResource(id = R.string.key_location_permission_approval_message),
+            positiveButtonBlock = positiveButtonBlock,
+            dismissBlock = dismissBlock
+        )
+    )
 }
 
 private fun requestLocation(

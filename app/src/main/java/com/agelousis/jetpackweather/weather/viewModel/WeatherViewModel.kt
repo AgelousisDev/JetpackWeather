@@ -47,7 +47,7 @@ class WeatherViewModel: ViewModel() {
 
     var alertPair by mutableStateOf<Pair<String?, String?>>(value = null to null)
 
-    private fun onOpenDialogClicked() {
+    fun showDialog() {
         _showDialog.value = true
     }
 
@@ -161,7 +161,7 @@ class WeatherViewModel: ViewModel() {
                 loaderStateMutableStateFlow.value = false
                 networkErrorMutableStateFlow.value = true
                 alertPair = context.resources.getString(R.string.key_error_label) to it.localizedMessage
-                onOpenDialogClicked()
+                showDialog()
             }
         )
     }
