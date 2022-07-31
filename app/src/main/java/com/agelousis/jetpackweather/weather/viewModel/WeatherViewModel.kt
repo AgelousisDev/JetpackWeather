@@ -45,6 +45,9 @@ class WeatherViewModel: ViewModel() {
     private val _showDialog = MutableStateFlow(value = false)
     val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
 
+    val requestLocationMutableState = MutableStateFlow(value = false)
+    val requestLocationState: StateFlow<Boolean> = requestLocationMutableState.asStateFlow()
+
     var alertPair by mutableStateOf<Pair<String?, String?>>(value = null to null)
 
     fun showDialog() {

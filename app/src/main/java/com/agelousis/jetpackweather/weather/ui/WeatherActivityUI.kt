@@ -424,11 +424,13 @@ private fun requestLocation(
             android.Manifest.permission.ACCESS_FINE_LOCATION
         )
         && state
-    )
+    ) {
+        viewModel.requestLocationMutableState.value = true
         LocationHelper(
             context = context,
             priority = PRIORITY_HIGH_ACCURACY
         ) {
+            viewModel.requestLocationMutableState.value = false
             viewModel.addressDataModelMutableStateFlow.value = viewModel.getAddressFromLocation(
                 context = context,
                 longitude = it.longitude,
@@ -446,6 +448,7 @@ private fun requestLocation(
             )
             successUnitBlock()
         }
+    }
 }
 
 fun requestWeather(

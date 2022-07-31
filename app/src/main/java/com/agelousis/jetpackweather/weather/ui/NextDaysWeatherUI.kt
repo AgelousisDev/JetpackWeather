@@ -28,6 +28,7 @@ import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.ui.rows.HeaderRowLayout
 import com.agelousis.jetpackweather.weather.rows.ForecastDayWeatherLayout
 import com.agelousis.jetpackweather.weather.rows.HourlyWeatherConditionsRowLayout
+import com.agelousis.jetpackweather.weather.rows.RequestLocationLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -42,6 +43,7 @@ fun NextDaysWeatherLayout(
     val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
     val isRefreshing by viewModel.swipeRefreshStateFlow.collectAsState()
     val networkErrorState by viewModel.networkErrorStateFlow.collectAsState()
+    val requestLocationState by viewModel.requestLocationState.collectAsState()
 
     ConstraintLayout(
         modifier = Modifier
@@ -126,6 +128,22 @@ fun NextDaysWeatherLayout(
                     }
                 }
             }
+        if (requestLocationState)
+            RequestLocationLayout(
+                modifier = Modifier
+                    .constrainAs(progressIndicatorConstrainedReference) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        width = Dimension.value(
+                            dp = 100.dp
+                        )
+                        height = Dimension.value(
+                            dp = 100.dp
+                        )
+                    }
+            )
         if (loaderState && !isRefreshing)
             CircularProgressIndicator(
                 modifier = Modifier

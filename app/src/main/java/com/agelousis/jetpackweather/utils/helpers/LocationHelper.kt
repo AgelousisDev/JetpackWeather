@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Looper
 import androidx.core.app.ActivityCompat
+import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
 import com.google.android.gms.location.*
 
 typealias LocationSuccessBlock = (Location) -> Unit
@@ -44,10 +45,10 @@ class LocationHelper(
         val locationSettingsRequest = builder.build()
         val settingsClient = LocationServices.getSettingsClient(context)
         settingsClient.checkLocationSettings(locationSettingsRequest)
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
+        if (context.arePermissionsGranted(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
         )
             LocationServices.getFusedLocationProviderClient(context).requestLocationUpdates(
                 locationRequest,

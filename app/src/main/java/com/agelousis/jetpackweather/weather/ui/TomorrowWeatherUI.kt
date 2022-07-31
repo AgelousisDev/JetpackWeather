@@ -26,10 +26,7 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.ui.rows.HeaderRowLayout
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
-import com.agelousis.jetpackweather.weather.rows.CalendarRowLayout
-import com.agelousis.jetpackweather.weather.rows.CurrentTemperatureRowLayout
-import com.agelousis.jetpackweather.weather.rows.HourlyWeatherConditionsRowLayout
-import com.agelousis.jetpackweather.weather.rows.SunAndMoonRowLayout
+import com.agelousis.jetpackweather.weather.rows.*
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -44,6 +41,7 @@ fun TomorrowWeatherLayout(
     val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
     val isRefreshing by viewModel.swipeRefreshStateFlow.collectAsState()
     val networkErrorState by viewModel.networkErrorStateFlow.collectAsState()
+    val requestLocationState by viewModel.requestLocationState.collectAsState()
 
     ConstraintLayout(
         modifier = Modifier
@@ -157,6 +155,22 @@ fun TomorrowWeatherLayout(
                     }
                 }
             }
+        if (requestLocationState)
+            RequestLocationLayout(
+                modifier = Modifier
+                    .constrainAs(progressIndicatorConstrainedReference) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        end.linkTo(parent.end)
+                        bottom.linkTo(parent.bottom)
+                        width = Dimension.value(
+                            dp = 100.dp
+                        )
+                        height = Dimension.value(
+                            dp = 100.dp
+                        )
+                    }
+            )
         if (loaderState && !isRefreshing)
             CircularProgressIndicator(
                 modifier = Modifier
