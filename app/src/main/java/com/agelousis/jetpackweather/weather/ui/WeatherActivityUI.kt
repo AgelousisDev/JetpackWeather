@@ -260,8 +260,8 @@ fun WeatherActivityNavigation(
             WeatherDrawerNavigationScreen.Settings.route ->
                 innerNavController.context.resources.getString(R.string.key_settings_label)
             else ->
-                viewModel.weatherResponseLiveData.value?.weatherLocationDataModel?.regionCountry
-                    ?: innerNavController.context.resources.getString(R.string.app_name)
+                //viewModel.weatherResponseLiveData.value?.weatherLocationDataModel?.regionCountry
+                    viewModel.addressDataModelStateFlow.value?.addressLine ?: innerNavController.context.resources.getString(R.string.app_name)
         }
     }
 }
@@ -282,6 +282,7 @@ fun WeatherAppBarActions(
                 Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
                 Context.MODE_PRIVATE
             ).addressDataModel = viewModel.addressDataModelStateFlow.value
+            viewModel.weatherUiAppBarTitle = viewModel.addressDataModelStateFlow.value?.addressLine
             requestWeather(
                 context = context,
                 viewModel = viewModel,
@@ -298,11 +299,16 @@ fun WeatherAppBarActions(
         if (it != WeatherDrawerNavigationScreen.Settings.route)
         // Current Location
             IconButton(
-                enabled = viewModel.locationPermissionState,
+                enabled = viewModel.locationPermissionState
+                        || context.arePermissionsGranted(
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION
+                        ),
                 onClick = {
                     requestLocation(
                         context = context,
-                        viewModel = viewModel
+                        viewModel = viewModel,
+                        fromUpdate = true
                     )
                 }
             ) {
@@ -416,7 +422,9 @@ private fun LocationPermissionDialog(
 private fun requestLocation(
     context: Context,
     state: Boolean = true,
+    fromUpdate: Boolean = false,
     viewModel: WeatherViewModel,
+
     successUnitBlock: SuccessUnitBlock = {}
 ) {
     if (context.arePermissionsGranted(
@@ -425,17 +433,20 @@ private fun requestLocation(
         )
         && state
     ) {
-        viewModel.requestLocationMutableState.value = true
+        if (!fromUpdate)
+            viewModel.requestLocationMutableState.value = true
         LocationHelper(
             context = context,
             priority = PRIORITY_HIGH_ACCURACY
         ) {
-            viewModel.requestLocationMutableState.value = false
+            if (!fromUpdate)
+                viewModel.requestLocationMutableState.value = false
             viewModel.addressDataModelMutableStateFlow.value = viewModel.getAddressFromLocation(
                 context = context,
                 longitude = it.longitude,
                 latitude = it.latitude
             )
+            viewModel.weatherUiAppBarTitle = viewModel.addressDataModelStateFlow.value?.addressLine
             context.getSharedPreferences(
                 Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
                 Context.MODE_PRIVATE

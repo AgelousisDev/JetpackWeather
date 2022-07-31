@@ -135,8 +135,12 @@ class WeatherViewModel: ViewModel() {
             addressLine = addresses?.firstOrNull()?.getAddressLine(0)?.takeIf { addressLine ->
                 addressLine.split(",").size < 3
             } ?: listOf(
-                addresses?.firstOrNull()?.getAddressLine(0)?.split(",")?.getOrNull(index = 1) ?: "",
-                addresses?.firstOrNull()?.getAddressLine(0)?.split(",")?.getOrNull(index = 1) ?: ""
+                with(addresses?.firstOrNull()?.getAddressLine(0)?.split(",")?.lastIndex ?: 0) {
+                    addresses?.firstOrNull()?.getAddressLine(0)?.split(",")?.getOrNull(
+                        index = this - 1
+                    )
+                },
+                addresses?.firstOrNull()?.getAddressLine(0)?.split(",")?.lastOrNull() ?: ""
             ).joinToString()
         )
     }
@@ -156,7 +160,7 @@ class WeatherViewModel: ViewModel() {
                 loaderStateMutableStateFlow.value = false
                 networkErrorMutableStateFlow.value = false
                 weatherResponseMutableLiveData.value = weatherResponseModel
-                weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
+                //weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
                 successBlock?.invoke(weatherResponseModel)
             },
             failureBlock = {
@@ -188,7 +192,7 @@ class WeatherViewModel: ViewModel() {
                 loaderStateMutableStateFlow.value = false
                 networkErrorMutableStateFlow.value = false
                 weatherResponseMutableLiveData.value = weatherResponseModel
-                weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
+                //weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
                 sharedPreferences.weatherResponseModel = weatherResponseModel
             },
             failureBlock = {
