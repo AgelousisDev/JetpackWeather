@@ -50,7 +50,7 @@ class WeatherViewModel: ViewModel() {
 
     var alertPair by mutableStateOf<Pair<String?, String?>>(value = null to null)
 
-    fun showDialog() {
+    private fun showDialog() {
         _showDialog.value = true
     }
 
@@ -118,7 +118,7 @@ class WeatherViewModel: ViewModel() {
         longitude: Double,
         latitude: Double
     ): AddressDataModel {
-        val geocoder = Geocoder(context, Locale.getDefault())
+        val geocoder = Geocoder(context, Locale.ENGLISH)
         var addresses: List<Address>? = null
 
         try {

@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.network.response.CurrentWeatherDataModel
-import com.agelousis.jetpackweather.network.response.WeatherLocationDataModel
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.addressDataModel
 import com.agelousis.jetpackweather.utils.extensions.weatherResponseModel
@@ -30,8 +30,7 @@ class WeatherAlarmReceiver: BroadcastReceiver() {
             weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.currentWeatherDataModel?.let { currentWeatherDataModel ->
                 openScopeAndScheduleNotification(
                     context = p0,
-                    weatherLocationDataModel = weatherResponseModel?.weatherLocationDataModel
-                        ?: return@apply,
+                    addressDataModel = addressDataModel,
                     currentWeatherDataModel = currentWeatherDataModel
                 )
             }
@@ -45,8 +44,7 @@ class WeatherAlarmReceiver: BroadcastReceiver() {
                 ) { weatherResponseModel ->
                     openScopeAndScheduleNotification(
                         context = p0,
-                        weatherLocationDataModel = weatherResponseModel.weatherLocationDataModel
-                            ?: return@requestCurrentWeather,
+                        addressDataModel = addressDataModel,
                         currentWeatherDataModel = weatherResponseModel.currentWeatherDataModel
                             ?: return@requestCurrentWeather
                     )
@@ -56,7 +54,7 @@ class WeatherAlarmReceiver: BroadcastReceiver() {
 
     private fun openScopeAndScheduleNotification(
         context: Context,
-        weatherLocationDataModel: WeatherLocationDataModel,
+        addressDataModel: AddressDataModel,
         currentWeatherDataModel: CurrentWeatherDataModel
     ) {
         scope.launch {
@@ -67,7 +65,7 @@ class WeatherAlarmReceiver: BroadcastReceiver() {
                     context = context,
                     notificationDataModel = NotificationDataModel(
                         notificationId = 1,
-                        title = weatherLocationDataModel.regionCountry,
+                        title = addressDataModel.addressLine,
                         body = "%s\n%s\n%s\n%s\n%s".format(
                             currentWeatherDataModel.currentTemperatureUnitFormatted(
                                 context = context
