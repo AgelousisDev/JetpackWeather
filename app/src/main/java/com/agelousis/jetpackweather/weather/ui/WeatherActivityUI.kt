@@ -271,7 +271,6 @@ fun WeatherAppBarActions(
     viewModel: WeatherViewModel
 ) {
     val context = LocalContext.current
-    val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
     val mapAddressPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->
@@ -332,7 +331,7 @@ fun WeatherAppBarActions(
                         ).also { intent ->
                             intent.putExtra(
                                 MapAddressPickerActivity.CURRENT_ADDRESS,
-                                addressDataModel
+                                viewModel.addressDataModelStateFlow.value
                             )
                         }
                     )
