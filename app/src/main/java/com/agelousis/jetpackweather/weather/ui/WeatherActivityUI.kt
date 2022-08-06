@@ -180,9 +180,9 @@ fun WeatherActivityBottomNavigationLayout(
             },
             bottomBar = {
                 Crossfade(
-                    targetState = viewModel.currentNavigationRoute
+                    targetState = viewModel.currentNavigationRoute != WeatherDrawerNavigationScreen.Settings.route
                 ) {
-                    if (it != WeatherDrawerNavigationScreen.Settings.route)
+                    if (it)
                         WeatherBottomNavigation(
                             navController = navController,
                             items = bottomNavigationItems

@@ -61,6 +61,11 @@
         <entry key="../../../../../../layout/compose-model-1659241985147.xml" value="0.47129629629629627" />
         <entry key="../../../../../../layout/compose-model-1659242660733.xml" value="0.2766047297297297" />
         <entry key="../../../../../../layout/compose-model-1659512340859.xml" value="0.27744932432432434" />
+        <entry key="../../../../../../layout/compose-model-1659524215796.xml" value="0.47129629629629627" />
+        <entry key="../../../../../../layout/compose-model-1659634552913.xml" value="0.47129629629629627" />
+        <entry key="../../../../../../layout/compose-model-1659636669022.xml" value="0.20766065210509654" />
+        <entry key="../../../../../../layout/compose-model-1659803767963.xml" value="0.47129629629629627" />
+        <entry key="../../../../../../layout/compose-model-1659808853333.xml" value="0.8375959079283888" />
         <entry key="../../../../../layout/compose-model-1655750866057.xml" value="0.27744932432432434" />
         <entry key="../../../../../layout/compose-model-1655751541288.xml" value="0.27744932432432434" />
         <entry key="../../../../../layout/compose-model-1655835086031.xml" value="0.27744932432432434" />
@@ -136,6 +141,7 @@
         <entry key="app/src/main/res/drawable/ic_sun.xml" value="0.2135" />
         <entry key="app/src/main/res/drawable/ic_sunrise_morning.xml" value="0.237" />
         <entry key="app/src/main/res/drawable/ic_today.xml" value="0.237" />
+        <entry key="app/src/main/res/drawable/ic_tomorrow.xml" value="0.2545" />
         <entry key="app/src/main/res/drawable/ic_wind.xml" value="0.208" />
         <entry key="app/src/main/res/font/ubuntu.xml" value="0.2296875" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/app_icon.xml" value="0.237" />
