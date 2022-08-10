@@ -1,7 +1,6 @@
 package com.agelousis.jetpackweather.weather.viewModel
 
 import android.content.Context
-import android.location.Address
 import android.location.Geocoder
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -117,32 +116,30 @@ class WeatherViewModel: ViewModel() {
         context: Context,
         longitude: Double,
         latitude: Double
-    ): AddressDataModel {
-        val geocoder = Geocoder(context, Locale.ENGLISH)
-        var addresses: List<Address>? = null
-
+    ) = with(Geocoder(context, Locale.ENGLISH)) {
         try {
-            addresses = geocoder.getFromLocation(latitude, longitude, 1)
-        } catch(ex: Exception) {
-            ex.printStackTrace()
+            getFromLocation(latitude, longitude, 1)?.let { addresses ->
+                AddressDataModel(
+                    countryName = addresses.firstOrNull()?.countryName,
+                    countryCode = addresses.firstOrNull()?.countryCode,
+                    longitude = addresses.firstOrNull()?.longitude,
+                    latitude = addresses.firstOrNull()?.latitude,
+                    addressLine = addresses.firstOrNull()?.getAddressLine(0)?.takeIf { addressLine ->
+                        addressLine.split(",").size < 3
+                    } ?: listOf(
+                        with(addresses.firstOrNull()?.getAddressLine(0)?.split(",")?.lastIndex ?: 0) {
+                            addresses.firstOrNull()?.getAddressLine(0)?.split(",")?.getOrNull(
+                                index = this - 1
+                            )
+                        },
+                        addresses.firstOrNull()?.getAddressLine(0)?.split(",")?.lastOrNull() ?: ""
+                    ).joinToString()
+                )
+            }
         }
-
-        return AddressDataModel(
-            countryName = addresses?.firstOrNull()?.countryName,
-            countryCode = addresses?.firstOrNull()?.countryCode,
-            longitude = addresses?.firstOrNull()?.longitude,
-            latitude = addresses?.firstOrNull()?.latitude,
-            addressLine = addresses?.firstOrNull()?.getAddressLine(0)?.takeIf { addressLine ->
-                addressLine.split(",").size < 3
-            } ?: listOf(
-                with(addresses?.firstOrNull()?.getAddressLine(0)?.split(",")?.lastIndex ?: 0) {
-                    addresses?.firstOrNull()?.getAddressLine(0)?.split(",")?.getOrNull(
-                        index = this - 1
-                    )
-                },
-                addresses?.firstOrNull()?.getAddressLine(0)?.split(",")?.lastOrNull() ?: ""
-            ).joinToString()
-        )
+        catch (e: Exception) {
+            null
+        }
     }
 
     fun requestCurrentWeather(

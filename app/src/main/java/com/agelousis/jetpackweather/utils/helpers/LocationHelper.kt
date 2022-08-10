@@ -23,7 +23,7 @@ class LocationHelper(
 
     override fun onLocationResult(p0: LocationResult) {
         super.onLocationResult(p0)
-        locationSuccessBlock(p0.lastLocation)
+        locationSuccessBlock(p0.lastLocation ?: return)
         if (removeLocationUpdates)
             LocationServices.getFusedLocationProviderClient(context).removeLocationUpdates(this)
     }

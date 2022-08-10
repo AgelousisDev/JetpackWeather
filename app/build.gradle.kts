@@ -3,28 +3,29 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.plugin.parcelize")
+    id("com.github.ben-manes.versions") version "0.42.0"
 }
 
-val navVersion = "2.5.0-beta01"
-val composeVersion = "1.2.0-beta03"
+val navVersion = "2.5.1"
+val composeVersion = "1.2.1"
 val constraintLayoutVersion = "2.1.3"
-val constraintLayoutComposeVersion = "1.1.0-alpha02"
+val constraintLayoutComposeVersion = "1.1.0-alpha03"
 val composeActivityVersion = "1.5.0-beta01"
 val composeMaterialYouVersion = "1.0.0-alpha14"
 val liveDataViewModelVersion = "2.5.0-beta01"
-val playServicesMapsVersion = "18.0.2"
-val playServicesLocationVersion = "19.0.1"
-val materialYouVersion = "1.7.0-alpha02"
+val playServicesMapsVersion = "18.1.0"
+val playServicesLocationVersion = "20.0.0"
+val materialYouVersion = "1.7.0-alpha03"
 val lottieComposeVersion = "5.2.0"
-val browserVersion = "1.3.0"
+val browserVersion = "1.4.0"
 
 android {
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.agelousis.jetpackweather"
         minSdk = 26
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -65,7 +66,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
+        kotlinCompilerExtensionVersion = "1.2.0"
     }
     packagingOptions {
         resources {
@@ -100,16 +101,16 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     // Google Maps
     implementation("com.google.android.gms:play-services-location:$playServicesLocationVersion")
     implementation("com.google.android.gms:play-services-maps:$playServicesMapsVersion")
-    implementation("com.google.maps.android:maps-compose:2.2.1")
+    implementation("com.google.maps.android:maps-compose:2.5.3")
 
     // Accompanist
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.24.11-rc")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.26.0-alpha")
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
