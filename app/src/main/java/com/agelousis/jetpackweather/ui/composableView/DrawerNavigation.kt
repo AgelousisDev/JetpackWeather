@@ -3,6 +3,7 @@ package com.agelousis.jetpackweather.ui.composableView
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -43,54 +44,61 @@ fun WeatherDrawerNavigation(
         scrimColor = Color.Transparent,
         drawerState = drawerState,
         drawerContent = {
-            headerContent()
-            Spacer(
-                modifier = Modifier
-                    .padding(
-                        top = 32.dp
-                    )
-            )
-            weatherDrawerNavigationScreens.forEach { weatherDrawerNavigationScreen ->
-                NavigationDrawerItem(
-                    icon = {
-                        Icon(
-                            imageVector = weatherDrawerNavigationScreen.icon,
-                            contentDescription = null
-                        )
-                    },
-                    label = {
-                        Text(
-                            text = stringResource(id = weatherDrawerNavigationScreen.label),
-                            style = Typography.bodyMedium
-                        )
-                    },
-                    selected = weatherDrawerNavigationScreen == selectedItem,
-                    onClick = {
-                        coroutineScope.launch {
-                            drawerState.close()
-                        }
-                        selectedItem = weatherDrawerNavigationScreen
-                        navController.navigate(weatherDrawerNavigationScreen.route) {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
+            ModalDrawerSheet(
+                drawerShape = RoundedCornerShape(
+                    topEnd = 32.dp,
+                    bottomEnd = 32.dp
+                )
+            ) {
+                headerContent()
+                Spacer(
                     modifier = Modifier
                         .padding(
-                            paddingValues = NavigationDrawerItemDefaults.ItemPadding
+                            top = 32.dp
                         )
                 )
-            }
-            Spacer(
-                modifier = Modifier
-                    .weight(
-                        weight = 1f
+                weatherDrawerNavigationScreens.forEach { weatherDrawerNavigationScreen ->
+                    NavigationDrawerItem(
+                        icon = {
+                            Icon(
+                                imageVector = weatherDrawerNavigationScreen.icon,
+                                contentDescription = null
+                            )
+                        },
+                        label = {
+                            Text(
+                                text = stringResource(id = weatherDrawerNavigationScreen.label),
+                                style = Typography.bodyMedium
+                            )
+                        },
+                        selected = weatherDrawerNavigationScreen == selectedItem,
+                        onClick = {
+                            coroutineScope.launch {
+                                drawerState.close()
+                            }
+                            selectedItem = weatherDrawerNavigationScreen
+                            navController.navigate(weatherDrawerNavigationScreen.route) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(
+                                paddingValues = NavigationDrawerItemDefaults.ItemPadding
+                            )
                     )
-            )
-            footerContent()
+                }
+                Spacer(
+                    modifier = Modifier
+                        .weight(
+                            weight = 1f
+                        )
+                )
+                footerContent()
+            }
         },
         content = content
     )

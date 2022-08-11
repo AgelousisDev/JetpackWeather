@@ -1,5 +1,6 @@
 package com.agelousis.jetpackweather.mapAddressPicker
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,7 +17,10 @@ class MapAddressPickerActivity: ComponentActivity() {
     }
 
     private val currentAddressDataModel by lazy {
-        intent?.extras?.getParcelable<AddressDataModel?>(CURRENT_ADDRESS)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            intent?.extras?.getParcelable(CURRENT_ADDRESS, AddressDataModel::class.java)
+        else
+            intent?.extras?.getParcelable(CURRENT_ADDRESS)
     }
 
     private val viewModel by viewModels<MapViewModel>()

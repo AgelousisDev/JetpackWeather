@@ -3,6 +3,7 @@ package com.agelousis.jetpackweather.weather.ui
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -27,6 +28,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.mapAddressPicker.MapAddressPickerActivity
 import com.agelousis.jetpackweather.network.repositories.SuccessUnitBlock
 import com.agelousis.jetpackweather.ui.composableView.SimpleDialog
@@ -43,7 +45,7 @@ import com.agelousis.jetpackweather.utils.helpers.LocationHelper
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.drawerNavigation.WeatherDrawerNavigationScreen
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
-import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
+import com.google.android.gms.location.Priority
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -276,7 +278,10 @@ fun WeatherAppBarActions(
     ) { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             viewModel.addressDataModelMutableStateFlow.value =
-                activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS, AddressDataModel::class.java)
+                else
+                    activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
             context.getSharedPreferences(
                 Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
                 Context.MODE_PRIVATE
@@ -436,7 +441,7 @@ private fun requestLocation(
             viewModel.requestLocationMutableState.value = true
         LocationHelper(
             context = context,
-            priority = PRIORITY_HIGH_ACCURACY
+            priority = Priority.PRIORITY_HIGH_ACCURACY
         ) {
             if (!fromUpdate)
                 viewModel.requestLocationMutableState.value = false

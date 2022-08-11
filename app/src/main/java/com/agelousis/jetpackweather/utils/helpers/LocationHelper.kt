@@ -30,7 +30,7 @@ class LocationHelper(
 
     private val locationRequest by lazy {
         val locationRequest = LocationRequest.create()
-                .setPriority(priority ?: LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY)
+                .setPriority(priority ?: Priority.PRIORITY_BALANCED_POWER_ACCURACY)
                 .setInterval(interval ?: (10L * 1000))
                 .setFastestInterval(fastestInterval ?: 10000)
         smallestDisplacement?.let {

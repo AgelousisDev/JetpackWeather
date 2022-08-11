@@ -49,19 +49,17 @@ class MapViewModel: ViewModel()  {
         }.start()
     }
 
-    fun getLocationFromAddress(context: Context, strAddress: String): AddressDataModel? {
-        val geocoder = Geocoder(context, Locale.getDefault())
-        val addresses = geocoder.getFromLocationName(strAddress, 1)
-        return if (!addresses.isNullOrEmpty())
-            AddressDataModel(
-                countryName = addresses.firstOrNull()?.countryName,
-                countryCode = addresses.firstOrNull()?.countryCode,
-                longitude = addresses.firstOrNull()?.longitude,
-                latitude = addresses.firstOrNull()?.latitude,
-                addressLine = addresses.firstOrNull()?.getAddressLine(0)
-            )
-        else
-            null
-    }
+    fun getLocationFromAddress(context: Context, strAddress: String) =
+        with(Geocoder(context, Locale.getDefault())) {
+            getFromLocationName(strAddress, 1)?.let { addresses ->
+                AddressDataModel(
+                    countryName = addresses.firstOrNull()?.countryName,
+                    countryCode = addresses.firstOrNull()?.countryCode,
+                    longitude = addresses.firstOrNull()?.longitude,
+                    latitude = addresses.firstOrNull()?.latitude,
+                    addressLine = addresses.firstOrNull()?.getAddressLine(0)
+                )
+            }
+        }
 
 }
