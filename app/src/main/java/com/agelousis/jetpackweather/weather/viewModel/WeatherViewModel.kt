@@ -3,6 +3,7 @@ package com.agelousis.jetpackweather.weather.viewModel
 import android.content.Context
 import android.location.Geocoder
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
@@ -78,6 +79,8 @@ class WeatherViewModel: ViewModel() {
     private val weatherResponseMutableLiveData by lazy { MutableLiveData<WeatherResponseModel>() }
     val weatherResponseLiveData: LiveData<WeatherResponseModel>
         get() = weatherResponseMutableLiveData
+    
+    val weatherSettingsList = mutableStateListOf<WeatherSettings>()
 
     val nextDaysForecastDataList: List<Any>
         get() {

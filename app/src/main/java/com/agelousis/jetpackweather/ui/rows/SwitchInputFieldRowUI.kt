@@ -24,6 +24,7 @@ typealias SwitchInputFieldBlock = (isChecked: Boolean) -> Unit
 @Composable
 fun SwitchInputFieldRowLayout(
     weatherSettings: WeatherSettings,
+    forceRefresh: Boolean = false,
     switchInputFieldBlock: SwitchInputFieldBlock
 ) {
     var isChecked by remember {
@@ -31,6 +32,8 @@ fun SwitchInputFieldRowLayout(
             value = weatherSettings.optionIsChecked
         )
     }
+    if (forceRefresh)
+        isChecked = weatherSettings.optionIsChecked
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
