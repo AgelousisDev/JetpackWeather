@@ -1,5 +1,6 @@
 package com.agelousis.jetpackweather.weather.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -42,6 +43,7 @@ import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.addressDataModel
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
 import com.agelousis.jetpackweather.utils.helpers.LocationHelper
+import com.agelousis.jetpackweather.weather.WeatherActivity
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.drawerNavigation.WeatherDrawerNavigationScreen
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
@@ -61,6 +63,7 @@ private val weatherDrawerNavigationScreens = listOf(
     WeatherDrawerNavigationScreen.Settings
 )
 
+@SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun WeatherActivityBottomNavigationLayout(
     viewModel: WeatherViewModel
@@ -74,7 +77,12 @@ fun WeatherActivityBottomNavigationLayout(
     }
     val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
     val onBack: () -> Unit = {
-        navController.navigateUp()
+        when(WeatherNavigationScreen fromRoute viewModel.currentNavigationRoute) {
+            WeatherNavigationScreen.Today ->
+                (context as? WeatherActivity)?.finish()
+            else ->
+                navController.navigateUp()
+        }
     }
     BackHandler(
         onBack = onBack

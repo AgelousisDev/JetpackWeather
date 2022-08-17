@@ -3,7 +3,6 @@ package com.agelousis.jetpackweather.weather
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agelousis.jetpackweather.ui.theme.JetpackWeatherTheme
