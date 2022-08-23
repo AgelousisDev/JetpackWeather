@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.Crossfade
@@ -43,7 +42,6 @@ import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.addressDataModel
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
 import com.agelousis.jetpackweather.utils.helpers.LocationHelper
-import com.agelousis.jetpackweather.weather.WeatherActivity
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.drawerNavigation.WeatherDrawerNavigationScreen
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
@@ -76,17 +74,6 @@ fun WeatherActivityBottomNavigationLayout(
         mutableStateOf(value = true)
     }
     val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
-    val onBack: () -> Unit = {
-        when(WeatherNavigationScreen fromRoute viewModel.currentNavigationRoute) {
-            WeatherNavigationScreen.Today ->
-                (context as? WeatherActivity)?.finish()
-            else ->
-                navController.navigateUp()
-        }
-    }
-    BackHandler(
-        onBack = onBack
-    )
     SimpleDialog(
         show = showDialogState,
         simpleDialogDataModel = SimpleDialogDataModel(
