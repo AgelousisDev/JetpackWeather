@@ -17,7 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class WeatherAlarmReceiver: BroadcastReceiver() {
+class WeatherAlarmReceiver : BroadcastReceiver() {
 
     private val scope = CoroutineScope(Dispatchers.Main)
 
@@ -59,7 +59,8 @@ class WeatherAlarmReceiver: BroadcastReceiver() {
     ) {
         scope.launch {
             UrlBitmapHelper.init(
-                urlString = currentWeatherDataModel.weatherConditionDataModel?.iconUrl ?: return@launch
+                urlString = currentWeatherDataModel.weatherConditionDataModel?.iconUrl
+                    ?: return@launch
             ) { iconBitmap ->
                 NotificationHelper.triggerNotification(
                     context = context,
@@ -87,7 +88,14 @@ class WeatherAlarmReceiver: BroadcastReceiver() {
                                 )
                             )
                         ),
-                        largeImageBitmap = iconBitmap
+                        largeImageBitmap = iconBitmap,
+                        buttons = listOf(
+                            Triple(
+                                first = R.drawable.ic_update,
+                                second = context.resources.getString(R.string.key_update_location_label),
+                                third = null
+                            )
+                        )
                     )
                 )
             }
