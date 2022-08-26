@@ -57,13 +57,6 @@ object NotificationHelper {
             }*/,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
-        notificationDataModel.buttons?.forEach { button ->
-            addAction(
-                button.first,
-                button.second,
-                button.third ?: resultPendingIntent
-            )
-        }
         setContentIntent(resultPendingIntent)
     }
 
