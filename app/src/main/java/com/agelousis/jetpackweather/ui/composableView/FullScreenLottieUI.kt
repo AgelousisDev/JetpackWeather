@@ -1,4 +1,4 @@
-package com.agelousis.jetpackweather.weather.ui
+package com.agelousis.jetpackweather.ui.composableView
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,14 +8,15 @@ import com.agelousis.jetpackweather.R
 import com.airbnb.lottie.compose.*
 
 @Composable
-fun NetworkErrorLayout(
+fun FullScreenLottieLayout(
     state: Boolean,
+    lottieAnimationResourceId: Int,
     modifier: Modifier = Modifier
 ) {
     if (state) {
         val composition by rememberLottieComposition(
             LottieCompositionSpec.RawRes(
-                resId = R.raw.no_internet_animation
+                resId = lottieAnimationResourceId
             )
         )
         val progress by animateLottieCompositionAsState(
@@ -35,8 +36,9 @@ fun NetworkErrorLayout(
 
 @Preview
 @Composable
-fun NetworkErrorLayoutPreview() {
-    NetworkErrorLayout(
-        state = true
+fun FullScreenLottieLayoutPreview() {
+    FullScreenLottieLayout(
+        state = true,
+        lottieAnimationResourceId = R.raw.no_internet_animation
     )
 }

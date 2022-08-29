@@ -22,13 +22,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.CurrentDayWeatherDataModel
 import com.agelousis.jetpackweather.network.response.WeatherHourlyDataModel
+import com.agelousis.jetpackweather.ui.composableView.FullScreenLottieLayout
 import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.ui.rows.HeaderRowLayout
 import com.agelousis.jetpackweather.weather.rows.ForecastDayWeatherLayout
 import com.agelousis.jetpackweather.weather.rows.HourlyWeatherConditionsRowLayout
-import com.agelousis.jetpackweather.weather.rows.RequestLocationLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -128,22 +129,25 @@ fun NextDaysWeatherLayout(
                     }
                 }
             }
-        if (requestLocationState)
-            RequestLocationLayout(
-                modifier = Modifier
-                    .constrainAs(progressIndicatorConstrainedReference) {
-                        start.linkTo(parent.start)
-                        top.linkTo(parent.top)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                        width = Dimension.value(
-                            dp = 100.dp
-                        )
-                        height = Dimension.value(
-                            dp = 100.dp
-                        )
-                    }
-            )
+
+        FullScreenLottieLayout(
+            state = requestLocationState,
+            lottieAnimationResourceId = R.raw.location_animation,
+            modifier = Modifier
+                .constrainAs(progressIndicatorConstrainedReference) {
+                    start.linkTo(parent.start)
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.value(
+                        dp = 100.dp
+                    )
+                    height = Dimension.value(
+                        dp = 100.dp
+                    )
+                }
+        )
+
         if (loaderState && !isRefreshing)
             CircularProgressIndicator(
                 modifier = Modifier
@@ -155,8 +159,9 @@ fun NextDaysWeatherLayout(
                     }
             )
 
-        NetworkErrorLayout(
+        FullScreenLottieLayout(
             state = networkErrorState,
+            lottieAnimationResourceId = R.raw.no_internet_animation,
             modifier = Modifier
                 .constrainAs(networkErrorAnimationConstrainedReference) {
                     start.linkTo(parent.start)
