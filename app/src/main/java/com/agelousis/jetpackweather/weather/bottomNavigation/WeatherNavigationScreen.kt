@@ -7,7 +7,8 @@ import com.agelousis.jetpackweather.weather.drawerNavigation.WeatherDrawerNaviga
 sealed class WeatherNavigationScreen(
     val route: String,
     @StringRes val resourceId: Int,
-    val icon: Int
+    val icon: Int,
+    var badge: String? = null
 ) {
 
     companion object {

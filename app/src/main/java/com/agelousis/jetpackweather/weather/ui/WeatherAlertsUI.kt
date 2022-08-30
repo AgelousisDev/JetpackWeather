@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +25,7 @@ import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.ui.composableView.FullScreenLottieLayout
+import com.agelousis.jetpackweather.ui.rows.WeatherAlertRowLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -92,17 +94,27 @@ fun WeatherAlertsLayout(
                         space = 16.dp
                     ),
                     contentPadding = PaddingValues(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 16.dp,
                         bottom = 170.dp
                     )
                 ) {
+                    items(
+                        items = weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList ?: listOf()
+                    ) { weatherAlertModel ->
+                        WeatherAlertRowLayout(
+                            modifier = Modifier
+                                .animateItemPlacement(),
+                            weatherAlertModel = weatherAlertModel
+                        )
+                    }
                 }
             }
 
         FullScreenLottieLayout(
-            state = requestLocationState
-                    || (weatherResponseModel != null
-                    && weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty()),
-            lottieAnimationResourceId = if (requestLocationState) R.raw.location_animation else R.raw.empty_animation,
+            state = requestLocationState,
+            lottieAnimationResourceId = R.raw.location_animation,
             modifier = Modifier
                 .constrainAs(progressIndicatorConstrainedReference) {
                     start.linkTo(parent.start)
@@ -130,8 +142,10 @@ fun WeatherAlertsLayout(
             )
 
         FullScreenLottieLayout(
-            state = networkErrorState,
-            lottieAnimationResourceId = R.raw.no_internet_animation,
+            state = networkErrorState
+                    || (weatherResponseModel != null
+                    && weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty()),
+            lottieAnimationResourceId = if (networkErrorState) R.raw.no_internet_animation else R.raw.empty_animation,
             modifier = Modifier
                 .constrainAs(networkErrorAnimationConstrainedReference) {
                     start.linkTo(parent.start)

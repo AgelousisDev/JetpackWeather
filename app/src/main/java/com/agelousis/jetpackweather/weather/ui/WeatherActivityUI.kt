@@ -16,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -75,6 +76,7 @@ fun WeatherActivityBottomNavigationLayout(
         mutableStateOf(value = true)
     }
     val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
+    val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
     SimpleDialog(
         show = showDialogState,
         simpleDialogDataModel = SimpleDialogDataModel(
@@ -183,7 +185,11 @@ fun WeatherActivityBottomNavigationLayout(
                     if (it)
                         WeatherBottomNavigation(
                             navController = navController,
-                            items = bottomNavigationItems
+                            items = bottomNavigationItems.also { bottomNavigationItems ->
+                                bottomNavigationItems.firstOrNull { weatherNavigationScreen ->
+                                    weatherNavigationScreen is WeatherNavigationScreen.Alerts
+                                }?.badge = weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList?.size?.toString()
+                            }
                         )
                 }
             },

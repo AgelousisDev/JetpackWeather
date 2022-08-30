@@ -2,10 +2,7 @@ package com.agelousis.jetpackweather.ui.composableView
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -43,12 +40,24 @@ fun WeatherBottomNavigation(
         items.forEach { weatherNavigationScreen ->
             NavigationBarItem(
                 icon = {
-                    Icon(
-                        painter = painterResource(
-                            id = weatherNavigationScreen.icon
-                        ),
-                        contentDescription = null
-                    )
+                    BadgedBox(
+                        badge = {
+                            if (!weatherNavigationScreen.badge.isNullOrEmpty())
+                                Badge {
+                                    Text(
+                                        text = weatherNavigationScreen.badge ?: "",
+                                        style = Typography.bodyMedium
+                                    )
+                                }
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(
+                                id = weatherNavigationScreen.icon
+                            ),
+                            contentDescription = null
+                        )
+                    }
                 },
                 label = {
                     Text(

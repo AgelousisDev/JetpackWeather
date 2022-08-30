@@ -101,7 +101,7 @@ fun CalendarRowLayout(
 @Composable
 fun CalendarRowLayoutPreview() {
     CalendarRowLayout(
-        weatherNavigationScreen = WeatherNavigationScreen.Today,
+        weatherNavigationScreen = WeatherNavigationScreen.Tomorrow,
         weatherResponseModel = null,
     )
 }
