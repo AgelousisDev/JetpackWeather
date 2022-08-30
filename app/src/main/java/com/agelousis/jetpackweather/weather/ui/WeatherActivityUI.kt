@@ -53,7 +53,8 @@ private val bottomNavigationItems by lazy {
     listOf(
         WeatherNavigationScreen.Today,
         WeatherNavigationScreen.Tomorrow,
-        WeatherNavigationScreen.NextDays
+        WeatherNavigationScreen.NextDays,
+        WeatherNavigationScreen.Alerts
     )
 }
 private val weatherDrawerNavigationScreens = listOf(
@@ -238,6 +239,14 @@ fun WeatherActivityNavigation(
             route = WeatherNavigationScreen.NextDays.route
         ) {
             NextDaysWeatherLayout(
+                viewModel = viewModel,
+                contentPadding = contentPadding
+            )
+        }
+        composable(
+            route = WeatherNavigationScreen.Alerts.route
+        ) {
+            WeatherAlertsLayout(
                 viewModel = viewModel,
                 contentPadding = contentPadding
             )

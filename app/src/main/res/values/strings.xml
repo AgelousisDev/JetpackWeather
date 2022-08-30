@@ -56,4 +56,5 @@
     <string name="key_warning_label">Warning</string>
     <string name="key_location_permission_approval_message">You must enable location permission in order to see your current weather info.</string>
     <string name="key_update_location_label">Update location</string>
+    <string name="key_alerts_label">Alerts</string>
 </resources>

@@ -16,7 +16,8 @@ sealed class WeatherNavigationScreen(
             get() = arrayOf(
                 Today,
                 Tomorrow,
-                NextDays
+                NextDays,
+                Alerts
             )
 
         infix fun fromRoute(
@@ -46,5 +47,10 @@ sealed class WeatherNavigationScreen(
         route = "nextDaysRoute",
         resourceId = R.string.key_next_days,
         icon = R.drawable.ic_next_days
+    )
+    object Alerts: WeatherNavigationScreen(
+        route = "alertsRoute",
+        resourceId = R.string.key_alerts_label,
+        icon = R.drawable.ic_warning_alert
     )
 }
