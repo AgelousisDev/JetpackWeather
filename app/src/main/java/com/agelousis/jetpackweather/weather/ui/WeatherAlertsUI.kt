@@ -151,12 +151,13 @@ fun WeatherAlertsLayout(
                     start.linkTo(parent.start)
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
+                    bottom.linkTo(parent.bottom, 120.dp)
                     width = Dimension.fillToConstraints
                     height = Dimension.fillToConstraints
                 }
                 .clickable {
-                    viewModel.swipeRefreshMutableStateFlow.value = true
+                    if (networkErrorState)
+                        viewModel.swipeRefreshMutableStateFlow.value = true
                 }
         )
 
