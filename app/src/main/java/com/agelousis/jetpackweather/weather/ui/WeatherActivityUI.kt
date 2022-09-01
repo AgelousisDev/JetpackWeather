@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -50,14 +51,6 @@ import com.google.android.gms.location.Priority
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private val bottomNavigationItems by lazy {
-    listOf(
-        WeatherNavigationScreen.Today,
-        WeatherNavigationScreen.Tomorrow,
-        WeatherNavigationScreen.NextDays,
-        WeatherNavigationScreen.Alerts
-    )
-}
 private val weatherDrawerNavigationScreens = listOf(
     WeatherDrawerNavigationScreen.HomeWeather,
     WeatherDrawerNavigationScreen.Settings
@@ -185,10 +178,14 @@ fun WeatherActivityBottomNavigationLayout(
                     if (it)
                         WeatherBottomNavigation(
                             navController = navController,
-                            items = bottomNavigationItems.also { bottomNavigationItems ->
+                            items = viewModel.bottomNavigationItems.also { bottomNavigationItems ->
                                 bottomNavigationItems.firstOrNull { weatherNavigationScreen ->
                                     weatherNavigationScreen is WeatherNavigationScreen.Alerts
-                                }?.badge = weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList?.size?.toString()
+                                }?.badge =
+                                    if (!weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty())
+                                        weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList?.size?.toString()
+                                    else
+                                        null
                             }
                         )
                 }
@@ -498,6 +495,10 @@ fun requestWeather(
 @Composable
 fun WeatherActivityLayoutPreview() {
     WeatherActivityBottomNavigationLayout(
-        viewModel = WeatherViewModel()
+        viewModel = viewModel<WeatherViewModel>().also { weatherViewModel ->
+            weatherViewModel.bottomNavigationItems.add(
+                WeatherNavigationScreen.Alerts
+            )
+        }
     )
 }

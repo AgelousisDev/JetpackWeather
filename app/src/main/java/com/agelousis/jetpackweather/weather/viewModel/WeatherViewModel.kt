@@ -32,6 +32,11 @@ class WeatherViewModel: ViewModel() {
     var weatherUiAppBarTitle by mutableStateOf<String?>(
         value = null
     )
+    val bottomNavigationItems = mutableStateListOf(
+        WeatherNavigationScreen.Today,
+        WeatherNavigationScreen.Tomorrow,
+        WeatherNavigationScreen.NextDays
+    )
     var currentNavigationRoute by mutableStateOf(
         value = WeatherNavigationScreen.Today.route
     )
@@ -191,6 +196,10 @@ class WeatherViewModel: ViewModel() {
                 swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
                 networkErrorMutableStateFlow.value = false
+                //if (!weatherResponseModel.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty())
+                    //bottomNavigationItems.add(
+                        //WeatherNavigationScreen.Alerts
+                    //)
                 weatherResponseMutableLiveData.value = weatherResponseModel
                 //weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
                 sharedPreferences.weatherResponseModel = weatherResponseModel
