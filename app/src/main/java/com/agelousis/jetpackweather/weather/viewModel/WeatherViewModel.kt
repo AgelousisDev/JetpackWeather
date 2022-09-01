@@ -196,10 +196,10 @@ class WeatherViewModel: ViewModel() {
                 swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
                 networkErrorMutableStateFlow.value = false
-                //if (!weatherResponseModel.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty())
-                    //bottomNavigationItems.add(
-                        //WeatherNavigationScreen.Alerts
-                    //)
+                if (!weatherResponseModel.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty())
+                    bottomNavigationItems.add(
+                        WeatherNavigationScreen.Alerts
+                    )
                 weatherResponseMutableLiveData.value = weatherResponseModel
                 //weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
                 sharedPreferences.weatherResponseModel = weatherResponseModel

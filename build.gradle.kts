@@ -26,9 +26,8 @@ allprojects {
                     "-opt-in=androidx.compose.material.ExperimentalMaterialApi",
                     "-opt-in=androidx.compose.runtime.ExperimentalComposeApi",
                     "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi",
-                    "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi",
-                    "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
-                    "-opt-in=com.google.accompanist.pager.ExperimentalPagerApi"
+                    //"-opt-in=com.google.accompanist.pager.ExperimentalPagerApi",
+                    "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
                 )
         }
     }

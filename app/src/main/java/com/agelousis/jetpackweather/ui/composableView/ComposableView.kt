@@ -226,7 +226,7 @@ fun CircularProgressbar(
 
         // Display the data usage value
         DisplayText(
-            animateNumber = dataUsageAnimate,
+           // animateNumber = dataUsageAnimate,
             dataText = dataText,
             dataTextStyle = dataTextStyle,
             remainingText = remainingText,
@@ -240,7 +240,7 @@ fun CircularProgressbar(
 
 @Composable
 private fun DisplayText(
-    animateNumber: State<Float>,
+    //animateNumber: State<Float>,
     dataText: String?,
     dataTextStyle: TextStyle,
     remainingText: String?,
