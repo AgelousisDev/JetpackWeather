@@ -147,7 +147,7 @@ fun WeatherAlertsLayout(
             state = networkErrorState
                     || (weatherResponseModel != null
                     && weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty()),
-            lottieAnimationResourceId = if (networkErrorState) R.raw.no_internet_animation else R.raw.empty_animation,
+            lottieAnimationResourceId = if (networkErrorState) R.raw.no_internet_animation else R.raw.happy_earth_animation,
             modifier = Modifier
                 .constrainAs(networkErrorAnimationConstrainedReference) {
                     start.linkTo(parent.start)

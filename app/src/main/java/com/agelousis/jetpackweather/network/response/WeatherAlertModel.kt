@@ -10,18 +10,18 @@ import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
 import com.google.gson.annotations.SerializedName
 
 data class WeatherAlertModel(
-    @SerializedName(value = "headline") val headline: String?,
-    @SerializedName(value = "msgtype") val msgType: String?,
-    @SerializedName(value = "severity") val severity: String?,
-    @SerializedName(value = "urgency") val urgency: String?,
-    @SerializedName(value = "areas") val areas: String?,
-    @SerializedName(value = "category") val category: String?,
-    @SerializedName(value = "event") val event: String?,
-    @SerializedName(value = "note") val note: String?,
-    @SerializedName(value = "effective") val effective: String?,
-    @SerializedName(value = "expires") val expires: String?,
-    @SerializedName(value = "desc") val desc: String?,
-    @SerializedName(value = "instruction") val instruction: String?
+    @SerializedName(value = "headline") val headline: String? = null,
+    @SerializedName(value = "msgtype") val msgType: String? = null,
+    @SerializedName(value = "severity") val severity: String? = null,
+    @SerializedName(value = "urgency") val urgency: String? = null,
+    @SerializedName(value = "areas") val areas: String? = null,
+    @SerializedName(value = "category") val category: String? = null,
+    @SerializedName(value = "event") val event: String? = null,
+    @SerializedName(value = "note") val note: String? = null,
+    @SerializedName(value = "effective") val effective: String? = null,
+    @SerializedName(value = "expires") val expires: String? = null,
+    @SerializedName(value = "desc") val desc: String? = null,
+    @SerializedName(value = "instruction") val instruction: String? = null
 ) {
 
     infix fun alertExpirationLabelWith(context: Context) =

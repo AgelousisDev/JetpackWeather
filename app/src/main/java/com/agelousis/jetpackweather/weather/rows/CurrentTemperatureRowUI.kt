@@ -26,6 +26,7 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.CurrentWeatherDataModel
 import com.agelousis.jetpackweather.ui.composableView.CircularProgressbar
 import com.agelousis.jetpackweather.ui.composableView.VerticalProgress
+import com.agelousis.jetpackweather.ui.rows.CircularDotLayout
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.ui.theme.medium
 import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
@@ -113,7 +114,7 @@ fun CurrentTemperatureRowLayout(
                 }
         )
 
-        Box(
+        CircularDotLayout(
             modifier = Modifier
                 .constrainAs(windLayoutDividerConstrainedReference) {
                     start.linkTo(parent.start)
@@ -122,10 +123,6 @@ fun CurrentTemperatureRowLayout(
                     width = Dimension.value(dp = 6.dp)
                     height = Dimension.value(dp = 6.dp)
                 }
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceTint,
-                    shape = CircleShape
-                )
         )
 
         // Wind Layout
@@ -223,7 +220,7 @@ fun CurrentTemperatureRowLayout(
             )
         }
 
-        Box(
+        CircularDotLayout(
             modifier = Modifier
                 .constrainAs(uvIndexLayoutDividerConstrainedReference) {
                     start.linkTo(parent.start)
@@ -232,10 +229,6 @@ fun CurrentTemperatureRowLayout(
                     width = Dimension.value(dp = 6.dp)
                     height = Dimension.value(dp = 6.dp)
                 }
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceTint,
-                    shape = CircleShape
-                )
         )
 
         // UV Index Layout
@@ -308,7 +301,7 @@ fun CurrentTemperatureRowLayout(
             )
         }
 
-        Box(
+        CircularDotLayout(
             modifier = Modifier
                 .constrainAs(humidityLayoutDividerConstrainedReference) {
                     start.linkTo(parent.start)
@@ -317,10 +310,6 @@ fun CurrentTemperatureRowLayout(
                     width = Dimension.value(dp = 6.dp)
                     height = Dimension.value(dp = 6.dp)
                 }
-                .background(
-                    color = MaterialTheme.colorScheme.surfaceTint,
-                    shape = CircleShape
-                )
         )
 
         // Humidity
