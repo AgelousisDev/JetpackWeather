@@ -2,6 +2,8 @@ package com.agelousis.jetpackweather.network.response
 
 import android.content.Context
 import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.network.response.enumerations.WeatherAlertSeverity
+import com.agelousis.jetpackweather.network.response.enumerations.WeatherAlertUrgency
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.toDate
 import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
@@ -32,5 +34,15 @@ data class WeatherAlertModel(
                 pattern = Constants.SERVER_FULL_DATE_TIME_FORMAT
             )?.toDisplayDate()
         )
+
+    val severityType
+        get() = WeatherAlertSeverity.values().firstOrNull { weatherAlertSeverity ->
+            weatherAlertSeverity.type == severity
+        }
+
+    val urgencyType
+        get() = WeatherAlertUrgency.values().firstOrNull { weatherAlertUrgency ->
+            weatherAlertUrgency.type == urgency
+        }
 
 }

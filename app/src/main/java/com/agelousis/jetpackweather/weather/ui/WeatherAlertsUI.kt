@@ -101,7 +101,9 @@ fun WeatherAlertsLayout(
                     )
                 ) {
                     items(
-                        items = weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList ?: listOf()
+                        items = weatherResponseModel?.weatherAlertsDataModel
+                            ?.weatherAlertsModelList
+                            ?: listOf()
                     ) { weatherAlertModel ->
                         WeatherAlertRowLayout(
                             modifier = Modifier
