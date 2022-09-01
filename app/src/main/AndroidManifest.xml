@@ -17,7 +17,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.JetpackWeather"
-        android:enableOnBackInvokedCallback="true"
         tools:targetApi="33">
         <activity
             android:name="com.agelousis.jetpackweather.weather.WeatherActivity"
