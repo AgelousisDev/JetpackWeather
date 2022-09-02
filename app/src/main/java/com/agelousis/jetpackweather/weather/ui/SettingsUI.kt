@@ -111,10 +111,8 @@ fun SettingsLayout(
                             )
                         }
                         Divider(
+                            thickness = 0.5.dp,
                             modifier = Modifier
-                                .height(
-                                    height = 0.5.dp
-                                )
                                 .padding(
                                     start = 16.dp
                                 )
@@ -144,10 +142,8 @@ fun SettingsLayout(
                             )
                         }
                         Divider(
+                            thickness = 0.5.dp,
                             modifier = Modifier
-                                .height(
-                                    height = 0.5.dp
-                                )
                                 .padding(
                                     start = 16.dp
                                 )

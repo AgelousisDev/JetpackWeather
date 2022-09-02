@@ -24,17 +24,6 @@ data class WeatherAlertModel(
     @SerializedName(value = "instruction") val instruction: String? = null
 ) {
 
-    infix fun alertExpirationLabelWith(context: Context) =
-        context.resources.getString(
-            R.string.key_from_date_to_date_with_dates_label,
-            effective?.toDate(
-                pattern = Constants.SERVER_FULL_DATE_TIME_FORMAT
-            )?.toDisplayDate(),
-            expires?.toDate(
-                pattern = Constants.SERVER_FULL_DATE_TIME_FORMAT
-            )?.toDisplayDate()
-        )
-
     val severityType
         get() = WeatherAlertSeverity.values().firstOrNull { weatherAlertSeverity ->
             weatherAlertSeverity.type == severity
@@ -44,5 +33,22 @@ data class WeatherAlertModel(
         get() = WeatherAlertUrgency.values().firstOrNull { weatherAlertUrgency ->
             weatherAlertUrgency.type == urgency
         }
+
+    infix fun getMoreDetailsWith(
+        context: Context
+    ) = listOf(
+        context.resources.getString(
+            R.string.key_effective_with_value_label,
+            effective?.toDate(
+                pattern = Constants.SERVER_FULL_DATE_TIME_FORMAT
+            )?.toDisplayDate()
+        ),
+        context.resources.getString(
+            R.string.key_expires_with_value_label,
+            expires?.toDate(
+                pattern = Constants.SERVER_FULL_DATE_TIME_FORMAT
+            )?.toDisplayDate()
+        )
+    )
 
 }
