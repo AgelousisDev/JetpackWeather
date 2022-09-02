@@ -196,11 +196,8 @@ class WeatherViewModel: ViewModel() {
                 swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
                 networkErrorMutableStateFlow.value = false
-                if (!weatherResponseModel.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty())
-                    bottomNavigationItems.add(
-                        WeatherNavigationScreen.Alerts
-                    )
                 weatherResponseMutableLiveData.value = weatherResponseModel
+                configureBottomNavigationItems()
                 //weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
                 sharedPreferences.weatherResponseModel = weatherResponseModel
             },
@@ -219,6 +216,15 @@ class WeatherViewModel: ViewModel() {
                 //onOpenDialogClicked()
             }
         )
+    }
+
+    private fun configureBottomNavigationItems() {
+        if (!weatherResponseLiveData.value?.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty()
+            && WeatherNavigationScreen.Alerts !in bottomNavigationItems
+        )
+            bottomNavigationItems.add(
+                WeatherNavigationScreen.Alerts
+            )
     }
 
 }

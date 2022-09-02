@@ -62,4 +62,5 @@
     <string name="key_less_label">Less</string>
     <string name="key_effective_with_value_label">Effective: %s</string>
     <string name="key_expires_with_value_label">Expires: %s</string>
+    <string name="key_air_quality_label">Air Quality</string>
 </resources>

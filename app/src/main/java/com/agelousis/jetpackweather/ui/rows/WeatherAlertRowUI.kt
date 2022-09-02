@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.WeatherAlertModel
 import com.agelousis.jetpackweather.ui.composableView.IconWithCornersLayout
+import com.agelousis.jetpackweather.ui.composableView.VerticalAnimatedView
 import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.ui.theme.medium
@@ -153,6 +154,7 @@ fun WeatherAlertRowLayout(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
+                        .fillMaxWidth()
                         .align(
                             alignment = Alignment.End
                         )
@@ -190,36 +192,40 @@ fun WeatherAlertRowLayout(
                         )
                     }
                 }
-                if (moreInfoExpandState) {
-                    Divider(
-                        thickness = 0.2.dp,
-                        color = colorResource(id = R.color.dayNightTextOnBackground)
-                    )
-                    (weatherAlertModel getMoreDetailsWith context).forEach { detail ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .padding(
-                                    top = 8.dp
-                                )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Info,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.surfaceTint,
-                                modifier = Modifier
-                                    .size(
-                                        size = 14.dp
-                                    )
-                            )
-                            Text(
-                                text = detail,
-                                style = Typography.labelSmall.medium,
+                VerticalAnimatedView(
+                    state = moreInfoExpandState
+                ) {
+                    Column {
+                        Divider(
+                            thickness = 0.2.dp,
+                            color = colorResource(id = R.color.dayNightTextOnBackground)
+                        )
+                        (weatherAlertModel getMoreDetailsWith context).forEach { detail ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .padding(
-                                        start = 10.dp
+                                        top = 8.dp
                                     )
-                            )
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Info,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.surfaceTint,
+                                    modifier = Modifier
+                                        .size(
+                                            size = 14.dp
+                                        )
+                                )
+                                Text(
+                                    text = detail,
+                                    style = Typography.labelSmall.medium,
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 10.dp
+                                        )
+                                )
+                            }
                         }
                     }
                 }
