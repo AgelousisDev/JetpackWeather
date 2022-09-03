@@ -16,8 +16,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.WeatherAlertModel
+import com.agelousis.jetpackweather.ui.composableView.BulletsTextLayout
 import com.agelousis.jetpackweather.ui.composableView.IconWithCornersLayout
 import com.agelousis.jetpackweather.ui.composableView.VerticalAnimatedView
 import com.agelousis.jetpackweather.ui.models.HeaderModel
@@ -45,59 +48,65 @@ fun WeatherAlertRowLayout(
                 space = 12.dp
             )
         ) {
-            // Severity Icon
-            IconWithCornersLayout(
+            ConstraintLayout(
                 modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        top = 16.dp
-                    )
-                    .size(
-                        width = 56.dp,
-                        height = 56.dp
-                    )
-                    .align(
-                        alignment = Alignment.Start
-                    ),
-                backgroundColor = colorResource(id = weatherAlertModel.severityType?.color
-                    ?: R.color.yellowLighter),
-                iconResourceId = R.drawable.ic_warning_alert
-            )
-            // Event
-            Text(
-                text = weatherAlertModel.event ?: "",
-                style = Typography.bodyLarge,
-                modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        top = 16.dp,
-                        end = 16.dp
-                    )
-                    .align(
-                        alignment = Alignment.CenterHorizontally
-                    )
-            )
-            // Headline
-            Text(
-                text = weatherAlertModel.headline ?: "",
-                style = Typography.bodyMedium,
-                modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        top = 16.dp,
-                        end = 16.dp
-                    )
-            )
+                    .fillMaxWidth()
+            ) {
+                val (headerIconConstrainedReference, eventTextConstrainedReference,
+                    headlineTextConstrainedReference) = createRefs()
+                // Severity Icon
+                IconWithCornersLayout(
+                    modifier = Modifier
+                        .constrainAs(headerIconConstrainedReference) {
+                            start.linkTo(parent.start, 16.dp)
+                            top.linkTo(parent.top, 16.dp)
+                            width = Dimension.value(
+                                dp = 56.dp
+                            )
+                            height = Dimension.value(
+                                dp = 56.dp
+                            )
+                        },
+                    backgroundColor = colorResource(id = weatherAlertModel.severityType?.color
+                        ?: R.color.yellowLighter),
+                    iconResourceId = R.drawable.ic_warning_alert
+                )
+                // Event
+                Text(
+                    text = weatherAlertModel.event ?: "",
+                    style = Typography.bodyLarge,
+                    modifier = Modifier
+                        .constrainAs(eventTextConstrainedReference) {
+                            start.linkTo(headerIconConstrainedReference.end, 16.dp)
+                            top.linkTo(headerIconConstrainedReference.top)
+                            end.linkTo(parent.end, 16.dp)
+                            width = Dimension.fillToConstraints
+                        }
+                )
+                // Headline
+                Text(
+                    text = weatherAlertModel.headline ?: "",
+                    style = Typography.bodyMedium,
+                    modifier = Modifier
+                        .constrainAs(headlineTextConstrainedReference) {
+                            start.linkTo(headerIconConstrainedReference.end, 16.dp)
+                            top.linkTo(eventTextConstrainedReference.bottom)
+                            end.linkTo(parent.end, 16.dp)
+                            width = Dimension.fillToConstraints
+                        }
+                )
+            }
             // Description
-            Text(
-                text = weatherAlertModel.desc ?: "",
-                style = Typography.labelMedium,
+            BulletsTextLayout(
                 modifier = Modifier
                     .padding(
                         start = 16.dp,
                         top = 16.dp,
                         end = 16.dp
-                    )
+                    ),
+                bullets = weatherAlertModel.descriptionList ?: listOf(),
+                bulletColor = MaterialTheme.colorScheme.surfaceTint,
+                textStyle = Typography.labelMedium
             )
             if (!weatherAlertModel.instruction.isNullOrEmpty()) {
                 // Instructions
@@ -144,11 +153,6 @@ fun WeatherAlertRowLayout(
             // More Information
             Column(
                 modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        bottom = 16.dp,
-                        end = 16.dp
-                    )
                     .fillMaxWidth()
             ) {
                 Row(
@@ -169,7 +173,11 @@ fun WeatherAlertRowLayout(
                             text = stringResource(
                                 id = if (!it) R.string.key_more_label else R.string.key_less_label
                             ),
-                            style = Typography.bodyMedium
+                            style = Typography.bodyMedium,
+                            modifier = Modifier
+                                .padding(
+                                    start = 16.dp
+                                )
                         )
                     }
                     IconButton(
@@ -200,13 +208,17 @@ fun WeatherAlertRowLayout(
                             thickness = 0.2.dp,
                             color = colorResource(id = R.color.dayNightTextOnBackground)
                         )
-                        (weatherAlertModel getMoreDetailsWith context).forEach { detail ->
+                        (weatherAlertModel getMoreDetailsWith context).forEachIndexed { index, detail ->
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .padding(
-                                        top = 8.dp
+                                        start = 16.dp,
+                                        top = 8.dp,
+                                        end = 16.dp,
+                                        bottom = if (index == (weatherAlertModel getMoreDetailsWith context).size - 1) 16.dp else 0.dp
                                     )
+                                    .fillMaxWidth()
                             ) {
                                 Icon(
                                     imageVector = Icons.Filled.Info,

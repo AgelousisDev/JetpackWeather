@@ -24,16 +24,6 @@ data class WeatherAlertModel(
     @SerializedName(value = "instruction") val instruction: String? = null
 ) {
 
-    val severityType
-        get() = WeatherAlertSeverity.values().firstOrNull { weatherAlertSeverity ->
-            weatherAlertSeverity.type == severity
-        }
-
-    val urgencyType
-        get() = WeatherAlertUrgency.values().firstOrNull { weatherAlertUrgency ->
-            weatherAlertUrgency.type == urgency
-        }
-
     infix fun getMoreDetailsWith(
         context: Context
     ) = listOf(
@@ -50,5 +40,23 @@ data class WeatherAlertModel(
             )?.toDisplayDate()
         )
     )
+
+    val severityType
+        get() = WeatherAlertSeverity.values().firstOrNull { weatherAlertSeverity ->
+            weatherAlertSeverity.type == severity
+        }
+
+    val urgencyType
+        get() = WeatherAlertUrgency.values().firstOrNull { weatherAlertUrgency ->
+            weatherAlertUrgency.type == urgency
+        }
+
+    val descriptionList
+        get() = desc
+            ?.replace(
+                oldValue = "\n",
+                newValue = " "
+            )
+            ?.split(". ")
 
 }
