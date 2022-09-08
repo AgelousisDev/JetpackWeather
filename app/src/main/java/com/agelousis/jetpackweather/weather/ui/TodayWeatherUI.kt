@@ -113,6 +113,19 @@ fun TodayWeatherLayout(
                             currentWeatherDataModel = weatherResponseModel?.currentWeatherDataModel ?: return@item
                         )
                     }
+                    // Air Quality
+                    item {
+                        if (weatherResponseModel != null
+                            && weatherResponseModel?.currentWeatherDataModel?.airQuality != null
+                        )
+                            HeaderRowLayout(
+                                modifier = Modifier
+                                    .animateItemPlacement(),
+                                headerModel = HeaderModel(
+                                    header = stringResource(id = R.string.key_air_quality_label)
+                                )
+                            )
+                    }
                     // Day Hourly Temperature
                     item {
                         if (weatherResponseModel != null

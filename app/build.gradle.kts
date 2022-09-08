@@ -15,7 +15,7 @@ val composeMaterialYouVersion = "1.0.0-alpha16"
 val liveDataViewModelVersion = "2.5.0-beta01"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "20.0.0"
-val materialYouVersion = "1.7.0-alpha03"
+val materialYouVersion = "1.8.0-alpha01"
 val lottieComposeVersion = "5.2.0"
 val browserVersion = "1.4.0"
 
@@ -66,7 +66,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0"
+        kotlinCompilerExtensionVersion = "1.3.1"
     }
     packagingOptions {
         resources {
@@ -91,7 +91,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$liveDataViewModelVersion")
-    implementation("io.coil-kt:coil-compose:2.1.0")
+    implementation("io.coil-kt:coil-compose:2.2.1")
     // Retrofit & OkHttp
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.8")
@@ -107,10 +107,10 @@ dependencies {
     // Google Maps
     implementation("com.google.android.gms:play-services-location:$playServicesLocationVersion")
     implementation("com.google.android.gms:play-services-maps:$playServicesMapsVersion")
-    implementation("com.google.maps.android:maps-compose:2.5.3")
+    implementation("com.google.maps.android:maps-compose:2.7.0")
 
     // Accompanist
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.26.0-alpha")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.26.2-beta")
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
