@@ -1,30 +1,36 @@
 package com.agelousis.jetpackweather.ui.composableView
 
+import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.agelousis.jetpackweather.R
-import com.agelousis.jetpackweather.ui.theme.Typography
-import com.agelousis.jetpackweather.ui.theme.WhiteTwo
+import com.agelousis.jetpackweather.ui.theme.*
 
 @Composable
 fun VerticalProgress(
@@ -266,6 +272,103 @@ private fun DisplayText(
     }
 }
 
+@Composable
+fun RangeLayout(
+    modifier: Modifier = Modifier,
+    width: Dp,
+    colors: List<Color>,
+    labels: List<String>,
+    selectedColorIndex: Int? = null
+) {
+    LazyRow(
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.spacedBy(
+            space = 8.dp
+        ),
+        modifier = modifier
+            .then(
+                other = Modifier
+                    .width(
+                        width = width
+                    )
+            )
+    ) {
+        itemsIndexed(
+            items = colors
+        ) { index, color ->
+            val animateColor = remember {
+                Animatable(
+                    initialValue = color
+                )
+            }
+            if (selectedColorIndex != null)
+                LaunchedEffect(
+                    key1 = Unit
+                ) {
+                    while(true) {
+                        animateColor.animateTo(
+                            targetValue = Color.Transparent,
+                            animationSpec = tween(
+                                durationMillis = 1000
+                            )
+                        )
+                        animateColor.animateTo(
+                            targetValue = color,
+                            animationSpec = tween(
+                                durationMillis = 1000
+                            )
+                        )
+                    }
+                }
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(
+                    space = 8.dp
+                )
+            ) {
+                Canvas(
+                    modifier = Modifier
+                        .width(
+                            width = (width - (colors.size * 8).dp) / colors.size
+                        )
+                        .fillMaxHeight(
+                            fraction = (index + 1).toFloat() / (colors.size + 3)
+                        )
+                ) {
+                    drawRoundRect(
+                        color = if (selectedColorIndex != null
+                            && index <= selectedColorIndex
+                        )
+                            animateColor.value
+                        else
+                            color,
+                        cornerRadius = CornerRadius(
+                            x = 4.dp.toPx(),
+                            y = 4.dp.toPx()
+                        )
+                    )
+                }
+                MarqueeText(
+                    text = labels.getOrNull(
+                        index = index
+                    ) ?: "",
+                    style = Typography.labelSmall,
+                    color = colorResource(id = R.color.steel),
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .width(
+                            width = (width - (colors.size * 8).dp) / colors.size
+                        )
+                        .align(
+                            alignment = Alignment.CenterHorizontally
+                        )
+                )
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 fun VerticalProgressPreview() {
@@ -281,5 +384,31 @@ fun CircularProgressbarPreview() {
     CircularProgressbar(
         foregroundIndicatorColor = colorResource(id = R.color.fateBlue),
         dataUsage = 40f
+    )
+}
+
+@Preview
+@Composable
+fun RangeLayoutPreview() {
+    RangeLayout(
+        modifier = Modifier
+            .height(
+                height = 100.dp
+            ),
+        width = LocalConfiguration.current.screenWidthDp.dp,
+        colors = listOf(
+            Butterscotch,
+            Petrol,
+            Purple40,
+            PetrolLighter,
+            PurpleGrey80
+        ),
+        labels = listOf(
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+        )
     )
 }

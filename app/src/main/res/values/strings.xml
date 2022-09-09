@@ -63,4 +63,18 @@
     <string name="key_effective_with_value_label">Effective: %s</string>
     <string name="key_expires_with_value_label">Expires: %s</string>
     <string name="key_air_quality_label">Air Quality</string>
+    <string-array name="key_air_quality_data_array">
+        <item>Carbon Monoxide (μg/m3)</item>
+        <item>Ozone (μg/m3)</item>
+        <item>Nitrogen dioxide (μg/m3)</item>
+        <item>Sulphur dioxide (μg/m3)</item>
+    </string-array>
+    <string-array name="key_air_quality_us_epa_index_array">
+        <item>Good</item>
+        <item>Moderate</item>
+        <item>Unhealthy for sensitive group</item>
+        <item>Unhealthy</item>
+        <item>Very Unhealthy</item>
+        <item>Hazardous</item>
+    </string-array>
 </resources>

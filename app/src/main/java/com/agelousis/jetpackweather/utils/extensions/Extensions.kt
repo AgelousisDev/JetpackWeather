@@ -36,3 +36,8 @@ val Date.fullTime: String
     get() = with(SimpleDateFormat(Constants.FULL_TIME_FORMAT, Locale.getDefault())) {
         format(this@fullTime)
     }
+
+inline fun Int.run(block: (index: Int) -> Unit) {
+    for (index in 0 until this)
+        block(index)
+}

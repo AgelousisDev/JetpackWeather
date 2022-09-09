@@ -126,6 +126,17 @@ fun TodayWeatherLayout(
                                 )
                             )
                     }
+                    item {
+                        if (weatherResponseModel != null
+                            && weatherResponseModel?.currentWeatherDataModel?.airQuality != null
+                        )
+                            AirQualityRowLayout(
+                                modifier = Modifier
+                                    .animateItemPlacement(),
+                                weatherAirQualityDataModel = weatherResponseModel?.currentWeatherDataModel?.airQuality
+                                    ?: return@item
+                            )
+                    }
                     // Day Hourly Temperature
                     item {
                         if (weatherResponseModel != null
