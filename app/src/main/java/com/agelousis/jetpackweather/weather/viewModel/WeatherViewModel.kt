@@ -1,7 +1,6 @@
 package com.agelousis.jetpackweather.weather.viewModel
 
 import android.content.Context
-import android.location.Geocoder
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.network.repositories.SuccessBlock
@@ -25,7 +25,6 @@ import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.util.*
 
 class WeatherViewModel: ViewModel() {
 
@@ -120,36 +119,6 @@ class WeatherViewModel: ViewModel() {
         WeatherSettings.WeatherNotifications isEnabled context
     )
 
-    fun getAddressFromLocation(
-        context: Context,
-        longitude: Double,
-        latitude: Double
-    ) = with(Geocoder(context, Locale.ENGLISH)) {
-        try {
-            getFromLocation(latitude, longitude, 1)?.let { addresses ->
-                AddressDataModel(
-                    countryName = addresses.firstOrNull()?.countryName,
-                    countryCode = addresses.firstOrNull()?.countryCode,
-                    longitude = addresses.firstOrNull()?.longitude,
-                    latitude = addresses.firstOrNull()?.latitude,
-                    addressLine = addresses.firstOrNull()?.getAddressLine(0)?.takeIf { addressLine ->
-                        addressLine.split(",").size < 3
-                    } ?: listOf(
-                        with(addresses.firstOrNull()?.getAddressLine(0)?.split(",")?.lastIndex ?: 0) {
-                            addresses.firstOrNull()?.getAddressLine(0)?.split(",")?.getOrNull(
-                                index = this - 1
-                            )
-                        },
-                        addresses.firstOrNull()?.getAddressLine(0)?.split(",")?.lastOrNull() ?: ""
-                    ).joinToString()
-                )
-            }
-        }
-        catch (e: Exception) {
-            null
-        }
-    }
-
     fun requestCurrentWeather(
         context: Context,
         location: String,
@@ -180,6 +149,7 @@ class WeatherViewModel: ViewModel() {
 
     fun requestForecast(
         context: Context,
+        navController: NavController,
         location: String,
         days: Int,
         airQualityState: Boolean,
@@ -197,7 +167,7 @@ class WeatherViewModel: ViewModel() {
                 loaderStateMutableStateFlow.value = false
                 networkErrorMutableStateFlow.value = false
                 weatherResponseMutableLiveData.value = weatherResponseModel
-                configureBottomNavigationItems()
+                this configureBottomNavigationItemsWith navController
                 //weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
                 sharedPreferences.weatherResponseModel = weatherResponseModel
             },
@@ -218,13 +188,24 @@ class WeatherViewModel: ViewModel() {
         )
     }
 
-    private fun configureBottomNavigationItems() {
-        if (!weatherResponseLiveData.value?.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty()
-            && WeatherNavigationScreen.Alerts !in bottomNavigationItems
-        )
-            bottomNavigationItems.add(
+    private infix fun configureBottomNavigationItemsWith(
+        navController: NavController
+    ) {
+        if (!weatherResponseLiveData.value?.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty()) {
+            if (WeatherNavigationScreen.Alerts !in bottomNavigationItems)
+                bottomNavigationItems.add(
+                    WeatherNavigationScreen.Alerts
+                )
+        }
+        else {
+            bottomNavigationItems.remove(
                 WeatherNavigationScreen.Alerts
             )
+            if ((WeatherNavigationScreen fromRoute currentNavigationRoute) is WeatherNavigationScreen.Alerts)
+                navController.navigate(
+                    WeatherNavigationScreen.Today.route
+                )
+        }
     }
 
 }

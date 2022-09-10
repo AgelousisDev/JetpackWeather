@@ -118,9 +118,7 @@ fun WeatherAlertRowLayout(
                 Column(
                     modifier = modifier
                 ) {
-                    weatherAlertModel.instruction.split(
-                        ". "
-                    ).forEach { instruction ->
+                    weatherAlertModel.instructionList?.forEach { instruction ->
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -206,7 +204,12 @@ fun WeatherAlertRowLayout(
                     Column {
                         Divider(
                             thickness = 0.2.dp,
-                            color = colorResource(id = R.color.dayNightTextOnBackground)
+                            color = colorResource(id = R.color.dayNightTextOnBackground),
+                            startIndent = 16.dp,
+                            modifier = Modifier
+                                .padding(
+                                    end = 16.dp
+                                )
                         )
                         (weatherAlertModel getMoreDetailsWith context).forEachIndexed { index, detail ->
                             Row(

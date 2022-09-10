@@ -1,13 +1,18 @@
 package com.agelousis.jetpackweather.utils.helpers
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.os.Looper
-import androidx.core.app.ActivityCompat
+import androidx.core.os.BuildCompat
+import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
+import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModelSuccessBlock
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
 import com.google.android.gms.location.*
+import java.util.*
 
 typealias LocationSuccessBlock = (Location) -> Unit
 
@@ -20,6 +25,80 @@ class LocationHelper(
         private val smallestDisplacement: Float? = null,
         private val locationSuccessBlock: LocationSuccessBlock
 ): LocationCallback() {
+
+    companion object {
+
+        @SuppressLint("UnsafeOptInUsageError")
+        fun getAddressFromLocation(
+            context: Context,
+            longitude: Double,
+            latitude: Double,
+            addressDataModelSuccessBlock: AddressDataModelSuccessBlock
+        ) {
+            Geocoder(context, Locale.ENGLISH).apply {
+                try {
+                    if (BuildCompat.isAtLeastT())
+                        getFromLocation(
+                            latitude,
+                            longitude,
+                            1
+                        ) { addresses ->
+                            addressDataModelSuccessBlock(
+                                this@Companion getAddressDataFrom addresses.firstOrNull()
+                            )
+                        }
+                    else
+                        getFromLocation(latitude, longitude, 1)?.let { addresses ->
+                            addressDataModelSuccessBlock(
+                                this@Companion getAddressDataFrom addresses.firstOrNull()
+                            )
+                        }
+                } catch (e: Exception) {
+                    addressDataModelSuccessBlock(
+                        null
+                    )
+                }
+            }
+        }
+
+        fun getLocationFromAddress(
+            context: Context,
+            strAddress: String
+        ) =
+            with(Geocoder(context, Locale.getDefault())) {
+                getFromLocationName(strAddress, 1)?.let { addresses ->
+                    AddressDataModel(
+                        countryName = addresses.firstOrNull()?.countryName,
+                        countryCode = addresses.firstOrNull()?.countryCode,
+                        longitude = addresses.firstOrNull()?.longitude,
+                        latitude = addresses.firstOrNull()?.latitude,
+                        addressLine = addresses.firstOrNull()?.getAddressLine(0)
+                    )
+                }
+            }
+
+        private infix fun getAddressDataFrom(address: Address?) =
+            if (address != null)
+                AddressDataModel(
+                    countryName = address.countryName,
+                    countryCode = address.countryCode,
+                    longitude = address.longitude,
+                    latitude = address.latitude,
+                    addressLine = address.getAddressLine(0)?.takeIf { addressLine ->
+                        addressLine.split(",").size < 3
+                    } ?: listOf(
+                        with(address.getAddressLine(0)?.split(",")?.lastIndex ?: 0) {
+                            address.getAddressLine(0)?.split(",")?.getOrNull(
+                                index = this - 1
+                            )
+                        },
+                        address.getAddressLine(0)?.split(",")?.lastOrNull() ?: ""
+                    ).joinToString()
+                )
+            else
+                null
+
+    }
 
     override fun onLocationResult(p0: LocationResult) {
         super.onLocationResult(p0)

@@ -3,6 +3,8 @@ package com.agelousis.jetpackweather.mapAddressPicker
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+typealias AddressDataModelSuccessBlock = (AddressDataModel?) -> Unit
+
 @Parcelize
 data class AddressDataModel(
     val countryName: String? = null,

@@ -59,4 +59,16 @@ data class WeatherAlertModel(
             )
             ?.split(". ")
 
+    val instructionList
+        get() = instruction?.split(
+            "."
+        )?.filterNot { instruction ->
+            instruction.isEmpty()
+        }?.map { instruction ->
+            instruction.replace(
+                oldValue = "\n",
+                newValue = " "
+            )
+        }
+
 }

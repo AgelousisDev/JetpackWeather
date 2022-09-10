@@ -173,7 +173,13 @@ fun MapAddressPickerView(
                 cameraPositionState = cameraPositionState,
                 uiSettings = MapUiSettings(
                     zoomControlsEnabled = false
-                )
+                ),
+                onMapClick = { latLng ->
+                    viewModel.getAddressFromLatLng(
+                        context = context,
+                        latLng = latLng
+                    )
+                }
             ) {
                 if (currentLatLng != null)
                     Marker(

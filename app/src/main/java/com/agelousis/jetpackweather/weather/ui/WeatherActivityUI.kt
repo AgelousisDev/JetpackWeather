@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -90,6 +91,7 @@ fun WeatherActivityBottomNavigationLayout(
     )*/
     requestLocation(
         context = context,
+        navController = navController,
         state = requestLocationOnStartupState,
         viewModel = viewModel
     ) {
@@ -98,6 +100,7 @@ fun WeatherActivityBottomNavigationLayout(
     if (isRefreshing)
         requestWeather(
             context = context,
+            navController = navController,
             viewModel = viewModel,
             longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: 0.0,
             latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: 0.0
@@ -166,7 +169,8 @@ fun WeatherActivityBottomNavigationLayout(
                     },
                     actions = {
                         WeatherAppBarActions(
-                            viewModel = viewModel,
+                            navController = navController,
+                            viewModel = viewModel
                         )
                     }
                 )
@@ -205,6 +209,7 @@ fun WeatherActivityBottomNavigationLayout(
                     )
                 else
                     LocationPermissionRequest(
+                        navController = navController,
                         viewModel = viewModel
                     )
             }
@@ -277,6 +282,7 @@ fun WeatherActivityNavigation(
 
 @Composable
 fun WeatherAppBarActions(
+    navController: NavController,
     viewModel: WeatherViewModel
 ) {
     val context = LocalContext.current
@@ -296,6 +302,7 @@ fun WeatherAppBarActions(
             viewModel.weatherUiAppBarTitle = viewModel.addressDataModelStateFlow.value?.addressLine
             requestWeather(
                 context = context,
+                navController = navController,
                 viewModel = viewModel,
                 longitude = viewModel.addressDataModelStateFlow.value?.longitude
                     ?: return@rememberLauncherForActivityResult,
@@ -318,6 +325,7 @@ fun WeatherAppBarActions(
                 onClick = {
                     requestLocation(
                         context = context,
+                        navController = navController,
                         viewModel = viewModel,
                         fromUpdate = true
                     )
@@ -359,6 +367,7 @@ fun WeatherAppBarActions(
 
 @Composable
 private fun LocationPermissionRequest(
+    navController: NavController,
     viewModel: WeatherViewModel
 ) {
     val context = LocalContext.current
@@ -376,6 +385,7 @@ private fun LocationPermissionRequest(
         }
         requestLocation(
             context = context,
+            navController = navController,
             viewModel = viewModel
         )
     }
@@ -432,10 +442,10 @@ private fun LocationPermissionDialog(
 
 private fun requestLocation(
     context: Context,
+    navController: NavController,
     state: Boolean = true,
     fromUpdate: Boolean = false,
     viewModel: WeatherViewModel,
-
     successUnitBlock: SuccessUnitBlock = {}
 ) {
     if (context.arePermissionsGranted(
@@ -449,38 +459,44 @@ private fun requestLocation(
         LocationHelper(
             context = context,
             priority = Priority.PRIORITY_HIGH_ACCURACY
-        ) {
+        ) { location ->
             if (!fromUpdate)
                 viewModel.requestLocationMutableState.value = false
-            viewModel.addressDataModelMutableStateFlow.value = viewModel.getAddressFromLocation(
+            LocationHelper.getAddressFromLocation(
                 context = context,
-                longitude = it.longitude,
-                latitude = it.latitude
-            )
-            viewModel.weatherUiAppBarTitle = viewModel.addressDataModelStateFlow.value?.addressLine
-            context.getSharedPreferences(
-                Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
-                Context.MODE_PRIVATE
-            ).addressDataModel = viewModel.addressDataModelStateFlow.value
-            requestWeather(
-                context = context,
-                viewModel = viewModel,
-                longitude = it.longitude,
-                latitude = it.latitude
-            )
-            successUnitBlock()
+                longitude = location.longitude,
+                latitude = location.latitude
+            ) { addressDataModel ->
+                viewModel.addressDataModelMutableStateFlow.value = addressDataModel
+
+                viewModel.weatherUiAppBarTitle = addressDataModel?.addressLine
+                context.getSharedPreferences(
+                    Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
+                    Context.MODE_PRIVATE
+                ).addressDataModel = addressDataModel
+                requestWeather(
+                    context = context,
+                    navController = navController,
+                    viewModel = viewModel,
+                    longitude = location.longitude,
+                    latitude = location.latitude
+                )
+                successUnitBlock()
+            }
         }
     }
 }
 
 fun requestWeather(
     context: Context,
+    navController: NavController,
     viewModel: WeatherViewModel,
     longitude: Double,
     latitude: Double
 ) {
     viewModel.requestForecast(
         context = context,
+        navController = navController,
         location = "%f,%f".format(
             latitude,
             longitude
