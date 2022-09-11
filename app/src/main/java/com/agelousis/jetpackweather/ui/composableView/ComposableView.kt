@@ -1,5 +1,7 @@
 package com.agelousis.jetpackweather.ui.composableView
 
+import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -31,6 +33,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.ui.theme.*
+import com.agelousis.jetpackweather.utils.extensions.bitmapDescriptorFromVector
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 
 @Composable
 fun VerticalProgress(
@@ -367,6 +373,25 @@ fun RangeLayout(
             }
         }
     }
+}
+
+@Composable
+fun MapMarker(
+    context: Context,
+    position: LatLng,
+    title: String,
+    snippet: String? = null,
+    @DrawableRes iconResourceId: Int
+) {
+    val icon = context bitmapDescriptorFromVector iconResourceId
+    Marker(
+        state = MarkerState(
+            position = position
+        ),
+        title = title,
+        snippet = snippet ?: "",
+        icon = icon
+    )
 }
 
 @Preview

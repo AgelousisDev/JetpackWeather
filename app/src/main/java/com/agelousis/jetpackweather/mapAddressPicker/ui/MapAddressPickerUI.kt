@@ -27,11 +27,14 @@ import androidx.constraintlayout.compose.Dimension
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.MapAddressPickerActivity
 import com.agelousis.jetpackweather.mapAddressPicker.viewModel.MapViewModel
+import com.agelousis.jetpackweather.ui.composableView.MapMarker
 import com.agelousis.jetpackweather.ui.composableView.WeatherSmallTopAppBar
 import com.agelousis.jetpackweather.ui.theme.Typography
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -39,7 +42,7 @@ fun MapAddressPickerView(
     viewModel: MapViewModel
 ) {
     val context = LocalContext.current
-    val snackbarHostState = remember {
+    val snackBarHostState = remember {
         SnackbarHostState()
     }
     val scope = rememberCoroutineScope()
@@ -48,21 +51,33 @@ fun MapAddressPickerView(
     val focusRequester = remember {
         FocusRequester()
     }
-    val currentLatLng =
-        if (addressDataModel != null)
-            LatLng(
-                addressDataModel?.latitude ?: return,
-                addressDataModel?.longitude ?: return
-            )
-        else
-            null
     val cameraPositionState = rememberCameraPositionState()
-    if (currentLatLng != null)
-        cameraPositionState.position = CameraPosition.fromLatLngZoom(currentLatLng, 10f)
+    LaunchedEffect(
+        key1 = addressDataModel
+    ) {
+        delay(
+            timeMillis = 100L
+        )
+        cameraPositionState.animate(
+            update = CameraUpdateFactory.newCameraPosition(
+                CameraPosition(
+                    LatLng(
+                        addressDataModel?.latitude
+                            ?: return@LaunchedEffect,
+                    addressDataModel?.longitude
+                        ?: return@LaunchedEffect
+                    ),
+                    10f,
+                    0f,
+                    0f
+                )
+            )
+        )
+    }
     Scaffold(
         snackbarHost = {
           SnackbarHost(
-              hostState = snackbarHostState
+              hostState = snackBarHostState
           )
         },
         modifier = Modifier
@@ -152,7 +167,7 @@ fun MapAddressPickerView(
                                 text = viewModel.addressLine ?: return@KeyboardActions,
                                 invalidAddressStateBlock = {
                                     scope.launch {
-                                        snackbarHostState.showSnackbar(
+                                        snackBarHostState.showSnackbar(
                                             message = context.resources.getString(R.string.key_invalid_location_message)
                                         )
                                     }
@@ -198,13 +213,18 @@ fun MapAddressPickerView(
                     )
                 }
             ) {
-                if (currentLatLng != null)
-                    Marker(
-                        state = MarkerState(
-                            position = currentLatLng
+                if (addressDataModel != null)
+                    MapMarker(
+                        context = context,
+                        position = LatLng(
+                            addressDataModel?.latitude
+                                ?: return@GoogleMap,
+                            addressDataModel?.longitude
+                                ?: return@GoogleMap
                         ),
                         title = addressDataModel?.countryName ?: "",
-                        snippet = addressDataModel?.addressLine ?: ""
+                        snippet = addressDataModel?.addressLine ?: "",
+                        iconResourceId = R.drawable.ic_map_marker
                     )
             }
             if (viewModel.addressIsLoading)

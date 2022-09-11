@@ -5,10 +5,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import com.agelousis.jetpackweather.utils.receiver.WeatherAlarmReceiver
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import java.util.*
 
 fun Context.arePermissionsGranted(
@@ -61,4 +64,24 @@ fun Context.schedulePushNotificationsEvery(
         )
     else
         alarmManager.cancel(alarmPendingIntent)
+}
+
+infix fun Context.bitmapDescriptorFromVector(
+    vectorResId: Int
+): BitmapDescriptor? {
+
+    // retrieve the actual drawable
+    val drawable = ContextCompat.getDrawable(this, vectorResId)
+        ?: return null
+    drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+    val bm = Bitmap.createBitmap(
+        drawable.intrinsicWidth,
+        drawable.intrinsicHeight,
+        Bitmap.Config.ARGB_8888
+    )
+
+    // draw it onto the bitmap
+    val canvas = android.graphics.Canvas(bm)
+    drawable.draw(canvas)
+    return BitmapDescriptorFactory.fromBitmap(bm)
 }
