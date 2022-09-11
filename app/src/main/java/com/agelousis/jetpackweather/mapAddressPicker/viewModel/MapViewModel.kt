@@ -1,7 +1,6 @@
 package com.agelousis.jetpackweather.mapAddressPicker.viewModel
 
 import android.content.Context
-import android.os.CountDownTimer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,27 +25,23 @@ class MapViewModel: ViewModel()  {
         value = false
     )
 
-    private var timer: CountDownTimer? = null
-
     fun onTextChanged(
         context: Context,
-        text: String
+        text: String,
+        invalidAddressStateBlock: () -> Unit
     ) {
         if (text == "")
             return
-        addressIsLoading = true
-        timer?.cancel()
-        timer = object : CountDownTimer(1000, 1500) {
-            override fun onTick(millisUntilFinished: Long) { }
-            override fun onFinish() {
-                addressDataModelMutableStateFlow.value = LocationHelper.getLocationFromAddress(
-                    context = context,
-                    strAddress = text
-                )
-                addressLine = addressDataModelStateFlow.value?.addressLine
-                addressIsLoading = false
-            }
-        }.start()
+        LocationHelper.getLocationFromAddress(
+            context = context,
+            strAddress = text
+        )?.let { addressDataModel ->
+            addressDataModelMutableStateFlow.value = addressDataModel
+            addressLine = addressDataModel.addressLine
+        } ?: run {
+            addressLine = ""
+            invalidAddressStateBlock()
+        }
     }
 
     fun getAddressFromLatLng(

@@ -116,7 +116,10 @@ fun WeatherAlertRowLayout(
                     )
                 )
                 Column(
-                    modifier = modifier
+                    modifier = modifier,
+                    verticalArrangement = Arrangement.spacedBy(
+                        space = 8.dp
+                    )
                 ) {
                     weatherAlertModel.instructionList?.forEach { instruction ->
                         Row(

@@ -43,12 +43,18 @@ class LocationHelper(
                             longitude,
                             1
                         ) { addresses ->
+                            addresses.takeIf {
+                                it.isNotEmpty()
+                            } ?: return@getFromLocation
                             addressDataModelSuccessBlock(
                                 this@Companion getAddressDataFrom addresses.firstOrNull()
                             )
                         }
                     else
                         getFromLocation(latitude, longitude, 1)?.let { addresses ->
+                            addresses.takeIf {
+                                it.isNotEmpty()
+                            } ?: return@let
                             addressDataModelSuccessBlock(
                                 this@Companion getAddressDataFrom addresses.firstOrNull()
                             )
@@ -67,6 +73,9 @@ class LocationHelper(
         ) =
             with(Geocoder(context, Locale.getDefault())) {
                 getFromLocationName(strAddress, 1)?.let { addresses ->
+                    addresses.takeIf {
+                        it.isNotEmpty()
+                    } ?: return@with null
                     AddressDataModel(
                         countryName = addresses.firstOrNull()?.countryName,
                         countryCode = addresses.firstOrNull()?.countryCode,

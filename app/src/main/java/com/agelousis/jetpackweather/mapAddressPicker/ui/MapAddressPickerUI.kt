@@ -32,12 +32,17 @@ import com.agelousis.jetpackweather.ui.theme.Typography
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
+import kotlinx.coroutines.launch
 
 @Composable
 fun MapAddressPickerView(
     viewModel: MapViewModel
 ) {
     val context = LocalContext.current
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
+    val scope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
     val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
     val focusRequester = remember {
@@ -55,6 +60,11 @@ fun MapAddressPickerView(
     if (currentLatLng != null)
         cameraPositionState.position = CameraPosition.fromLatLngZoom(currentLatLng, 10f)
     Scaffold(
+        snackbarHost = {
+          SnackbarHost(
+              hostState = snackbarHostState
+          )
+        },
         modifier = Modifier
             .statusBarsPadding(),
         topBar = {
@@ -139,7 +149,14 @@ fun MapAddressPickerView(
                         if (viewModel.addressLine != null)
                             viewModel.onTextChanged(
                                 context = context,
-                                text = viewModel.addressLine ?: return@KeyboardActions
+                                text = viewModel.addressLine ?: return@KeyboardActions,
+                                invalidAddressStateBlock = {
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar(
+                                            message = context.resources.getString(R.string.key_invalid_location_message)
+                                        )
+                                    }
+                                }
                             )
                     }
                 ),

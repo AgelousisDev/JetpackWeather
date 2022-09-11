@@ -77,4 +77,5 @@
         <item>Very Unhealthy</item>
         <item>Hazardous</item>
     </string-array>
+    <string name="key_invalid_location_message">Invalid location</string>
 </resources>
