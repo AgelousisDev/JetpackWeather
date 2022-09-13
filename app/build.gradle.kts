@@ -92,6 +92,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$liveDataViewModelVersion")
     implementation("io.coil-kt:coil-compose:2.2.1")
+    implementation("androidx.glance:glance-appwidget:1.0.0-SNAPSHOT")
     // Retrofit & OkHttp
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.8")

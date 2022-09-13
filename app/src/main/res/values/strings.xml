@@ -78,4 +78,5 @@
         <item>Hazardous</item>
     </string-array>
     <string name="key_invalid_location_message">Invalid location</string>
+    <string name="key_loading_label">Loading…</string>
 </resources>
