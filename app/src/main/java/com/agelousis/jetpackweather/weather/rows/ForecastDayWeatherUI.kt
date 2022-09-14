@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +16,8 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.CurrentDayWeatherDataModel
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
+import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
+import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.airbnb.lottie.compose.*
 
 @Composable
@@ -23,6 +26,12 @@ fun ForecastDayWeatherLayout(
     currentDayWeatherDataModel: CurrentDayWeatherDataModel
 ) {
     val context = LocalContext.current
+    val preferencesStoreHelper = PreferencesStoreHelper(
+        context = context
+    )
+    val temperatureUnitType by preferencesStoreHelper.temperatureUnitType.collectAsState(
+        initial = TemperatureUnitType.CELSIUS
+    )
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -38,7 +47,7 @@ fun ForecastDayWeatherLayout(
         ) {
             // C
             Text(
-                text = currentDayWeatherDataModel currentMinMaxTemperatureUnitFormatted context,
+                text = currentDayWeatherDataModel currentMinMaxTemperatureUnitFormatted temperatureUnitType,
                 style = textViewHeaderFont
             )
 

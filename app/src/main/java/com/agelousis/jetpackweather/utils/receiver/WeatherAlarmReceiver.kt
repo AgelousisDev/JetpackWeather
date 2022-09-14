@@ -12,6 +12,7 @@ import com.agelousis.jetpackweather.utils.extensions.weatherResponseModel
 import com.agelousis.jetpackweather.utils.helpers.NotificationHelper
 import com.agelousis.jetpackweather.utils.helpers.UrlBitmapHelper
 import com.agelousis.jetpackweather.utils.model.NotificationDataModel
+import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -69,7 +70,7 @@ class WeatherAlarmReceiver : BroadcastReceiver() {
                         title = addressDataModel.addressLine,
                         body = "%s\n%s\n%s\n%s\n%s".format(
                             currentWeatherDataModel.currentTemperatureUnitFormatted(
-                                context = context
+                                temperatureUnitType = TemperatureUnitType.CELSIUS
                             ),
                             currentWeatherDataModel.weatherConditionDataModel.text,
                             "%s %s".format(

@@ -9,7 +9,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,9 +28,12 @@ import com.agelousis.jetpackweather.ui.rows.SelectionInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.rows.SwitchInputFieldRowLayout
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.*
+import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
@@ -40,6 +42,13 @@ fun SettingsLayout(
     contentPadding: PaddingValues
 ) {
     val context = LocalContext.current
+    val preferencesStorageHelper = PreferencesStoreHelper(
+        context = context
+    )
+    val scope = rememberCoroutineScope()
+    val temperatureUnitType by preferencesStorageHelper.temperatureUnitType.collectAsState(
+        initial = TemperatureUnitType.CELSIUS
+    )
     val sharedPreferences = context.getSharedPreferences(
         Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
         Context.MODE_PRIVATE
@@ -48,6 +57,12 @@ fun SettingsLayout(
         mutableStateOf(value = false)
     }
     viewModel.weatherSettingsList.clear()
+    viewModel.weatherSettingsList.add(
+        WeatherSettings.TemperatureType.with(
+            context = context,
+            temperatureUnitType = temperatureUnitType
+        )
+    )
     viewModel.weatherSettingsList.addAll(
         viewModel getWeatherSettings context
     )
@@ -105,7 +120,8 @@ fun SettingsLayout(
                             weatherSettings = weatherSettings
                         ) { selectedPosition ->
                             configureSelectionInputFieldResult(
-                                sharedPreferences = sharedPreferences,
+                                scope = scope,
+                                preferencesStorageHelper = preferencesStorageHelper,
                                 weatherSettings = weatherSettings,
                                 selectedPosition = selectedPosition
                             )
@@ -156,13 +172,16 @@ fun SettingsLayout(
 }
 
 private fun configureSelectionInputFieldResult(
-    sharedPreferences: SharedPreferences,
+    scope: CoroutineScope,
+    preferencesStorageHelper: PreferencesStoreHelper,
     weatherSettings: WeatherSettings,
     selectedPosition: Int
 ) {
     when(weatherSettings) {
         WeatherSettings.TemperatureType ->
-            sharedPreferences.temperatureUnitType = TemperatureUnitType.values()[selectedPosition]
+            scope.launch {
+                preferencesStorageHelper setTemperatureUnitType TemperatureUnitType.values()[selectedPosition]
+            }
         else -> {}
     }
 }

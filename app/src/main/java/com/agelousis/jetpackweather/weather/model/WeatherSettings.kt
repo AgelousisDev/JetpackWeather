@@ -6,7 +6,6 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.addressDataModel
 import com.agelousis.jetpackweather.utils.extensions.offlineMode
-import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
 import com.agelousis.jetpackweather.utils.extensions.weatherNotificationsState
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 
@@ -22,7 +21,7 @@ sealed class WeatherSettings(
         label = R.string.key_temperature_unit_label
     ) {
 
-        infix fun withOptions(
+        /*infix fun withOptions(
             context: Context
         ) = this.apply {
             optionModelList = context.resources.getStringArray(R.array.key_temperature_unit_types_array).mapIndexed { index, item ->
@@ -40,7 +39,26 @@ sealed class WeatherSettings(
                     icon = temperatureUnitType.icon
                 )
             }
+        }*/
+
+        fun with(
+            context: Context,
+            temperatureUnitType: TemperatureUnitType?
+        ) = this.apply {
+            optionModelList = context.resources.getStringArray(R.array.key_temperature_unit_types_array).mapIndexed { index, item ->
+                OptionModel(
+                    label = item,
+                    icon = if (index == 0) R.drawable.ic_celsius else R.drawable.ic_fahrenheit
+                )
+            }
+            temperatureUnitType?.let {
+                OptionModel(
+                    label = context.resources.getStringArray(R.array.key_temperature_unit_types_array)[TemperatureUnitType.values().indexOf(it)],
+                    icon = it.icon
+                )
+            }
         }
+
     }
     object OfflineMode: WeatherSettings(
         label = R.string.key_load_saved_weather_when_offline_label

@@ -9,6 +9,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -25,12 +27,20 @@ import com.agelousis.jetpackweather.network.response.WeatherHourlyDataModel
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.ui.theme.bold
 import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
+import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
+import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 
 @Composable
 fun HourlyWeatherConditionRowLayout(
     weatherHourlyDataModel: WeatherHourlyDataModel
 ) {
     val context = LocalContext.current
+    val preferencesStoreHelper = PreferencesStoreHelper(
+        context = context
+    )
+    val temperatureUnitType by preferencesStoreHelper.temperatureUnitType.collectAsState(
+        initial = TemperatureUnitType.CELSIUS
+    )
     Card(
         border = BorderStroke(
             width = 0.5.dp,
@@ -90,9 +100,7 @@ fun HourlyWeatherConditionRowLayout(
                 )
                 // C
                 Text(
-                    text = weatherHourlyDataModel.currentTemperatureUnitFormatted(
-                        context = context
-                    ),
+                    text = weatherHourlyDataModel currentTemperatureUnitFormatted temperatureUnitType,
                     style = textViewHeaderFont
                 )
                 // Condition Text
@@ -107,9 +115,7 @@ fun HourlyWeatherConditionRowLayout(
                 Text(
                     text = stringResource(
                         id = R.string.key_feels_like_label,
-                        weatherHourlyDataModel.feelsLikeTemperatureUnitFormatted(
-                            context = context
-                        )
+                        weatherHourlyDataModel feelsLikeTemperatureUnitFormatted temperatureUnitType
                     ),
                     style = Typography.bodyMedium,
                     color = colorResource(id = R.color.grey),

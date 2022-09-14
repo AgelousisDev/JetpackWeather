@@ -2,8 +2,6 @@ package com.agelousis.jetpackweather.network.response
 
 import android.content.Context
 import com.agelousis.jetpackweather.R
-import com.agelousis.jetpackweather.utils.constants.Constants
-import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.google.gson.annotations.SerializedName
 import java.lang.StringBuilder
@@ -35,8 +33,10 @@ data class CurrentWeatherDataModel(
     @SerializedName(value = "air_quality") val airQuality: WeatherAirQualityDataModel? = null,
 ) {
 
-    fun currentTemperatureUnitFormatted(context: Context) =
-        when(context.getSharedPreferences(Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE).temperatureUnitType) {
+    infix fun currentTemperatureUnitFormatted(
+        temperatureUnitType: TemperatureUnitType?
+    ) =
+        when(temperatureUnitType) {
             TemperatureUnitType.FAHRENHEIT ->
                 "%d °F".format(
                     tempF?.toInt() ?: 0
@@ -47,8 +47,10 @@ data class CurrentWeatherDataModel(
                 )
         }
 
-    fun feelsLikeTemperatureUnitFormatted(context: Context) =
-        when(context.getSharedPreferences(Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE).temperatureUnitType) {
+    infix fun feelsLikeTemperatureUnitFormatted(
+        temperatureUnitType: TemperatureUnitType?
+    ) =
+        when(temperatureUnitType) {
             TemperatureUnitType.FAHRENHEIT ->
                 "%d °F".format(
                     feelsLikeF?.toInt() ?: 0

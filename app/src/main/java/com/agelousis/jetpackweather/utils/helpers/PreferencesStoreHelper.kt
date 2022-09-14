@@ -13,11 +13,12 @@ import com.agelousis.jetpackweather.utils.extensions.valueEnumOrNull
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import kotlinx.coroutines.flow.map
 
-class PreferencesStoreHelper(private val context: Context) {
+class PreferencesStoreHelper(val context: Context) {
 
     companion object {
         private const val WEATHER_PREFERENCES_KEY = "weatherPreferences"
         private val Context.dataStore by preferencesDataStore(name = WEATHER_PREFERENCES_KEY)
+
         private val TEMPERATURE_UNIT_TYPE_KEY = stringPreferencesKey(name = "temperatureUnitType")
         private val OFFLINE_MODE_KEY = booleanPreferencesKey(name = "offlineMode")
         private val WEATHER_RESPONSE_MODE_DATA_KEY = stringPreferencesKey(name = "weatherResponseModelData")

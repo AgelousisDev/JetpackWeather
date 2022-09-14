@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,8 @@ import com.agelousis.jetpackweather.ui.rows.CircularDotLayout
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.ui.theme.medium
 import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
+import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
+import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.airbnb.lottie.compose.*
 
 @Composable
@@ -35,6 +38,12 @@ fun CurrentTemperatureRowLayout(
     currentWeatherDataModel: CurrentWeatherDataModel
 ) {
     val context = LocalContext.current
+    val preferencesStoreHelper = PreferencesStoreHelper(
+        context = context
+    )
+    val temperatureUnitType by preferencesStoreHelper.temperatureUnitType.collectAsState(
+        initial = TemperatureUnitType.CELSIUS
+    )
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,9 +58,7 @@ fun CurrentTemperatureRowLayout(
             humidityLayoutDividerConstrainedReference, humidityLayoutConstrainedReference) = createRefs()
         // C
         Text(
-            text = currentWeatherDataModel.currentTemperatureUnitFormatted(
-                context = context
-            ),
+            text = currentWeatherDataModel currentTemperatureUnitFormatted temperatureUnitType,
             style = textViewHeaderFont,
             modifier = Modifier
                 .constrainAs(temperatureLabelConstrainedReference) {
@@ -97,9 +104,7 @@ fun CurrentTemperatureRowLayout(
         Text(
             text = stringResource(
                 id = R.string.key_feels_like_label,
-                currentWeatherDataModel.feelsLikeTemperatureUnitFormatted(
-                    context = context
-                )
+                currentWeatherDataModel feelsLikeTemperatureUnitFormatted temperatureUnitType
             ),
             style = Typography.bodyMedium,
             color = colorResource(id = R.color.grey),

@@ -114,7 +114,6 @@ class WeatherViewModel: ViewModel() {
     infix fun getWeatherSettings(
         context: Context
     ) = listOf(
-        WeatherSettings.TemperatureType withOptions context,
         WeatherSettings.OfflineMode isEnabled context,
         WeatherSettings.WeatherNotifications isEnabled context
     )

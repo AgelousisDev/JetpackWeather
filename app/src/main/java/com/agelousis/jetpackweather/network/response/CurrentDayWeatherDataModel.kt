@@ -3,7 +3,6 @@ package com.agelousis.jetpackweather.network.response
 import android.content.Context
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.utils.constants.Constants
-import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.google.gson.annotations.SerializedName
 
@@ -30,9 +29,9 @@ data class CurrentDayWeatherDataModel(
 ) {
 
     infix fun currentMinMaxTemperatureUnitFormatted(
-        context: Context
+        temperatureUnitType: TemperatureUnitType?
     ) =
-        when(context.getSharedPreferences(Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE).temperatureUnitType) {
+        when(temperatureUnitType) {
             TemperatureUnitType.FAHRENHEIT ->
                 "%d °F - %d °F".format(
                     minTempF?.toInt() ?: 0,

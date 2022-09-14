@@ -3,7 +3,6 @@ package com.agelousis.jetpackweather.network.response
 import android.content.Context
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.utils.constants.Constants
-import com.agelousis.jetpackweather.utils.extensions.temperatureUnitType
 import com.agelousis.jetpackweather.utils.extensions.toDate
 import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
@@ -46,8 +45,10 @@ data class WeatherHourlyDataModel(
     @SerializedName(value = "uv") val uv: Double? = null
 ) {
 
-    fun currentTemperatureUnitFormatted(context: Context) =
-        when(context.getSharedPreferences(Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE).temperatureUnitType) {
+    infix fun currentTemperatureUnitFormatted(
+        temperatureUnitType: TemperatureUnitType?
+    ) =
+        when(temperatureUnitType) {
             TemperatureUnitType.FAHRENHEIT ->
                 "%d °F".format(
                     tempF?.toInt() ?: 0
@@ -58,8 +59,10 @@ data class WeatherHourlyDataModel(
                 )
         }
 
-    fun feelsLikeTemperatureUnitFormatted(context: Context) =
-        when(context.getSharedPreferences(Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE).temperatureUnitType) {
+    infix fun feelsLikeTemperatureUnitFormatted(
+        temperatureUnitType: TemperatureUnitType?
+    ) =
+        when(temperatureUnitType) {
             TemperatureUnitType.FAHRENHEIT ->
                 "%d °F".format(
                     feelsLikeF?.toInt() ?: 0

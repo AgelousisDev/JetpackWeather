@@ -8,7 +8,7 @@ import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.google.gson.Gson
 
-var SharedPreferences.temperatureUnitType: TemperatureUnitType?
+/*var SharedPreferences.temperatureUnitType: TemperatureUnitType?
     set(value) {
         edit {
             putString(
@@ -22,7 +22,7 @@ var SharedPreferences.temperatureUnitType: TemperatureUnitType?
             Constants.SharedPreferencesKeys.TEMPERATURE_UNIT_TYPE_SHARED_PREFERENCES_KEY,
             null
         )
-    )
+    )*/
 
 var SharedPreferences.offlineMode: Boolean
     set(value) {
