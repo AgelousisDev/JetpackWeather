@@ -18,6 +18,7 @@ val playServicesLocationVersion = "20.0.0"
 val materialYouVersion = "1.8.0-alpha01"
 val lottieComposeVersion = "5.2.0"
 val browserVersion = "1.4.0"
+val dataStorePreferenceVersion = "1.0.0"
 
 android {
     compileSdk = 33
@@ -78,6 +79,8 @@ android {
 dependencies {
     // Native
     implementation("com.google.android.material:material:$materialYouVersion")
+    // Datastore
+    implementation("androidx.datastore:datastore-preferences:$dataStorePreferenceVersion")
 
     // Browser
     implementation("androidx.browser:browser:$browserVersion")

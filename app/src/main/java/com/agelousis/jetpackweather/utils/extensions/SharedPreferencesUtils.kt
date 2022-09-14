@@ -3,7 +3,6 @@ package com.agelousis.jetpackweather.utils.extensions
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
-import com.agelousis.jetpackweather.network.response.WeatherLocationDataModel
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType

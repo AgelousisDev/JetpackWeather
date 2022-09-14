@@ -1,6 +1,7 @@
 package com.agelousis.jetpackweather.utils.extensions
 
 import com.agelousis.jetpackweather.utils.constants.Constants
+import com.google.gson.Gson
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,3 +42,19 @@ inline fun Int.run(block: (index: Int) -> Unit) {
     for (index in 0 until this)
         block(index)
 }
+
+inline fun <reified T> String.toModel() =
+    try {
+        Gson().fromJson(this, T::class.java)
+    }
+    catch (e: Exception) {
+        null
+    }
+
+val <T> T.jsonString
+    get() = try {
+        Gson().toJson(this)
+    }
+    catch (e: Exception) {
+        null
+    }
