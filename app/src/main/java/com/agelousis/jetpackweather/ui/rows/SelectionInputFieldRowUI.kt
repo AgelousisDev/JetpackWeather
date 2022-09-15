@@ -26,9 +26,6 @@ fun SelectionInputFieldRowLayout(
     var expandedDropDownMenu by remember {
         mutableStateOf(value = false)
     }
-    var selectedItem by remember {
-        mutableStateOf(value = weatherSettings.selectedOptionModel?.label)
-    }
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
@@ -52,9 +49,9 @@ fun SelectionInputFieldRowLayout(
                     width = Dimension.fillToConstraints
                 }
         )
-        if (selectedItem != null)
+        if (weatherSettings.selectedOptionModel?.label != null)
             Text(
-                text = selectedItem ?: "",
+                text = weatherSettings.selectedOptionModel?.label ?: "",
                 style = Typography.labelMedium,
                 modifier = Modifier
                     .constrainAs(selectionIconConstrainedReference) {
@@ -104,7 +101,6 @@ fun SelectionInputFieldRowLayout(
                     onClick = {
                         expandedDropDownMenu = false
                         selectionInputFieldBlock(index)
-                        selectedItem = optionModel.label
                     },
                     leadingIcon = {
                         Icon(

@@ -51,7 +51,7 @@ sealed class WeatherSettings(
                     icon = if (index == 0) R.drawable.ic_celsius else R.drawable.ic_fahrenheit
                 )
             }
-            temperatureUnitType?.let {
+            selectedOptionModel = temperatureUnitType?.let {
                 OptionModel(
                     label = context.resources.getStringArray(R.array.key_temperature_unit_types_array)[TemperatureUnitType.values().indexOf(it)],
                     icon = it.icon

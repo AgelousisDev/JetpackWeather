@@ -56,16 +56,6 @@ fun SettingsLayout(
     var forceSwitchInputRefreshState by remember {
         mutableStateOf(value = false)
     }
-    viewModel.weatherSettingsList.clear()
-    viewModel.weatherSettingsList.add(
-        WeatherSettings.TemperatureType.with(
-            context = context,
-            temperatureUnitType = temperatureUnitType
-        )
-    )
-    viewModel.weatherSettingsList.addAll(
-        viewModel getWeatherSettings context
-    )
 
     val notificationsPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
@@ -168,6 +158,20 @@ fun SettingsLayout(
                 }
             }
         }
+    }
+    LaunchedEffect(
+        key1 = temperatureUnitType
+    ) {
+        viewModel.weatherSettingsList.clear()
+        viewModel.weatherSettingsList.add(
+            WeatherSettings.TemperatureType.with(
+                context = context,
+                temperatureUnitType = temperatureUnitType
+            )
+        )
+        viewModel.weatherSettingsList.addAll(
+            viewModel getWeatherSettings context
+        )
     }
 }
 
