@@ -3,10 +3,6 @@ package com.agelousis.jetpackweather.weather.model
 import android.content.Context
 import androidx.annotation.StringRes
 import com.agelousis.jetpackweather.R
-import com.agelousis.jetpackweather.utils.constants.Constants
-import com.agelousis.jetpackweather.utils.extensions.addressDataModel
-import com.agelousis.jetpackweather.utils.extensions.offlineMode
-import com.agelousis.jetpackweather.utils.extensions.weatherNotificationsState
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 
 sealed class WeatherSettings(
@@ -20,26 +16,6 @@ sealed class WeatherSettings(
     object TemperatureType: WeatherSettings(
         label = R.string.key_temperature_unit_label
     ) {
-
-        /*infix fun withOptions(
-            context: Context
-        ) = this.apply {
-            optionModelList = context.resources.getStringArray(R.array.key_temperature_unit_types_array).mapIndexed { index, item ->
-                OptionModel(
-                    label = item,
-                    icon = if (index == 0) R.drawable.ic_celsius else R.drawable.ic_fahrenheit
-                )
-            }
-            selectedOptionModel = context.getSharedPreferences(
-                Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
-                Context.MODE_PRIVATE
-            )?.temperatureUnitType?.let { temperatureUnitType ->
-                OptionModel(
-                    label = context.resources.getStringArray(R.array.key_temperature_unit_types_array)[TemperatureUnitType.values().indexOf(temperatureUnitType)],
-                    icon = temperatureUnitType.icon
-                )
-            }
-        }*/
 
         fun with(
             context: Context,
@@ -65,12 +41,9 @@ sealed class WeatherSettings(
     ) {
 
         infix fun isEnabled(
-            context: Context
+            offlineMode: Boolean
         ) = this.apply {
-            optionIsChecked = context.getSharedPreferences(
-                Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
-                Context.MODE_PRIVATE
-            ).offlineMode
+            optionIsChecked = offlineMode
         }
 
     }
@@ -80,14 +53,10 @@ sealed class WeatherSettings(
     ) {
 
         infix fun isEnabled(
-            context: Context
+            weatherNotificationsState: Boolean
         ) = this.apply {
-            val sharedPreferences = context.getSharedPreferences(
-                Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
-                Context.MODE_PRIVATE
-            )
-            optionIsChecked = sharedPreferences.weatherNotificationsState
-            optionIsEnabled = sharedPreferences.addressDataModel != null
+            optionIsChecked = weatherNotificationsState
+            //optionIsEnabled = sharedPreferences.addressDataModel != null
         }
 
     }

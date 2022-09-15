@@ -34,6 +34,7 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.mapAddressPicker.MapAddressPickerActivity
 import com.agelousis.jetpackweather.network.repositories.SuccessUnitBlock
+import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.ui.composableView.SimpleDialog
 import com.agelousis.jetpackweather.ui.composableView.WeatherBottomNavigation
 import com.agelousis.jetpackweather.ui.composableView.WeatherDrawerNavigation
@@ -42,13 +43,14 @@ import com.agelousis.jetpackweather.ui.composableView.models.PositiveButtonBlock
 import com.agelousis.jetpackweather.ui.composableView.models.SimpleDialogDataModel
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.utils.constants.Constants
-import com.agelousis.jetpackweather.utils.extensions.addressDataModel
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
 import com.agelousis.jetpackweather.utils.helpers.LocationHelper
+import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.drawerNavigation.WeatherDrawerNavigationScreen
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.google.android.gms.location.Priority
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -71,6 +73,16 @@ fun WeatherActivityBottomNavigationLayout(
     }
     val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
     val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
+    val preferencesStoreHelper = PreferencesStoreHelper(
+        context = context
+    )
+    val scope = rememberCoroutineScope()
+    val offlineMode by preferencesStoreHelper.offlineMode.collectAsState(
+        initial = false
+    )
+    val savedWeatherResponseModel by preferencesStoreHelper.weatherResponseModelData.collectAsState(
+        initial = null
+    )
     SimpleDialog(
         show = showDialogState,
         simpleDialogDataModel = SimpleDialogDataModel(
@@ -91,21 +103,26 @@ fun WeatherActivityBottomNavigationLayout(
     )*/
     requestLocation(
         context = context,
+        scope = scope,
         navController = navController,
         state = requestLocationOnStartupState,
-        viewModel = viewModel
+        viewModel = viewModel,
+        offlineMode = offlineMode,
+        savedWeatherResponseModel = savedWeatherResponseModel
     ) {
         requestLocationOnStartupState = false
     }
     if (isRefreshing)
         requestWeather(
             context = context,
+            scope = scope,
             navController = navController,
             viewModel = viewModel,
             longitude = viewModel.addressDataModelStateFlow.value?.longitude ?: 0.0,
-            latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: 0.0
+            latitude = viewModel.addressDataModelStateFlow.value?.latitude ?: 0.0,
+            offlineMode = offlineMode,
+            savedWeatherResponseModel = savedWeatherResponseModel
         )
-    val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     WeatherDrawerNavigation(
         modifier = Modifier
@@ -286,6 +303,16 @@ fun WeatherAppBarActions(
     viewModel: WeatherViewModel
 ) {
     val context = LocalContext.current
+    val preferencesStoreHelper = PreferencesStoreHelper(
+        context = context
+    )
+    val scope = rememberCoroutineScope()
+    val offlineMode by preferencesStoreHelper.offlineMode.collectAsState(
+        initial = false
+    )
+    val savedWeatherResponseModel by preferencesStoreHelper.weatherResponseModelData.collectAsState(
+        initial = null
+    )
     val mapAddressPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->
@@ -295,19 +322,21 @@ fun WeatherAppBarActions(
                     activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS, AddressDataModel::class.java)
                 else
                     activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
-            context.getSharedPreferences(
-                Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
-                Context.MODE_PRIVATE
-            ).addressDataModel = viewModel.addressDataModelStateFlow.value
+            scope.launch {
+                preferencesStoreHelper setCurrentAddressData viewModel.addressDataModelStateFlow.value
+            }
             viewModel.weatherUiAppBarTitle = viewModel.addressDataModelStateFlow.value?.addressLine
             requestWeather(
                 context = context,
+                scope = scope,
                 navController = navController,
                 viewModel = viewModel,
                 longitude = viewModel.addressDataModelStateFlow.value?.longitude
                     ?: return@rememberLauncherForActivityResult,
                 latitude = viewModel.addressDataModelStateFlow.value?.latitude
-                    ?: return@rememberLauncherForActivityResult
+                    ?: return@rememberLauncherForActivityResult,
+                offlineMode = offlineMode,
+                savedWeatherResponseModel = savedWeatherResponseModel
             )
         }
     }
@@ -325,9 +354,12 @@ fun WeatherAppBarActions(
                 onClick = {
                     requestLocation(
                         context = context,
+                        scope = scope,
                         navController = navController,
                         viewModel = viewModel,
-                        fromUpdate = true
+                        fromUpdate = true,
+                        offlineMode = offlineMode,
+                        savedWeatherResponseModel = savedWeatherResponseModel
                     )
                 }
             ) {
@@ -371,6 +403,16 @@ private fun LocationPermissionRequest(
     viewModel: WeatherViewModel
 ) {
     val context = LocalContext.current
+    val preferencesStoreHelper = PreferencesStoreHelper(
+        context = context
+    )
+    val scope = rememberCoroutineScope()
+    val offlineMode by preferencesStoreHelper.offlineMode.collectAsState(
+        initial = false
+    )
+    val savedWeatherResponseModel by preferencesStoreHelper.weatherResponseModelData.collectAsState(
+        initial = null
+    )
     var locationPermissionDialogState by remember {
         mutableStateOf(value = false)
     }
@@ -385,8 +427,11 @@ private fun LocationPermissionRequest(
         }
         requestLocation(
             context = context,
+            scope = scope,
             navController = navController,
-            viewModel = viewModel
+            viewModel = viewModel,
+            offlineMode = offlineMode,
+            savedWeatherResponseModel = savedWeatherResponseModel
         )
     }
 
@@ -442,12 +487,18 @@ private fun LocationPermissionDialog(
 
 private fun requestLocation(
     context: Context,
+    scope: CoroutineScope,
     navController: NavController,
     state: Boolean = true,
     fromUpdate: Boolean = false,
     viewModel: WeatherViewModel,
+    offlineMode: Boolean,
+    savedWeatherResponseModel: WeatherResponseModel?,
     successUnitBlock: SuccessUnitBlock = {}
 ) {
+    val preferencesStoreHelper = PreferencesStoreHelper(
+        context = context
+    )
     if (context.arePermissionsGranted(
             android.Manifest.permission.ACCESS_COARSE_LOCATION,
             android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -470,16 +521,18 @@ private fun requestLocation(
                 viewModel.addressDataModelMutableStateFlow.value = addressDataModel
 
                 viewModel.weatherUiAppBarTitle = addressDataModel?.addressLine
-                context.getSharedPreferences(
-                    Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
-                    Context.MODE_PRIVATE
-                ).addressDataModel = addressDataModel
+                scope.launch {
+                    preferencesStoreHelper setCurrentAddressData addressDataModel
+                }
                 requestWeather(
                     context = context,
+                    scope = scope,
                     navController = navController,
                     viewModel = viewModel,
                     longitude = location.longitude,
-                    latitude = location.latitude
+                    latitude = location.latitude,
+                    offlineMode = offlineMode,
+                    savedWeatherResponseModel = savedWeatherResponseModel
                 )
                 successUnitBlock()
             }
@@ -489,13 +542,17 @@ private fun requestLocation(
 
 fun requestWeather(
     context: Context,
+    scope: CoroutineScope,
     navController: NavController,
     viewModel: WeatherViewModel,
     longitude: Double,
-    latitude: Double
+    latitude: Double,
+    offlineMode: Boolean,
+    savedWeatherResponseModel: WeatherResponseModel?
 ) {
     viewModel.requestForecast(
         context = context,
+        scope = scope,
         navController = navController,
         location = "%f,%f".format(
             latitude,
@@ -503,7 +560,9 @@ fun requestWeather(
         ),
         days = 7,
         airQualityState = true,
-        alertsState = true
+        alertsState = true,
+        offlineMode = offlineMode,
+        savedWeatherResponseModel = savedWeatherResponseModel
     )
 }
 

@@ -73,7 +73,7 @@ class PreferencesStoreHelper(val context: Context) {
             preferences[WEATHER_NOTIFICATION_STATE_KEY] == true
         }
 
-    suspend infix fun setCurrentAddressData(addressDataModel: AddressDataModel) {
+    suspend infix fun setCurrentAddressData(addressDataModel: AddressDataModel?) {
         context.dataStore.edit { mutablePreferences ->
             mutablePreferences[CURRENT_ADDRESS_DATA_KEY] = addressDataModel.jsonString
                 ?: ""

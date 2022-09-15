@@ -58,3 +58,11 @@ val <T> T.jsonString
     catch (e: Exception) {
         null
     }
+
+inline fun <T : Any> ifLetThen(vararg elements: T?, closure: (List<Any>) -> Unit): List<Any>? {
+    return if (elements.all { it != null }) {
+        closure(elements.filterNotNull())
+        elements.filterNotNull()
+    }
+    else null
+}

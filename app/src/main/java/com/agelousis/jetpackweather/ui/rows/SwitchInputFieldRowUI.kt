@@ -24,24 +24,15 @@ typealias SwitchInputFieldBlock = (isChecked: Boolean) -> Unit
 @Composable
 fun SwitchInputFieldRowLayout(
     weatherSettings: WeatherSettings,
-    forceRefresh: Boolean = false,
     switchInputFieldBlock: SwitchInputFieldBlock
 ) {
-    var isChecked by remember {
-        mutableStateOf(
-            value = weatherSettings.optionIsChecked
-        )
-    }
-    if (forceRefresh)
-        isChecked = weatherSettings.optionIsChecked
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
                 enabled = weatherSettings.optionIsEnabled
             ) {
-                isChecked = !isChecked
-                switchInputFieldBlock(isChecked)
+                switchInputFieldBlock(weatherSettings.optionIsChecked)
             }
     ) {
         val (labelConstrainedReference, switchConstrainedReference)
@@ -58,7 +49,7 @@ fun SwitchInputFieldRowLayout(
                     width = Dimension.fillToConstraints
                 }
         )
-        val icon: (@Composable () -> Unit)? = if (isChecked) {
+        val icon: (@Composable () -> Unit)? = if (weatherSettings.optionIsChecked) {
             {
                 Icon(
                     imageVector = Icons.Filled.Check,
@@ -71,9 +62,8 @@ fun SwitchInputFieldRowLayout(
         } else
             null
         Switch(
-            checked = isChecked,
+            checked = weatherSettings.optionIsChecked,
             onCheckedChange = {
-                isChecked = it
                 switchInputFieldBlock(it)
             },
             enabled = weatherSettings.optionIsEnabled,

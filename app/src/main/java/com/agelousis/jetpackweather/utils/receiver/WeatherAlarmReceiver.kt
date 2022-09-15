@@ -6,16 +6,15 @@ import android.content.Intent
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.network.response.CurrentWeatherDataModel
-import com.agelousis.jetpackweather.utils.constants.Constants
-import com.agelousis.jetpackweather.utils.extensions.addressDataModel
-import com.agelousis.jetpackweather.utils.extensions.weatherResponseModel
 import com.agelousis.jetpackweather.utils.helpers.NotificationHelper
+import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
 import com.agelousis.jetpackweather.utils.helpers.UrlBitmapHelper
 import com.agelousis.jetpackweather.utils.model.NotificationDataModel
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class WeatherAlarmReceiver : BroadcastReceiver() {
@@ -24,32 +23,36 @@ class WeatherAlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(p0: Context?, p1: Intent?) {
         p0 ?: return
-        p0.getSharedPreferences(
-            Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
-            Context.MODE_PRIVATE
-        )?.apply {
-            val addressDataModel = addressDataModel ?: return@apply
+        val preferencesStoreHelper = PreferencesStoreHelper(
+            context = p0
+        )
+        scope.launch {
+            val addressDataModel = preferencesStoreHelper.currentAddressDataModel.firstOrNull()
+            val weatherResponseModel = preferencesStoreHelper.weatherResponseModelData.firstOrNull()
+
             weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.currentWeatherDataModel?.let { currentWeatherDataModel ->
                 openScopeAndScheduleNotification(
                     context = p0,
-                    addressDataModel = addressDataModel,
+                    addressDataModel = addressDataModel
+                        ?: return@let,
                     currentWeatherDataModel = currentWeatherDataModel
                 )
             } ?: WeatherViewModel().requestCurrentWeather(
+                context = p0,
+                location = "%f,%f".format(
+                    addressDataModel?.latitude
+                        ?: return@launch,
+                    addressDataModel.longitude
+                ),
+                airQualityState = true
+            ) {
+                openScopeAndScheduleNotification(
                     context = p0,
-                    location = "%f,%f".format(
-                        addressDataModel.latitude,
-                        addressDataModel.longitude
-                    ),
-                    airQualityState = true
-                ) { weatherResponseModel ->
-                    openScopeAndScheduleNotification(
-                        context = p0,
-                        addressDataModel = addressDataModel,
-                        currentWeatherDataModel = weatherResponseModel.currentWeatherDataModel
-                            ?: return@requestCurrentWeather
-                    )
-                }
+                    addressDataModel = addressDataModel,
+                    currentWeatherDataModel = it.currentWeatherDataModel
+                        ?: return@requestCurrentWeather
+                )
+            }
         }
     }
 

@@ -3,7 +3,6 @@ package com.agelousis.jetpackweather.weather.ui
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -26,7 +25,6 @@ import androidx.core.os.BuildCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agelousis.jetpackweather.ui.rows.SelectionInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.rows.SwitchInputFieldRowLayout
-import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.*
 import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
@@ -49,27 +47,20 @@ fun SettingsLayout(
     val temperatureUnitType by preferencesStorageHelper.temperatureUnitType.collectAsState(
         initial = TemperatureUnitType.CELSIUS
     )
-    val sharedPreferences = context.getSharedPreferences(
-        Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY,
-        Context.MODE_PRIVATE
+    val offlineMode by preferencesStorageHelper.offlineMode.collectAsState(
+        initial = false
     )
-    var forceSwitchInputRefreshState by remember {
-        mutableStateOf(value = false)
-    }
+    val weatherNotificationsState by preferencesStorageHelper.weatherNotificationsState.collectAsState(
+        initial = false
+    )
 
     val notificationsPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        sharedPreferences.weatherNotificationsState = isGranted
-        forceSwitchInputRefreshState = true
-        viewModel.weatherSettingsList.clear()
-        viewModel.weatherSettingsList.addAll(
-            viewModel getWeatherSettings context
-        )
-
         configureSwitchInputFieldEvent(
             context = context,
-            sharedPreferences = sharedPreferences,
+            scope = scope,
+            preferencesStorageHelper = preferencesStorageHelper,
             weatherSettings = WeatherSettings.WeatherNotifications,
             isChecked = isGranted
         )
@@ -127,10 +118,8 @@ fun SettingsLayout(
                     is WeatherSettings.OfflineMode,
                     is WeatherSettings.WeatherNotifications -> {
                         SwitchInputFieldRowLayout(
-                            weatherSettings = weatherSettings,
-                            forceRefresh = forceSwitchInputRefreshState
+                            weatherSettings = weatherSettings
                         ) { isChecked ->
-                            forceSwitchInputRefreshState = false
                             if (weatherSettings is WeatherSettings.WeatherNotifications
                                 && !context.arePermissionsGranted(android.Manifest.permission.POST_NOTIFICATIONS)
                                 && BuildCompat.isAtLeastT()
@@ -142,7 +131,8 @@ fun SettingsLayout(
                             }
                             configureSwitchInputFieldEvent(
                                 context = context,
-                                sharedPreferences = sharedPreferences,
+                                scope = scope,
+                                preferencesStorageHelper = preferencesStorageHelper,
                                 weatherSettings = weatherSettings,
                                 isChecked = isChecked
                             )
@@ -160,7 +150,9 @@ fun SettingsLayout(
         }
     }
     LaunchedEffect(
-        key1 = temperatureUnitType
+        key1 = temperatureUnitType,
+        key2 = offlineMode,
+        key3 = weatherNotificationsState
     ) {
         viewModel.weatherSettingsList.clear()
         viewModel.weatherSettingsList.add(
@@ -169,8 +161,11 @@ fun SettingsLayout(
                 temperatureUnitType = temperatureUnitType
             )
         )
-        viewModel.weatherSettingsList.addAll(
-            viewModel getWeatherSettings context
+        viewModel.weatherSettingsList.add(
+            WeatherSettings.OfflineMode isEnabled offlineMode
+        )
+        viewModel.weatherSettingsList.add(
+            WeatherSettings.WeatherNotifications isEnabled weatherNotificationsState
         )
     }
 }
@@ -192,15 +187,20 @@ private fun configureSelectionInputFieldResult(
 
 private fun configureSwitchInputFieldEvent(
     context: Context,
-    sharedPreferences: SharedPreferences,
+    scope: CoroutineScope,
+    preferencesStorageHelper: PreferencesStoreHelper,
     weatherSettings: WeatherSettings,
     isChecked: Boolean
 ) {
     when(weatherSettings) {
         WeatherSettings.OfflineMode ->
-            sharedPreferences.offlineMode = isChecked
+            scope.launch {
+                preferencesStorageHelper setOfflineMode isChecked
+            }
         WeatherSettings.WeatherNotifications -> {
-            sharedPreferences.weatherNotificationsState = isChecked
+            scope.launch {
+                preferencesStorageHelper setWeatherNotificationsState isChecked
+            }
             context.schedulePushNotificationsEvery(
                 scheduleState = isChecked,
                 alarmManagerType = AlarmManager.INTERVAL_HOUR

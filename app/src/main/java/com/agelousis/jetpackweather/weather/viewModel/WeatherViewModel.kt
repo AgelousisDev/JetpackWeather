@@ -16,15 +16,16 @@ import com.agelousis.jetpackweather.network.repositories.WeatherRepository
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.utils.constants.Constants
-import com.agelousis.jetpackweather.utils.extensions.offlineMode
 import com.agelousis.jetpackweather.utils.extensions.toDate
 import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
-import com.agelousis.jetpackweather.utils.extensions.weatherResponseModel
+import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class WeatherViewModel: ViewModel() {
 
@@ -111,13 +112,6 @@ class WeatherViewModel: ViewModel() {
             return items
         }
 
-    infix fun getWeatherSettings(
-        context: Context
-    ) = listOf(
-        WeatherSettings.OfflineMode isEnabled context,
-        WeatherSettings.WeatherNotifications isEnabled context
-    )
-
     fun requestCurrentWeather(
         context: Context,
         location: String,
@@ -148,13 +142,18 @@ class WeatherViewModel: ViewModel() {
 
     fun requestForecast(
         context: Context,
+        scope: CoroutineScope,
         navController: NavController,
         location: String,
         days: Int,
         airQualityState: Boolean,
-        alertsState: Boolean
+        alertsState: Boolean,
+        offlineMode: Boolean,
+        savedWeatherResponseModel: WeatherResponseModel?
     ) {
-        val sharedPreferences = context.getSharedPreferences(Constants.SharedPreferencesKeys.WEATHER_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
+        val preferencesStoreHelper = PreferencesStoreHelper(
+            context = context
+        )
         loaderStateMutableStateFlow.value = !swipeRefreshStateFlow.value
         WeatherRepository.requestForecast(
             location = location,
@@ -168,16 +167,18 @@ class WeatherViewModel: ViewModel() {
                 weatherResponseMutableLiveData.value = weatherResponseModel
                 this configureBottomNavigationItemsWith navController
                 //weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
-                sharedPreferences.weatherResponseModel = weatherResponseModel
+                scope.launch {
+                    preferencesStoreHelper setWeatherResponseModelData weatherResponseModel
+                }
             },
             failureBlock = {
                 swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
-                if (sharedPreferences.offlineMode
-                    && sharedPreferences.weatherResponseModel != null
+                if (offlineMode
+                    && savedWeatherResponseModel != null
                 ) {
-                    weatherResponseMutableLiveData.value = sharedPreferences.weatherResponseModel
-                    weatherUiAppBarTitle = sharedPreferences.weatherResponseModel?.weatherLocationDataModel?.regionCountry
+                    weatherResponseMutableLiveData.value = savedWeatherResponseModel
+                    weatherUiAppBarTitle = savedWeatherResponseModel.weatherLocationDataModel?.regionCountry
                 }
                 else
                     networkErrorMutableStateFlow.value = true
