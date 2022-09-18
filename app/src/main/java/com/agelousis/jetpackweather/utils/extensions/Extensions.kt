@@ -1,7 +1,11 @@
 package com.agelousis.jetpackweather.utils.extensions
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.google.gson.Gson
+import okio.IOException
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -66,3 +70,12 @@ inline fun <T : Any> ifLetThen(vararg elements: T?, closure: (List<Any>) -> Unit
     }
     else null
 }
+
+val String.urlBitmap
+    get() =
+        try {
+            val url = URL(this)
+            BitmapFactory.decodeStream(url.openConnection().getInputStream())
+        } catch (ex: IOException) {
+            null
+        }

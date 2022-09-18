@@ -29,10 +29,12 @@ class WeatherAlarmReceiver : BroadcastReceiver() {
         scope.launch {
             val addressDataModel = preferencesStoreHelper.currentAddressDataModel.firstOrNull()
             val weatherResponseModel = preferencesStoreHelper.weatherResponseModelData.firstOrNull()
+            val temperatureUnitType = preferencesStoreHelper.temperatureUnitType.firstOrNull()
 
             weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.currentWeatherDataModel?.let { currentWeatherDataModel ->
                 openScopeAndScheduleNotification(
                     context = p0,
+                    temperatureUnitType = temperatureUnitType,
                     addressDataModel = addressDataModel
                         ?: return@let,
                     currentWeatherDataModel = currentWeatherDataModel
@@ -48,6 +50,7 @@ class WeatherAlarmReceiver : BroadcastReceiver() {
             ) {
                 openScopeAndScheduleNotification(
                     context = p0,
+                    temperatureUnitType = temperatureUnitType,
                     addressDataModel = addressDataModel,
                     currentWeatherDataModel = it.currentWeatherDataModel
                         ?: return@requestCurrentWeather
@@ -58,6 +61,7 @@ class WeatherAlarmReceiver : BroadcastReceiver() {
 
     private fun openScopeAndScheduleNotification(
         context: Context,
+        temperatureUnitType: TemperatureUnitType?,
         addressDataModel: AddressDataModel,
         currentWeatherDataModel: CurrentWeatherDataModel
     ) {
@@ -73,7 +77,8 @@ class WeatherAlarmReceiver : BroadcastReceiver() {
                         title = addressDataModel.addressLine,
                         body = "%s\n%s\n%s\n%s\n%s".format(
                             currentWeatherDataModel.currentTemperatureUnitFormatted(
-                                temperatureUnitType = TemperatureUnitType.CELSIUS
+                                temperatureUnitType = temperatureUnitType
+                                    ?: TemperatureUnitType.CELSIUS
                             ),
                             currentWeatherDataModel.weatherConditionDataModel.text,
                             "%s %s".format(

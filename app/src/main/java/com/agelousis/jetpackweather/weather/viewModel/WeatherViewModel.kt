@@ -22,12 +22,16 @@ import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class WeatherViewModel: ViewModel() {
+
+    private val uiScope = CoroutineScope(context = Dispatchers.Main)
 
     var weatherUiAppBarTitle by mutableStateOf<String?>(
         value = null
@@ -142,14 +146,11 @@ class WeatherViewModel: ViewModel() {
 
     fun requestForecast(
         context: Context,
-        scope: CoroutineScope,
         navController: NavController,
         location: String,
         days: Int,
         airQualityState: Boolean,
-        alertsState: Boolean,
-        offlineMode: Boolean,
-        savedWeatherResponseModel: WeatherResponseModel?
+        alertsState: Boolean
     ) {
         val preferencesStoreHelper = PreferencesStoreHelper(
             context = context
@@ -167,21 +168,23 @@ class WeatherViewModel: ViewModel() {
                 weatherResponseMutableLiveData.value = weatherResponseModel
                 this configureBottomNavigationItemsWith navController
                 //weatherUiAppBarTitle = weatherResponseModel.weatherLocationDataModel?.regionCountry
-                scope.launch {
+                uiScope.launch {
                     preferencesStoreHelper setWeatherResponseModelData weatherResponseModel
                 }
             },
             failureBlock = {
                 swipeRefreshMutableStateFlow.value = false
                 loaderStateMutableStateFlow.value = false
-                if (offlineMode
-                    && savedWeatherResponseModel != null
-                ) {
-                    weatherResponseMutableLiveData.value = savedWeatherResponseModel
-                    weatherUiAppBarTitle = savedWeatherResponseModel.weatherLocationDataModel?.regionCountry
+                uiScope.launch {
+                    if (preferencesStoreHelper.offlineMode.firstOrNull() == true
+                        && preferencesStoreHelper.weatherResponseModelData.firstOrNull() != null
+                    ) {
+                        weatherResponseMutableLiveData.value = preferencesStoreHelper.weatherResponseModelData.firstOrNull()
+                        weatherUiAppBarTitle = preferencesStoreHelper.weatherResponseModelData.firstOrNull()?.weatherLocationDataModel?.regionCountry
+                    }
+                    else
+                        networkErrorMutableStateFlow.value = true
                 }
-                else
-                    networkErrorMutableStateFlow.value = true
                 //alertPair = context.resources.getString(R.string.key_error_label) to it.localizedMessage
                 //onOpenDialogClicked()
             }

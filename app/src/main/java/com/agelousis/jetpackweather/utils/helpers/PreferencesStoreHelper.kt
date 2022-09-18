@@ -16,14 +16,14 @@ import kotlinx.coroutines.flow.map
 class PreferencesStoreHelper(val context: Context) {
 
     companion object {
-        private const val WEATHER_PREFERENCES_KEY = "weatherPreferences"
-        private val Context.dataStore by preferencesDataStore(name = WEATHER_PREFERENCES_KEY)
+        const val WEATHER_PREFERENCES_KEY = "weatherPreferences"
+        val Context.dataStore by preferencesDataStore(name = WEATHER_PREFERENCES_KEY)
 
-        private val TEMPERATURE_UNIT_TYPE_KEY = stringPreferencesKey(name = "temperatureUnitType")
+        val TEMPERATURE_UNIT_TYPE_KEY = stringPreferencesKey(name = "temperatureUnitType")
         private val OFFLINE_MODE_KEY = booleanPreferencesKey(name = "offlineMode")
-        private val WEATHER_RESPONSE_MODE_DATA_KEY = stringPreferencesKey(name = "weatherResponseModelData")
+        val WEATHER_RESPONSE_MODE_DATA_KEY = stringPreferencesKey(name = "weatherResponseModelData")
         private val WEATHER_NOTIFICATION_STATE_KEY = booleanPreferencesKey(name = "weatherNotifications")
-        private val CURRENT_ADDRESS_DATA_KEY = stringPreferencesKey(name = "currentAddressData")
+        val CURRENT_ADDRESS_DATA_KEY = stringPreferencesKey(name = "currentAddressData")
     }
 
     suspend infix fun setTemperatureUnitType(temperatureUnitType: TemperatureUnitType) {
