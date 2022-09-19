@@ -144,6 +144,8 @@
         <entry key="../../../../../../layout/compose-model-1663567075497.xml" value="0.3675925925925926" />
         <entry key="../../../../../../layout/compose-model-1663567241549.xml" value="2.0" />
         <entry key="../../../../../../layout/compose-model-1663583809387.xml" value="0.3675925925925926" />
+        <entry key="../../../../../../layout/compose-model-1663611699028.xml" value="0.3675925925925926" />
+        <entry key="../../../../../../layout/compose-model-1663611802727.xml" value="0.3675925925925926" />
         <entry key="../../../../../layout/compose-model-1655750866057.xml" value="0.27744932432432434" />
         <entry key="../../../../../layout/compose-model-1655751541288.xml" value="0.27744932432432434" />
         <entry key="../../../../../layout/compose-model-1655835086031.xml" value="0.27744932432432434" />
@@ -214,6 +216,7 @@
         <entry key="app/src/main/res/drawable/ic_arrow_direction_down.xml" value="0.183" />
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_down_24.xml" value="0.137" />
         <entry key="app/src/main/res/drawable/ic_baseline_keyboard_arrow_right_24.xml" value="0.237" />
+        <entry key="app/src/main/res/drawable/ic_baseline_refresh_24.xml" value="0.1775" />
         <entry key="app/src/main/res/drawable/ic_map_marker_svgrepo_com.xml" value="0.2515" />
         <entry key="app/src/main/res/drawable/ic_moon.xml" value="0.2135" />
         <entry key="app/src/main/res/drawable/ic_moonrise.xml" value="0.237" />

@@ -4,24 +4,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.Preferences
 import androidx.glance.*
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
-import androidx.glance.appwidget.cornerRadius
+import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.layout.*
 import androidx.glance.state.GlanceStateDefinition
+import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.appWidget.actionCallback.WeatherAppWidgetActionCallback
 import com.agelousis.jetpackweather.appWidget.helper.CustomGlanceStateDefinition
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.*
 import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
+import com.agelousis.jetpackweather.weather.WeatherActivity
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
-import java.util.*
 
 class WeatherAppWidget: GlanceAppWidget() {
 
@@ -54,26 +59,69 @@ class WeatherAppWidget: GlanceAppWidget() {
                 .fillMaxSize()
                 .background(
                     colorProvider = ColorProvider(
-                        R.color.whiteTwo
+                        R.color.colorPrimaryDark
                     )
                 )
-                .cornerRadius(
-                    radius = 32.dp
+                .clickable(
+                    onClick = actionStartActivity(WeatherActivity::class.java)
                 )
         ) {
-            // Location & Time
+            // Location
             Text(
-                text = "${addressDataModel?.addressLine}\n${Date().toDisplayDate(
-                    pattern = Constants.DISPLAY_DATE_TIME_FORMAT
-                )}",
+                text = addressDataModel?.addressLine
+                    ?: "",
                 style = TextStyle(
-                    fontSize = 14.sp
-                ),
-                modifier = GlanceModifier
-                    .padding(
-                        top = 16.dp
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = ColorProvider(
+                        resId = R.color.dayNightTextOnBackground
                     )
+                )
             )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Last updated
+                Text(
+                    text = weatherResponseModel?.currentWeatherDataModel?.lastUpdated?.toDate(
+                        pattern = Constants.SERVER_DATE_TIME_FORMAT
+                    )?.toDisplayDate(
+                        pattern = Constants.DISPLAY_DATE_TIME_FORMAT
+                    )?.let {
+                        context.resources.getString(
+                            R.string.key_last_updated_with_date_label,
+                            it
+                        )
+                    } ?: "",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = ColorProvider(
+                            resId = R.color.dayNightTextOnBackground
+                        )
+                    ),
+                    modifier = GlanceModifier
+                        .padding(
+                            top = 8.dp
+                        )
+                )
+                Image(
+                    provider = ImageProvider(
+                        R.drawable.ic_baseline_refresh_24
+                    ),
+                    contentDescription = null,
+                    modifier = GlanceModifier
+                        .padding(
+                            start = 8.dp
+                        )
+                        .size(
+                            size = 20.dp
+                        )
+                        .clickable(
+                            onClick = actionRunCallback<WeatherAppWidgetActionCallback>()
+                        )
+                )
+            }
             Row(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalAlignment = Alignment.CenterVertically,
@@ -88,7 +136,10 @@ class WeatherAppWidget: GlanceAppWidget() {
                         temperatureUnitType = temperatureUnitType
                     ) ?: "",
                     style = TextStyle(
-                        fontSize = 24.sp
+                        fontSize = 24.sp,
+                        color = ColorProvider(
+                            resId = R.color.dayNightTextOnBackground
+                        )
                     )
                 )
                 val iconBitmap = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.iconUrl?.urlBitmap
@@ -138,12 +189,6 @@ class WeatherAppWidget: GlanceAppWidget() {
                         top = 8.dp
                     )
             )
-            Spacer(
-                modifier = GlanceModifier
-                    .padding(
-                        top = 8.dp
-                    )
-            )
             // Wind Layout
             Row(
                 modifier = GlanceModifier
@@ -172,17 +217,25 @@ class WeatherAppWidget: GlanceAppWidget() {
                             start = 16.dp
                         )
                 ) {
-                    if (weatherResponseModel?.currentWeatherDataModel?.windDegree != null)
-                        Image(
-                            provider = ImageProvider(
-                                resId = R.drawable.ic_arrow_direction_down
-                            ),
-                            contentDescription = null,
-                            modifier = GlanceModifier
-                                .size(
-                                    size = 15.dp
-                                )
+                    if (weatherResponseModel?.currentWeatherDataModel?.windDegree != null) {
+                        val arrowBitmap = ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_arrow_direction_down
+                        )?.fromVector()?.rotate(
+                            angle = weatherResponseModel.currentWeatherDataModel.windDegree.toFloat()
                         )
+                        if (arrowBitmap != null)
+                            Image(
+                                provider = ImageProvider(
+                                    bitmap = arrowBitmap
+                                ),
+                                contentDescription = null,
+                                modifier = GlanceModifier
+                                    .size(
+                                        size = 15.dp
+                                    )
+                            )
+                    }
                     Text(
                         text = context.resources.getString(R.string.key_km_hourly_label),
                         style = TextStyle(
@@ -223,7 +276,10 @@ class WeatherAppWidget: GlanceAppWidget() {
                             ) ?: ""
                         ),
                         style = TextStyle(
-                            fontSize = 14.sp
+                            fontSize = 14.sp,
+                            color = ColorProvider(
+                                resId = R.color.dayNightTextOnBackground
+                            )
                         )
                     )
                 }

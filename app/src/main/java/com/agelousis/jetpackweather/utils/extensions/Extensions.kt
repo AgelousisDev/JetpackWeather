@@ -2,6 +2,9 @@ package com.agelousis.jetpackweather.utils.extensions
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.drawable.Drawable
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.google.gson.Gson
 import okio.IOException
@@ -79,3 +82,24 @@ val String.urlBitmap
         } catch (ex: IOException) {
             null
         }
+
+fun Drawable.fromVector(padding: Int = 0): Bitmap {
+    val bitmap = Bitmap.createBitmap(this.intrinsicWidth, this.intrinsicHeight, Bitmap.Config.ARGB_8888)
+    val canvas = Canvas(bitmap)
+    this.setBounds(padding, padding, canvas.width - padding, canvas.height - padding)
+    this.draw(canvas)
+    return bitmap
+}
+
+infix fun Bitmap.rotate(
+    angle: Float
+) = Bitmap.createBitmap(
+    this,
+    0,
+    0,
+    width,height,
+    Matrix().also { matrix ->
+        matrix.postRotate(angle)
+    },
+    true
+)
