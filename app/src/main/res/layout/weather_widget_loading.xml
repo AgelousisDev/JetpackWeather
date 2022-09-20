@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    app:cardCornerRadius="16dp"
-    app:cardUseCompatPadding="true"
-    app:contentPadding="16dp">
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <com.google.android.material.textview.MaterialTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:fontFamily="@font/ubuntu"
             android:textSize="20sp"
             android:textColor="@color/dayNightTextOnBackground"
-            android:text="CA 94043, USA"/>
+            android:text="@string/key_widget_preview_location_label"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,16 +28,15 @@
             android:gravity="center"
             android:layout_marginTop="8dp">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
                 android:fontFamily="@font/ubuntu"
                 android:textSize="14sp"
                 android:textColor="@color/dayNightTextOnBackground"
-                android:text="Last Updated\nTue, 20 Sep 2022 01:45"/>
+                android:text="@string/key_widget_preview_date_time_label"/>
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="8dp"
@@ -46,16 +44,114 @@
 
         </LinearLayout>
 
-        <com.google.android.material.textview.MaterialTextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
             android:fontFamily="@font/ubuntu"
             android:textSize="24sp"
             android:textColor="@color/dayNightTextOnBackground"
-            android:text="20°C"/>
+            android:text="@string/key_widget_preview_temperature_label"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                app:srcCompat="@drawable/ic_weather_partly_cloudy_day"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/ubuntu_light"
+            android:textSize="14sp"
+            android:textColor="@color/grey"
+            android:text="@string/key_widget_preview_condition_label"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/ubuntu_light"
+            android:textSize="14sp"
+            android:textColor="@color/grey"
+            android:text="@string/key_widget_preview_feels_like_temperature_label"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ubuntu"
+            android:textSize="24sp"
+            android:textColor="@color/colorAccent"
+            android:text="@string/key_widget_preview_wind_speed_label"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginStart="16dp">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                app:srcCompat="@drawable/ic_arrow_direction_down"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu_light"
+                android:textSize="12sp"
+                android:textColor="@color/grey"
+                android:text="@string/key_widget_preview_kilometers_by_hour_label"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu"
+                android:textSize="16sp"
+                android:textColor="@color/colorAccent"
+                android:text="@string/key_widget_preview_wind_state_label"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/ubuntu"
+                android:textSize="14sp"
+                android:textColor="@color/dayNightTextOnBackground"
+                android:text="@string/key_widget_preview_wind_direction_label"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+</FrameLayout>

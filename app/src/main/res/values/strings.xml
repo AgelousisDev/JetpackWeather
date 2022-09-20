@@ -79,4 +79,13 @@
     </string-array>
     <string name="key_invalid_location_message">Invalid location</string>
     <string name="key_loading_label">Loading…</string>
+    <string name="key_widget_preview_location_label">CA 94043, USA</string>
+    <string name="key_widget_preview_date_time_label">Last Updated\nTue, 20 Sep 2022 01:45</string>
+    <string name="key_widget_preview_temperature_label">20°C</string>
+    <string name="key_widget_preview_condition_label">Party cloudy</string>
+    <string name="key_widget_preview_feels_like_temperature_label">Feels like 19°C</string>
+    <string name="key_widget_preview_wind_speed_label">3</string>
+    <string name="key_widget_preview_kilometers_by_hour_label">km/h</string>
+    <string name="key_widget_preview_wind_state_label">Light</string>
+    <string name="key_widget_preview_wind_direction_label">Now • From North</string>
 </resources>
