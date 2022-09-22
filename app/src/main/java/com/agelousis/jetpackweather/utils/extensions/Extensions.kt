@@ -93,7 +93,7 @@ fun Drawable.fromVector(padding: Int = 0): Bitmap {
 
 infix fun Bitmap.rotate(
     angle: Float
-) = Bitmap.createBitmap(
+): Bitmap = Bitmap.createBitmap(
     this,
     0,
     0,

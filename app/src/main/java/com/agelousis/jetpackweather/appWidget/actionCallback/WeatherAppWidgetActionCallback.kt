@@ -33,6 +33,8 @@ class WeatherAppWidgetActionCallback : ActionCallback {
                 updateAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId) {
                     it.toMutablePreferences()
                         .apply {
+                            this[PreferencesStoreHelper.CURRENT_ADDRESS_DATA_KEY] = this[PreferencesStoreHelper.CURRENT_ADDRESS_DATA_KEY]
+                                ?: ""
                             this[PreferencesStoreHelper.WEATHER_RESPONSE_MODE_DATA_KEY] = weatherResponseModel.jsonString
                                 ?: ""
                         }

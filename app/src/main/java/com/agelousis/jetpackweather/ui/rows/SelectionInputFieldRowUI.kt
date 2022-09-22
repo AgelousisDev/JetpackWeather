@@ -2,14 +2,18 @@ package com.agelousis.jetpackweather.ui.rows
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
@@ -23,6 +27,7 @@ fun SelectionInputFieldRowLayout(
     weatherSettings: WeatherSettings,
     selectionInputFieldBlock: SelectionInputFieldBlock
 ) {
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     var expandedDropDownMenu by remember {
         mutableStateOf(value = false)
     }
@@ -84,31 +89,50 @@ fun SelectionInputFieldRowLayout(
                     contentDescription = null
                 )
             }
-        DropdownMenu(
-            expanded = expandedDropDownMenu,
-            onDismissRequest = {
-                expandedDropDownMenu = false
-            }
-        ) {
-            weatherSettings.optionModelList?.forEachIndexed { index, optionModel ->
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = optionModel.label,
-                            style = Typography.labelMedium
-                        )
-                    },
-                    onClick = {
-                        expandedDropDownMenu = false
-                        selectionInputFieldBlock(index)
-                    },
-                    leadingIcon = {
-                        Icon(
-                            painter = painterResource(id = optionModel.icon),
-                            contentDescription = null
-                        )
-                    }
+        MaterialTheme(
+            shapes = MaterialTheme.shapes.copy(
+                extraSmall = RoundedCornerShape(
+                    size = 16.dp
                 )
+            )
+        ) {
+            DropdownMenu(
+                offset = DpOffset(
+                    x = screenWidth - 140.dp,
+                    y = 0.dp
+                ),
+                expanded = expandedDropDownMenu,
+                onDismissRequest = {
+                    expandedDropDownMenu = false
+                }
+            ) {
+                weatherSettings.optionModelList?.forEachIndexed { index, optionModel ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(
+                                text = optionModel.label,
+                                style = Typography.labelMedium
+                            )
+                        },
+                        onClick = {
+                            expandedDropDownMenu = false
+                            selectionInputFieldBlock(index)
+                        },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(id = optionModel.icon),
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.surfaceTint,
+                                modifier = Modifier
+                                    .size(
+                                        size = 20.dp
+                                    )
+                            )
+                        }
+                    )
+                    if (index < (weatherSettings.optionModelList?.size ?: 0) - 1)
+                        Divider()
+                }
             }
         }
     }

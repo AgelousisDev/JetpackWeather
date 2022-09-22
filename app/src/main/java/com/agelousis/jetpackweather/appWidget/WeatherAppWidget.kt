@@ -1,7 +1,6 @@
 package com.agelousis.jetpackweather.appWidget
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -37,33 +36,29 @@ class WeatherAppWidget: GlanceAppWidget() {
     override fun Content() {
         val context = LocalContext.current
         val preferences = currentState<Preferences>()
-        val weatherResponseModel = remember {
-            preferences[
+        val weatherResponseModel = preferences[
                     PreferencesStoreHelper.WEATHER_RESPONSE_MODE_DATA_KEY
             ]?.toModel<WeatherResponseModel>()
-        }
-        val addressDataModel = remember {
-            preferences[
+        val addressDataModel = preferences[
                 PreferencesStoreHelper.CURRENT_ADDRESS_DATA_KEY
             ]?.toModel<AddressDataModel>()
-        }
-        val temperatureUnitType = remember {
-            valueEnumOrNull<TemperatureUnitType>(
+        val temperatureUnitType = valueEnumOrNull<TemperatureUnitType>(
                 name = preferences[PreferencesStoreHelper.TEMPERATURE_UNIT_TYPE_KEY]
             )
-        }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically,
             modifier = GlanceModifier
-                .fillMaxSize()
                 .background(
                     colorProvider = ColorProvider(
-                        R.color.colorPrimaryDark
+                        R.color.surfaceVariantColor
                     )
                 )
                 .clickable(
                     onClick = actionStartActivity(WeatherActivity::class.java)
+                )
+                .padding(
+                    all = 8.dp
                 )
         ) {
             // Location
@@ -102,7 +97,8 @@ class WeatherAppWidget: GlanceAppWidget() {
                     ),
                     modifier = GlanceModifier
                         .padding(
-                            top = 8.dp
+                            top = 8.dp,
+                            end = 8.dp
                         )
                 )
                 Image(
@@ -111,9 +107,6 @@ class WeatherAppWidget: GlanceAppWidget() {
                     ),
                     contentDescription = null,
                     modifier = GlanceModifier
-                        .padding(
-                            start = 8.dp
-                        )
                         .size(
                             size = 20.dp
                         )

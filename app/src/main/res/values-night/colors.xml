@@ -42,4 +42,7 @@
     <color name="yellowLighter">#FEEDBF</color>
     <color name="petrolDarker">#46526D</color>
     <color name="petrolLighter">#505A6E</color>
+
+    <color name="surfaceVariantColor">@color/colorAccent</color>
+
 </resources>

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/surfaceVariantColor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -112,7 +112,7 @@
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                app:srcCompat="@drawable/ic_arrow_direction_down"/>
+                android:src="@drawable/ic_arrow_direction_down"/>
 
             <TextView
                 android:layout_width="wrap_content"
