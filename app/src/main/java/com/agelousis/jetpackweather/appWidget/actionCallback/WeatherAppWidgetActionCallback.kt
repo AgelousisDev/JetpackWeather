@@ -7,6 +7,7 @@ import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import com.agelousis.jetpackweather.appWidget.WeatherAppWidget
+import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.network.repositories.SuccessBlock
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.utils.extensions.jsonString
@@ -28,14 +29,14 @@ class WeatherAppWidgetActionCallback : ActionCallback {
     ) {
         requestWeatherForecast(
             context = context
-        ) { weatherResponseModel ->
+        ) { weatherResponsePair ->
             scope.launch {
                 updateAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId) {
                     it.toMutablePreferences()
                         .apply {
-                            this[PreferencesStoreHelper.CURRENT_ADDRESS_DATA_KEY] = this[PreferencesStoreHelper.CURRENT_ADDRESS_DATA_KEY]
+                            this[PreferencesStoreHelper.CURRENT_ADDRESS_DATA_KEY] = weatherResponsePair.first.jsonString
                                 ?: ""
-                            this[PreferencesStoreHelper.WEATHER_RESPONSE_MODE_DATA_KEY] = weatherResponseModel.jsonString
+                            this[PreferencesStoreHelper.WEATHER_RESPONSE_MODE_DATA_KEY] = weatherResponsePair.second.jsonString
                                 ?: ""
                         }
                 }
@@ -46,7 +47,7 @@ class WeatherAppWidgetActionCallback : ActionCallback {
 
     private suspend fun requestWeatherForecast(
         context: Context,
-        successBlock: SuccessBlock<WeatherResponseModel>
+        successBlock: SuccessBlock<Pair<AddressDataModel, WeatherResponseModel>>
     ) {
         val preferencesStoreHelper = PreferencesStoreHelper(
             context = context
@@ -60,7 +61,11 @@ class WeatherAppWidgetActionCallback : ActionCallback {
                 addressDataModel.longitude
             ),
             airQualityState = true,
-            successBlock = successBlock
+            successBlock = { weatherResponseModel ->
+                successBlock(
+                    addressDataModel to weatherResponseModel
+                )
+            }
         )
     }
 

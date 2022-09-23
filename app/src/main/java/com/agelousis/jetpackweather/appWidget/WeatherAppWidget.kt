@@ -10,6 +10,8 @@ import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.appWidgetBackground
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.layout.*
 import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.text.FontWeight
@@ -49,9 +51,10 @@ class WeatherAppWidget: GlanceAppWidget() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically,
             modifier = GlanceModifier
+                .appWidgetBackground()
                 .background(
                     colorProvider = ColorProvider(
-                        R.color.surfaceVariantColor
+                        R.color.colorPrimaryContainer
                     )
                 )
                 .clickable(
@@ -60,6 +63,10 @@ class WeatherAppWidget: GlanceAppWidget() {
                 .padding(
                     all = 8.dp
                 )
+                .cornerRadius(
+                    radius = 24.dp
+                )
+                .appWidgetBackground()
         ) {
             // Location
             Text(
@@ -69,7 +76,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium,
                     color = ColorProvider(
-                        resId = R.color.dayNightTextOnBackground
+                        resId = R.color.colorSecondary
                     )
                 )
             )
@@ -92,7 +99,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                     style = TextStyle(
                         fontSize = 14.sp,
                         color = ColorProvider(
-                            resId = R.color.dayNightTextOnBackground
+                            resId = R.color.colorTertiary
                         )
                     ),
                     modifier = GlanceModifier
@@ -131,7 +138,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                     style = TextStyle(
                         fontSize = 24.sp,
                         color = ColorProvider(
-                            resId = R.color.dayNightTextOnBackground
+                            resId = R.color.colorSecondary
                         )
                     )
                 )
@@ -157,7 +164,9 @@ class WeatherAppWidget: GlanceAppWidget() {
                 text = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.text
                     ?: "",
                 style = TextStyle(
-                    color = ColorProvider(R.color.grey),
+                    color = ColorProvider(
+                        resId = R.color.colorTertiary
+                    ),
                     fontSize = 14.sp
                 ),
                 modifier = GlanceModifier
@@ -174,7 +183,9 @@ class WeatherAppWidget: GlanceAppWidget() {
                     ) ?: ""
                 ),
                 style = TextStyle(
-                    color = ColorProvider(R.color.grey),
+                    color = ColorProvider(
+                        resId = R.color.colorTertiary
+                    ),
                     fontSize = 14.sp
                 ),
                 modifier = GlanceModifier
@@ -198,7 +209,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                         fontSize = 24.sp,
                         color = ColorProvider(
                             resId = weatherResponseModel?.currentWeatherDataModel?.windStateColor
-                                ?: R.color.colorAccent
+                                ?: R.color.colorTertiary
                         )
                     )
                 )
@@ -232,7 +243,9 @@ class WeatherAppWidget: GlanceAppWidget() {
                     Text(
                         text = context.resources.getString(R.string.key_km_hourly_label),
                         style = TextStyle(
-                            color = ColorProvider(R.color.grey),
+                            color = ColorProvider(
+                                resId = R.color.colorSecondary
+                            ),
                             fontSize = 12.sp,
                         ),
                         modifier = GlanceModifier
@@ -257,7 +270,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                             fontSize = 16.sp,
                             color = ColorProvider(
                                 resId = weatherResponseModel?.currentWeatherDataModel?.windStateColor
-                                    ?: R.color.colorAccent
+                                    ?: R.color.colorSecondary
                             )
                         )
                     )
@@ -271,7 +284,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                         style = TextStyle(
                             fontSize = 14.sp,
                             color = ColorProvider(
-                                resId = R.color.dayNightTextOnBackground
+                                resId = R.color.colorSecondary
                             )
                         )
                     )

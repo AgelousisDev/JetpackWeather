@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/surfaceVariantColor">
+    android:background="@color/colorPrimaryContainer">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_gravity="center_horizontal"
             android:fontFamily="@font/ubuntu"
             android:textSize="20sp"
-            android:textColor="@color/dayNightTextOnBackground"
+            android:textColor="@color/colorSecondary"
             android:text="@string/key_widget_preview_location_label"/>
 
         <LinearLayout
@@ -33,14 +33,15 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu"
                 android:textSize="14sp"
-                android:textColor="@color/dayNightTextOnBackground"
+                android:textColor="@color/colorTertiary"
                 android:text="@string/key_widget_preview_date_time_label"/>
 
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="8dp"
-                app:srcCompat="@drawable/ic_baseline_refresh_24" />
+                android:src="@drawable/ic_baseline_refresh_24"
+                android:contentDescription="@null"/>
 
         </LinearLayout>
 
@@ -56,14 +57,15 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/ubuntu"
             android:textSize="24sp"
-            android:textColor="@color/dayNightTextOnBackground"
+            android:textColor="@color/colorSecondary"
             android:text="@string/key_widget_preview_temperature_label"/>
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="16dp"
-                app:srcCompat="@drawable/ic_weather_partly_cloudy_day"/>
+                app:srcCompat="@drawable/ic_weather_partly_cloudy_day"
+                android:contentDescription="@null"/>
 
         </LinearLayout>
 
@@ -74,7 +76,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/ubuntu_light"
             android:textSize="14sp"
-            android:textColor="@color/grey"
+            android:textColor="@color/colorTertiary"
             android:text="@string/key_widget_preview_condition_label"/>
 
         <TextView
@@ -84,7 +86,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="@font/ubuntu_light"
             android:textSize="14sp"
-            android:textColor="@color/grey"
+            android:textColor="@color/colorTertiary"
             android:text="@string/key_widget_preview_feels_like_temperature_label"/>
 
     <LinearLayout
@@ -99,7 +101,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/ubuntu"
             android:textSize="24sp"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorSecondary"
             android:text="@string/key_widget_preview_wind_speed_label"/>
 
         <LinearLayout
@@ -112,14 +114,15 @@
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:src="@drawable/ic_arrow_direction_down"/>
+                android:src="@drawable/ic_arrow_direction_down"
+                android:contentDescription="@null"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu_light"
                 android:textSize="12sp"
-                android:textColor="@color/grey"
+                android:textColor="@color/colorSecondary"
                 android:text="@string/key_widget_preview_kilometers_by_hour_label"/>
 
         </LinearLayout>
@@ -136,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntu"
                 android:textSize="16sp"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorSecondary"
                 android:text="@string/key_widget_preview_wind_state_label"/>
 
             <TextView
@@ -145,7 +148,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/ubuntu"
                 android:textSize="14sp"
-                android:textColor="@color/dayNightTextOnBackground"
+                android:textColor="@color/colorSecondary"
                 android:text="@string/key_widget_preview_wind_direction_label"/>
 
         </LinearLayout>

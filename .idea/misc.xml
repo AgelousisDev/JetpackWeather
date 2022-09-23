@@ -235,6 +235,7 @@
         <entry key="app/src/main/res/drawable/ic_warning_alert.xml" value="0.2275" />
         <entry key="app/src/main/res/drawable/ic_weather_partly_cloudy_day.xml" value="0.1985" />
         <entry key="app/src/main/res/drawable/ic_wind.xml" value="0.208" />
+        <entry key="app/src/main/res/drawable/oval_shaped_background.xml" value="0.1985" />
         <entry key="app/src/main/res/font/ubuntu.xml" value="0.2296875" />
         <entry key="app/src/main/res/layout/weather_widget_loading.xml" value="0.33" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/app_icon.xml" value="0.237" />

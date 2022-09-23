@@ -43,6 +43,10 @@
     <color name="petrolDarker">#46526D</color>
     <color name="petrolLighter">#505A6E</color>
 
-    <color name="surfaceVariantColor">@color/colorAccent</color>
+    <color name="surfaceVariantColor">@color/dayNightTextOnBackground</color>
+    <color name="colorBackground">@color/dayNightTextOnBackground</color>
+    <color name="colorSecondary">@color/dayNightTextOnBackground</color>
+    <color name="colorSecondaryContainer">@color/dayNightTextOnBackground</color>
+    <color name="colorTertiary">@color/dayNightTextOnBackground</color>
 
 </resources>
