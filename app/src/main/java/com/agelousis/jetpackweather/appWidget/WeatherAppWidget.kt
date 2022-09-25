@@ -6,8 +6,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.datastore.preferences.core.Preferences
 import androidx.glance.*
-import androidx.glance.action.actionStartActivity
-import androidx.glance.action.clickable
+import androidx.glance.action.*
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.appWidgetBackground
@@ -26,13 +25,18 @@ import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.*
 import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
-import com.agelousis.jetpackweather.weather.WeatherActivity
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 
 class WeatherAppWidget: GlanceAppWidget() {
 
+    companion object {
+        private const val APP_START_ACTION_PARAM = "appStartActionParam"
+        val appStartActionParam = ActionParameters.Key<Boolean>(name = APP_START_ACTION_PARAM)
+    }
+
     override val stateDefinition: GlanceStateDefinition<*>
         get() = CustomGlanceStateDefinition
+
 
     @Composable
     override fun Content() {
@@ -51,20 +55,26 @@ class WeatherAppWidget: GlanceAppWidget() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically,
             modifier = GlanceModifier
-                .appWidgetBackground()
                 .background(
                     colorProvider = ColorProvider(
-                        R.color.colorPrimaryContainer
+                        resId = R.color.colorPrimaryContainer
                     )
                 )
                 .clickable(
+                    onClick = actionRunCallback<WeatherAppWidgetActionCallback>(
+                        parameters = actionParametersOf(
+                            appStartActionParam to true
+                        )
+                    )
+                )
+                /*.clickable(
                     onClick = actionStartActivity(WeatherActivity::class.java)
-                )
-                .padding(
-                    all = 8.dp
-                )
-                .cornerRadius(
+                )*/
+                /*.cornerRadius(
                     radius = 24.dp
+                )*/
+                .padding(
+                    all = 12.dp
                 )
                 .appWidgetBackground()
         ) {
@@ -78,11 +88,15 @@ class WeatherAppWidget: GlanceAppWidget() {
                     color = ColorProvider(
                         resId = R.color.colorSecondary
                     )
-                )
+                ),
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = GlanceModifier
+                    .padding(
+                        bottom = 8.dp
+                    )
             ) {
                 // Last updated
                 Text(
@@ -122,82 +136,100 @@ class WeatherAppWidget: GlanceAppWidget() {
                         )
                 )
             }
-            Row(
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = GlanceModifier
-                    .padding(
-                        top = 16.dp
-                    )
-            ) {
-                // C
-                Text(
-                    text = weatherResponseModel?.currentWeatherDataModel?.currentTemperatureUnitFormatted(
-                        temperatureUnitType = temperatureUnitType
-                    ) ?: "",
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        color = ColorProvider(
-                            resId = R.color.colorSecondary
+                    .background(
+                        colorProvider = ColorProvider(
+                            resId = R.color.colorSecondaryContainer
                         )
                     )
-                )
-                val iconBitmap = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.iconUrl?.urlBitmap
-                if (iconBitmap != null)
+                    .cornerRadius(
+                        radius = 8.dp
+                    )
+            ) {
+                Row(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalAlignment = Alignment.Top,
+                    modifier = GlanceModifier
+                        .padding(
+                            start = 8.dp,
+                            top = 8.dp,
+                            end = 8.dp
+                        )
+                ) {
+                    // C
+                    Text(
+                        text = weatherResponseModel?.currentWeatherDataModel?.currentTemperatureUnitFormatted(
+                            temperatureUnitType = temperatureUnitType
+                        ) ?: "",
+                        style = TextStyle(
+                            fontSize = 24.sp,
+                            color = ColorProvider(
+                                resId = R.color.colorSecondary
+                            )
+                        )
+                    )
+                    val iconBitmap = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.iconUrl?.urlBitmap
+                    if (iconBitmap != null)
                     // Condition Icon
-                    Image(
-                        provider = ImageProvider(
-                            bitmap = iconBitmap
+                        Image(
+                            provider = ImageProvider(
+                                bitmap = iconBitmap
+                            ),
+                            contentDescription = null,
+                            modifier = GlanceModifier
+                                .padding(
+                                    start = 16.dp
+                                )
+                                .size(
+                                    size = 40.dp
+                                )
+                        )
+                }
+                // Condition Text
+                Text(
+                    text = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.text
+                        ?: "",
+                    style = TextStyle(
+                        color = ColorProvider(
+                            resId = R.color.colorTertiary
                         ),
-                        contentDescription = null,
-                        modifier = GlanceModifier
-                            .padding(
-                                start = 16.dp
-                            )
-                            .size(
-                                size = 40.dp
-                            )
-                    )
+                        fontSize = 14.sp
+                    ),
+                    modifier = GlanceModifier
+                        .padding(
+                            start = 8.dp,
+                            top = 8.dp,
+                            end = 8.dp
+                        )
+                )
+                // Feels Like
+                Text(
+                    text = context.resources.getString(
+                        R.string.key_feels_like_label,
+                        weatherResponseModel?.currentWeatherDataModel?.feelsLikeTemperatureUnitFormatted(
+                            temperatureUnitType = temperatureUnitType
+                        ) ?: ""
+                    ),
+                    style = TextStyle(
+                        color = ColorProvider(
+                            resId = R.color.colorTertiary
+                        ),
+                        fontSize = 14.sp
+                    ),
+                    modifier = GlanceModifier
+                        .padding(
+                            all = 8.dp
+                        )
+                )
             }
-            // Condition Text
-            Text(
-                text = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.text
-                    ?: "",
-                style = TextStyle(
-                    color = ColorProvider(
-                        resId = R.color.colorTertiary
-                    ),
-                    fontSize = 14.sp
-                ),
-                modifier = GlanceModifier
-                    .padding(
-                        top = 8.dp
-                    )
-            )
-            // Feels Like
-            Text(
-                text = context.resources.getString(
-                    R.string.key_feels_like_label,
-                    weatherResponseModel?.currentWeatherDataModel?.feelsLikeTemperatureUnitFormatted(
-                        temperatureUnitType = temperatureUnitType
-                    ) ?: ""
-                ),
-                style = TextStyle(
-                    color = ColorProvider(
-                        resId = R.color.colorTertiary
-                    ),
-                    fontSize = 14.sp
-                ),
-                modifier = GlanceModifier
-                    .padding(
-                        top = 8.dp
-                    )
-            )
             // Wind Layout
             Row(
                 modifier = GlanceModifier
                     .padding(
-                        top = 16.dp
+                        top = 8.dp
                     ),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalAlignment = Alignment.CenterHorizontally

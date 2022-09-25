@@ -45,26 +45,35 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="16dp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="8dp"
+        android:background="@drawable/rectangle_rounded_background">
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ubuntu"
-            android:textSize="24sp"
-            android:textColor="@color/colorSecondary"
-            android:text="@string/key_widget_preview_temperature_label"/>
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntu"
+                android:textSize="24sp"
+                android:textColor="@color/colorSecondary"
+                android:text="@string/key_widget_preview_temperature_label"/>
 
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="16dp"
-                app:srcCompat="@drawable/ic_weather_partly_cloudy_day"
+                android:src="@drawable/ic_weather_partly_cloudy_day"
                 android:contentDescription="@null"/>
 
         </LinearLayout>
@@ -89,12 +98,14 @@
             android:textColor="@color/colorTertiary"
             android:text="@string/key_widget_preview_feels_like_temperature_label"/>
 
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="8dp">
 
         <TextView
             android:layout_width="wrap_content"

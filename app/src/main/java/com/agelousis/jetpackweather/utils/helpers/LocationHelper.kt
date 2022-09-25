@@ -15,6 +15,7 @@ import com.google.android.gms.location.*
 import java.util.*
 
 typealias LocationSuccessBlock = (Location) -> Unit
+typealias LocationPermissionsDeclinedBlock = () -> Unit
 
 class LocationHelper(
         private val context: Context,
@@ -23,6 +24,7 @@ class LocationHelper(
         private val interval: Long? = null,
         private val priority: Int? = null,
         private val smallestDisplacement: Float? = null,
+        locationPermissionsDeclinedBlock: LocationPermissionsDeclinedBlock? = null,
         private val locationSuccessBlock: LocationSuccessBlock
 ): LocationCallback() {
 
@@ -143,6 +145,8 @@ class LocationHelper(
                 this,
                 Looper.getMainLooper()
             )
+        else
+            locationPermissionsDeclinedBlock?.invoke()
     }
 
 }
