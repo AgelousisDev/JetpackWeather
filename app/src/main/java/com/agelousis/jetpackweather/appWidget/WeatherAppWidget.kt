@@ -37,6 +37,16 @@ class WeatherAppWidget: GlanceAppWidget() {
     override val stateDefinition: GlanceStateDefinition<*>
         get() = CustomGlanceStateDefinition
 
+    private val weatherAppWidgetGlanceModifier =
+        GlanceModifier
+            .clickable(
+                onClick = actionRunCallback<WeatherAppWidgetActionCallback>(
+                    parameters = actionParametersOf(
+                        appStartActionParam to true
+                    )
+                )
+            )
+
 
     @Composable
     override fun Content() {
@@ -54,17 +64,10 @@ class WeatherAppWidget: GlanceAppWidget() {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = GlanceModifier
+            modifier = weatherAppWidgetGlanceModifier
                 .background(
                     colorProvider = ColorProvider(
                         resId = R.color.colorPrimaryContainer
-                    )
-                )
-                .clickable(
-                    onClick = actionRunCallback<WeatherAppWidgetActionCallback>(
-                        parameters = actionParametersOf(
-                            appStartActionParam to true
-                        )
                     )
                 )
                 /*.clickable(
@@ -93,7 +96,7 @@ class WeatherAppWidget: GlanceAppWidget() {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = GlanceModifier
+                modifier = weatherAppWidgetGlanceModifier
                     .padding(
                         bottom = 8.dp
                     )
@@ -116,7 +119,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                             resId = R.color.colorTertiary
                         )
                     ),
-                    modifier = GlanceModifier
+                    modifier = weatherAppWidgetGlanceModifier
                         .padding(
                             top = 8.dp,
                             end = 8.dp
@@ -139,7 +142,7 @@ class WeatherAppWidget: GlanceAppWidget() {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = GlanceModifier
+                modifier = weatherAppWidgetGlanceModifier
                     .background(
                         colorProvider = ColorProvider(
                             resId = R.color.colorSecondaryContainer
@@ -152,7 +155,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                 Row(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalAlignment = Alignment.Top,
-                    modifier = GlanceModifier
+                    modifier = weatherAppWidgetGlanceModifier
                         .padding(
                             start = 8.dp,
                             top = 8.dp,
@@ -169,7 +172,8 @@ class WeatherAppWidget: GlanceAppWidget() {
                             color = ColorProvider(
                                 resId = R.color.colorSecondary
                             )
-                        )
+                        ),
+                        modifier = weatherAppWidgetGlanceModifier
                     )
                     val iconBitmap = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.iconUrl?.urlBitmap
                     if (iconBitmap != null)
@@ -179,7 +183,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                                 bitmap = iconBitmap
                             ),
                             contentDescription = null,
-                            modifier = GlanceModifier
+                            modifier = weatherAppWidgetGlanceModifier
                                 .padding(
                                     start = 16.dp
                                 )
@@ -198,7 +202,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                         ),
                         fontSize = 14.sp
                     ),
-                    modifier = GlanceModifier
+                    modifier = weatherAppWidgetGlanceModifier
                         .padding(
                             start = 8.dp,
                             top = 8.dp,
@@ -219,7 +223,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                         ),
                         fontSize = 14.sp
                     ),
-                    modifier = GlanceModifier
+                    modifier = weatherAppWidgetGlanceModifier
                         .padding(
                             all = 8.dp
                         )
@@ -227,7 +231,7 @@ class WeatherAppWidget: GlanceAppWidget() {
             }
             // Wind Layout
             Row(
-                modifier = GlanceModifier
+                modifier = weatherAppWidgetGlanceModifier
                     .padding(
                         top = 8.dp
                     ),
@@ -243,12 +247,13 @@ class WeatherAppWidget: GlanceAppWidget() {
                             resId = weatherResponseModel?.currentWeatherDataModel?.windStateColor
                                 ?: R.color.colorTertiary
                         )
-                    )
+                    ),
+                    modifier = weatherAppWidgetGlanceModifier
                 )
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = GlanceModifier
+                    modifier = weatherAppWidgetGlanceModifier
                         .padding(
                             start = 16.dp
                         )
@@ -266,7 +271,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                                     bitmap = arrowBitmap
                                 ),
                                 contentDescription = null,
-                                modifier = GlanceModifier
+                                modifier = weatherAppWidgetGlanceModifier
                                     .size(
                                         size = 15.dp
                                     )
@@ -280,7 +285,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                             ),
                             fontSize = 12.sp,
                         ),
-                        modifier = GlanceModifier
+                        modifier = weatherAppWidgetGlanceModifier
                             .padding(
                                 top = 8.dp
                             )
@@ -289,7 +294,7 @@ class WeatherAppWidget: GlanceAppWidget() {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = GlanceModifier
+                    modifier = weatherAppWidgetGlanceModifier
                         .padding(
                             start = 16.dp
                         )
@@ -304,7 +309,8 @@ class WeatherAppWidget: GlanceAppWidget() {
                                 resId = weatherResponseModel?.currentWeatherDataModel?.windStateColor
                                     ?: R.color.colorSecondary
                             )
-                        )
+                        ),
+                        modifier = weatherAppWidgetGlanceModifier
                     )
                     Text(
                         text = context.resources.getString(
@@ -318,7 +324,8 @@ class WeatherAppWidget: GlanceAppWidget() {
                             color = ColorProvider(
                                 resId = R.color.colorSecondary
                             )
-                        )
+                        ),
+                        modifier = weatherAppWidgetGlanceModifier
                     )
                 }
             }
