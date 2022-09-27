@@ -7,10 +7,10 @@ plugins {
 }
 
 val navVersion = "2.5.1"
-val composeVersion = "1.2.1"
+val composeVersion = "1.3.0-beta03"
 val constraintLayoutVersion = "2.1.3"
-val constraintLayoutComposeVersion = "1.1.0-alpha03"
-val composeActivityVersion = "1.5.1"
+val constraintLayoutComposeVersion = "1.1.0-alpha04"
+val composeActivityVersion = "1.6.0"
 val composeMaterialYouVersion = "1.0.0-alpha16"
 val liveDataViewModelVersion = "2.5.0-beta01"
 val playServicesMapsVersion = "18.1.0"
@@ -111,10 +111,10 @@ dependencies {
     // Google Maps
     implementation("com.google.android.gms:play-services-location:$playServicesLocationVersion")
     implementation("com.google.android.gms:play-services-maps:$playServicesMapsVersion")
-    implementation("com.google.maps.android:maps-compose:2.7.0")
+    implementation("com.google.maps.android:maps-compose:2.7.2")
 
     // Accompanist
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.26.2-beta")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.26.4-beta")
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
