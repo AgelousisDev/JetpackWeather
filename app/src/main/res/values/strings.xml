@@ -88,4 +88,5 @@
     <string name="key_widget_preview_kilometers_by_hour_label">km/h</string>
     <string name="key_widget_preview_wind_state_label">Light</string>
     <string name="key_widget_preview_wind_direction_label">Now • From North</string>
+    <string name="key_update_label">Update</string>
 </resources>

@@ -8,7 +8,7 @@ import com.agelousis.jetpackweather.mapAddressPicker.viewModel.MapViewModel
 fun MapAddressPickerActivityLayout(
     viewModel: MapViewModel
 ) {
-    MapAddressPickerView(
+    MapAddressPickerTopAppBar(
         viewModel = viewModel
     )
 }

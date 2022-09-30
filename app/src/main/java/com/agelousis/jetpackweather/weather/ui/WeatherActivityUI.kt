@@ -34,10 +34,7 @@ import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.mapAddressPicker.MapAddressPickerActivity
 import com.agelousis.jetpackweather.network.repositories.SuccessUnitBlock
-import com.agelousis.jetpackweather.ui.composableView.SimpleDialog
-import com.agelousis.jetpackweather.ui.composableView.WeatherBottomNavigation
-import com.agelousis.jetpackweather.ui.composableView.WeatherDrawerNavigation
-import com.agelousis.jetpackweather.ui.composableView.WeatherSmallTopAppBar
+import com.agelousis.jetpackweather.ui.composableView.*
 import com.agelousis.jetpackweather.ui.composableView.models.PositiveButtonBlock
 import com.agelousis.jetpackweather.ui.composableView.models.SimpleDialogDataModel
 import com.agelousis.jetpackweather.ui.theme.Typography
@@ -319,7 +316,7 @@ fun WeatherAppBarActions(
         targetState = viewModel.currentNavigationRoute
     ) {
         if (it != WeatherDrawerNavigationScreen.Settings.route)
-        // Current Location
+            // Current Location
             IconButton(
                 enabled = viewModel.locationPermissionState
                         || context.arePermissionsGranted(
@@ -346,7 +343,7 @@ fun WeatherAppBarActions(
         targetState = viewModel.currentNavigationRoute
     ) {
         if (it != WeatherDrawerNavigationScreen.Settings.route)
-        // Edit
+            // Edit
             IconButton(
                 onClick = {
                     mapAddressPickerLauncher.launch(

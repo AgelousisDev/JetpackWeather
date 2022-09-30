@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
@@ -37,6 +38,8 @@ import com.agelousis.jetpackweather.utils.extensions.bitmapDescriptorFromVector
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
+
+typealias SimpleButtonBlock = () -> Unit
 
 @Composable
 fun VerticalProgress(
@@ -394,6 +397,36 @@ fun MapMarker(
     )
 }
 
+@Composable
+fun SimpleButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    icon: ImageVector? = null,
+    simpleButtonBlock: SimpleButtonBlock
+) {
+    Button(
+        modifier = modifier,
+        onClick = simpleButtonBlock
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(
+                space = 16.dp
+            )
+        ) {
+            if (icon != null)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null
+                )
+            Text(
+                text = text,
+                style = textViewAlertTitleFont
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 fun VerticalProgressPreview() {
@@ -436,4 +469,12 @@ fun RangeLayoutPreview() {
             "5"
         )
     )
+}
+
+@Preview
+@Composable
+fun SimpleButtonPreview() {
+    SimpleButton(
+        text = "Simple Button"
+    ) {}
 }
