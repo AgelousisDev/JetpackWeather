@@ -11,7 +11,7 @@ val composeVersion = "1.3.0-beta03"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.1.0-alpha04"
 val composeActivityVersion = "1.6.0"
-val composeMaterialYouVersion = "1.0.0-alpha16"
+val composeMaterialYouVersion = "1.0.0-beta03"
 val liveDataViewModelVersion = "2.5.0-beta01"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "20.0.0"
@@ -94,7 +94,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$liveDataViewModelVersion")
-    implementation("io.coil-kt:coil-compose:2.2.1")
+    implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("androidx.glance:glance-appwidget:1.0.0-alpha04")
     // Retrofit & OkHttp
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
