@@ -66,6 +66,9 @@ class WeatherViewModel: ViewModel() {
     val swipeRefreshMutableStateFlow = MutableStateFlow(value = false)
     val swipeRefreshStateFlow: StateFlow<Boolean> = swipeRefreshMutableStateFlow.asStateFlow()
 
+    val lazyColumnFirstChildVisibilityMutableStateFlow = MutableStateFlow(value = true)
+    val lazyColumnFirstChildVisibilityStateFlow = lazyColumnFirstChildVisibilityMutableStateFlow.asStateFlow()
+
     fun onDialogConfirm() {
         alertPair = null to null
         _showDialog.value = false

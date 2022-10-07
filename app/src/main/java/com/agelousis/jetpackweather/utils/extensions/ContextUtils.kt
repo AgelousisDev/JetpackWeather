@@ -8,7 +8,10 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.core.content.ContextCompat
+import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.utils.receiver.WeatherAlarmReceiver
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -40,7 +43,7 @@ infix fun Context.openWebViewIntent(urlString: String) {
                 Intent(Intent.ACTION_VIEW, Uri.parse(urlString))
             )
         }
-        catch(e: Exception) {}
+        catch(_: Exception) {}
     }
 }
 
@@ -85,3 +88,13 @@ infix fun Context.bitmapDescriptorFromVector(
     drawable.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bm)
 }
+
+val WindowSizeClass.weatherDrawerNavigationType
+    get() = when(this.widthSizeClass) {
+        WindowWidthSizeClass.Medium ->
+            WeatherDrawerNavigationType.NAVIGATION_RAIL
+        WindowWidthSizeClass.Expanded ->
+            WeatherDrawerNavigationType.PERMANENT_NAVIGATION_DRAWER
+        else ->
+            WeatherDrawerNavigationType.NORMAL
+    }

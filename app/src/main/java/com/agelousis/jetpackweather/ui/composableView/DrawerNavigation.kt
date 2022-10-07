@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.drawerNavigation.WeatherDrawerNavigationScreen
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun WeatherDrawerNavigation(
     modifier: Modifier = Modifier,
+    weatherDrawerNavigationType: WeatherDrawerNavigationType,
     viewModel: WeatherViewModel,
     drawerState: DrawerState,
     coroutineScope: CoroutineScope,
@@ -39,67 +41,132 @@ fun WeatherDrawerNavigation(
     )?.weatherDrawerNavigationScreen
         ?: (WeatherDrawerNavigationScreen fromRoute viewModel.currentNavigationRoute)
                 ?: weatherDrawerNavigationScreens[0]
-    ModalNavigationDrawer(
-        modifier = modifier,
-        scrimColor = Color.Transparent,
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet(
-                drawerShape = RoundedCornerShape(
-                    topEnd = 32.dp,
-                    bottomEnd = 32.dp
-                )
-            ) {
-                headerContent()
-                Spacer(
-                    modifier = Modifier
-                        .padding(
-                            top = 32.dp
+    when(weatherDrawerNavigationType) {
+        WeatherDrawerNavigationType.PERMANENT_NAVIGATION_DRAWER ->
+            PermanentNavigationDrawer(
+                modifier = modifier,
+                drawerContent = {
+                    ModalDrawerSheet(
+                        drawerShape = RoundedCornerShape(
+                            topEnd = 32.dp,
+                            bottomEnd = 32.dp
                         )
-                )
-                weatherDrawerNavigationScreens.forEach { weatherDrawerNavigationScreen ->
-                    NavigationDrawerItem(
-                        icon = {
-                            Icon(
-                                imageVector = weatherDrawerNavigationScreen.icon,
-                                contentDescription = null
-                            )
-                        },
-                        label = {
-                            Text(
-                                text = stringResource(id = weatherDrawerNavigationScreen.label),
-                                style = Typography.bodyMedium
-                            )
-                        },
-                        selected = weatherDrawerNavigationScreen == selectedItem,
-                        onClick = {
-                            coroutineScope.launch {
-                                drawerState.close()
-                            }
-                            selectedItem = weatherDrawerNavigationScreen
-                            navController.navigate(weatherDrawerNavigationScreen.route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        modifier = Modifier
-                            .padding(
-                                paddingValues = NavigationDrawerItemDefaults.ItemPadding
-                            )
-                    )
-                }
-                Spacer(
-                    modifier = Modifier
-                        .weight(
-                            weight = 1f
+                    ) {
+                        headerContent()
+                        Spacer(
+                            modifier = Modifier
+                                .padding(
+                                    top = 32.dp
+                                )
                         )
-                )
-                footerContent()
-            }
-        },
-        content = content
-    )
+                        weatherDrawerNavigationScreens.forEach { weatherDrawerNavigationScreen ->
+                            NavigationDrawerItem(
+                                icon = {
+                                    Icon(
+                                        imageVector = weatherDrawerNavigationScreen.icon,
+                                        contentDescription = null
+                                    )
+                                },
+                                label = {
+                                    Text(
+                                        text = stringResource(id = weatherDrawerNavigationScreen.label),
+                                        style = Typography.bodyMedium
+                                    )
+                                },
+                                selected = weatherDrawerNavigationScreen == selectedItem,
+                                onClick = {
+                                    coroutineScope.launch {
+                                        drawerState.close()
+                                    }
+                                    selectedItem = weatherDrawerNavigationScreen
+                                    navController.navigate(weatherDrawerNavigationScreen.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                },
+                                modifier = Modifier
+                                    .padding(
+                                        paddingValues = NavigationDrawerItemDefaults.ItemPadding
+                                    )
+                            )
+                        }
+                        Spacer(
+                            modifier = Modifier
+                                .weight(
+                                    weight = 1f
+                                )
+                        )
+                        footerContent()
+                    }
+                },
+                content = content
+            )
+        else ->
+            ModalNavigationDrawer(
+                modifier = modifier,
+                scrimColor = Color.Transparent,
+                drawerState = drawerState,
+                drawerContent = {
+                    ModalDrawerSheet(
+                        drawerShape = RoundedCornerShape(
+                            topEnd = 32.dp,
+                            bottomEnd = 32.dp
+                        )
+                    ) {
+                        headerContent()
+                        Spacer(
+                            modifier = Modifier
+                                .padding(
+                                    top = 32.dp
+                                )
+                        )
+                        weatherDrawerNavigationScreens.forEach { weatherDrawerNavigationScreen ->
+                            NavigationDrawerItem(
+                                icon = {
+                                    Icon(
+                                        imageVector = weatherDrawerNavigationScreen.icon,
+                                        contentDescription = null
+                                    )
+                                },
+                                label = {
+                                    Text(
+                                        text = stringResource(id = weatherDrawerNavigationScreen.label),
+                                        style = Typography.bodyMedium
+                                    )
+                                },
+                                selected = weatherDrawerNavigationScreen == selectedItem,
+                                onClick = {
+                                    coroutineScope.launch {
+                                        drawerState.close()
+                                    }
+                                    selectedItem = weatherDrawerNavigationScreen
+                                    navController.navigate(weatherDrawerNavigationScreen.route) {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                },
+                                modifier = Modifier
+                                    .padding(
+                                        paddingValues = NavigationDrawerItemDefaults.ItemPadding
+                                    )
+                            )
+                        }
+                        Spacer(
+                            modifier = Modifier
+                                .weight(
+                                    weight = 1f
+                                )
+                        )
+                        footerContent()
+                    }
+                },
+                content = content
+            )
+    }
 }

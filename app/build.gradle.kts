@@ -19,13 +19,14 @@ val materialYouVersion = "1.8.0-alpha01"
 val lottieComposeVersion = "5.2.0"
 val browserVersion = "1.4.0"
 val dataStorePreferenceVersion = "1.0.0"
+val composeMaterialYouWindowSizeVersion = "1.0.0-rc01"
 
 android {
     compileSdk = 33
 
     defaultConfig {
         applicationId = "com.agelousis.jetpackweather"
-        minSdk = 26
+        minSdk = 27
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -90,6 +91,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:$composeActivityVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("androidx.compose.material3:material3:$composeMaterialYouVersion")
+    implementation("androidx.compose.material3:material3-window-size-class:$composeMaterialYouWindowSizeVersion")
     implementation("androidx.compose.ui:ui-viewbinding:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")

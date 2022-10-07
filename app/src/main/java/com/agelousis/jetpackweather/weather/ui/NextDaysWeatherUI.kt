@@ -8,12 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -45,6 +44,17 @@ fun NextDaysWeatherLayout(
     val isRefreshing by viewModel.swipeRefreshStateFlow.collectAsState()
     val networkErrorState by viewModel.networkErrorStateFlow.collectAsState()
     val requestLocationState by viewModel.requestLocationState.collectAsState()
+    val lazyColumnState = rememberLazyListState()
+    val firstVisibleItemIndex by remember {
+        derivedStateOf {
+            lazyColumnState.firstVisibleItemIndex == 0
+        }
+    }
+    LaunchedEffect(
+        key1 = firstVisibleItemIndex
+    ) {
+        viewModel.lazyColumnFirstChildVisibilityMutableStateFlow.value = firstVisibleItemIndex
+    }
 
     ConstraintLayout(
         modifier = Modifier
@@ -99,7 +109,8 @@ fun NextDaysWeatherLayout(
                     ),
                     contentPadding = PaddingValues(
                         bottom = 170.dp
-                    )
+                    ),
+                    state = lazyColumnState
                 ) {
                     items(
                         items =

@@ -7,7 +7,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.Crossfade
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -37,6 +38,7 @@ import com.agelousis.jetpackweather.network.repositories.SuccessUnitBlock
 import com.agelousis.jetpackweather.ui.composableView.*
 import com.agelousis.jetpackweather.ui.composableView.models.PositiveButtonBlock
 import com.agelousis.jetpackweather.ui.composableView.models.SimpleDialogDataModel
+import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
 import com.agelousis.jetpackweather.utils.helpers.LocationHelper
@@ -54,10 +56,12 @@ private val weatherDrawerNavigationScreens = listOf(
     WeatherDrawerNavigationScreen.Settings
 )
 
+@OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun WeatherActivityBottomNavigationLayout(
-    viewModel: WeatherViewModel
+    viewModel: WeatherViewModel,
+    weatherDrawerNavigationType: WeatherDrawerNavigationType
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -69,6 +73,7 @@ fun WeatherActivityBottomNavigationLayout(
     }
     val addressDataModel by viewModel.addressDataModelStateFlow.collectAsState()
     val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
+    val lazyColumnFirstItemVisibilityState by viewModel.lazyColumnFirstChildVisibilityStateFlow.collectAsState()
     SimpleDialog(
         show = showDialogState,
         simpleDialogDataModel = SimpleDialogDataModel(
@@ -108,6 +113,7 @@ fun WeatherActivityBottomNavigationLayout(
     WeatherDrawerNavigation(
         modifier = Modifier
             .statusBarsPadding(),
+        weatherDrawerNavigationType = weatherDrawerNavigationType,
         viewModel  = viewModel,
         drawerState = drawerState,
         coroutineScope = scope,
@@ -174,8 +180,46 @@ fun WeatherActivityBottomNavigationLayout(
                 )
             },
             bottomBar = {
-                Crossfade(
+                        AnimatedContent(
+                            targetState = viewModel.currentNavigationRoute != WeatherDrawerNavigationScreen.Settings.route
+                                    && if (weatherDrawerNavigationType == WeatherDrawerNavigationType.PERMANENT_NAVIGATION_DRAWER)
+                                lazyColumnFirstItemVisibilityState
+                            else
+                                true,
+                            transitionSpec = {
+                                // Going forwards in the survey: Set the initial offset to start
+                                // at the size of the content so it slides in from right to left, and
+                                // slides out from the left of the screen to -fullWidth
+                                slideInVertically(
+                                    animationSpec = tween(500),
+                                    initialOffsetY = { fullWidth -> fullWidth }
+                                ) with
+                                        slideOutVertically(
+                                            animationSpec = tween(500),
+                                            targetOffsetY = { fullWidth -> -fullWidth }
+                                        )
+                            }
+                        ) { state ->
+                            if (state)
+                                WeatherBottomNavigation(
+                                    navController = navController,
+                                    items = viewModel.bottomNavigationItems.also { bottomNavigationItems ->
+                                        bottomNavigationItems.firstOrNull { weatherNavigationScreen ->
+                                            weatherNavigationScreen is WeatherNavigationScreen.Alerts
+                                        }?.badge =
+                                            if (!weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty())
+                                                weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList?.size?.toString()
+                                            else
+                                                null
+                                    }
+                                )
+                        }
+                /*Crossfade(
                     targetState = viewModel.currentNavigationRoute != WeatherDrawerNavigationScreen.Settings.route
+                            && if (weatherDrawerNavigationType == WeatherDrawerNavigationType.PERMANENT_NAVIGATION_DRAWER)
+                                    lazyColumnFirstItemVisibilityState
+                               else
+                                   true
                 ) {
                     if (it)
                         WeatherBottomNavigation(
@@ -190,7 +234,7 @@ fun WeatherActivityBottomNavigationLayout(
                                         null
                             }
                         )
-                }
+                }*/
             },
             content = { innerPadding ->
                 if (viewModel.locationPermissionState
@@ -522,6 +566,7 @@ fun WeatherActivityLayoutPreview() {
             weatherViewModel.bottomNavigationItems.add(
                 WeatherNavigationScreen.Alerts
             )
-        }
+        },
+        weatherDrawerNavigationType = WeatherDrawerNavigationType.PERMANENT_NAVIGATION_DRAWER
     )
 }
