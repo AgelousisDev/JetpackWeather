@@ -1,5 +1,6 @@
 package com.agelousis.jetpackweather.ui.composableView
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -50,7 +51,11 @@ fun WeatherDrawerNavigation(
                         drawerShape = RoundedCornerShape(
                             topEnd = 32.dp,
                             bottomEnd = 32.dp
-                        )
+                        ),
+                        modifier = Modifier
+                            .background(
+                                color = Color.Transparent
+                            )
                     ) {
                         headerContent()
                         Spacer(

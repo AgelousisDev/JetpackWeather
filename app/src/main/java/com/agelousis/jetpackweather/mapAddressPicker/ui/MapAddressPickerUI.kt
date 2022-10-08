@@ -29,7 +29,6 @@ import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.mapAddressPicker.MapAddressPickerActivity
 import com.agelousis.jetpackweather.mapAddressPicker.viewModel.MapViewModel
 import com.agelousis.jetpackweather.ui.composableView.MapMarker
-import com.agelousis.jetpackweather.ui.composableView.SimpleButton
 import com.agelousis.jetpackweather.ui.composableView.WeatherSmallTopAppBar
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -130,7 +129,7 @@ fun MapAddressPickerLayout(
                     LatLng(
                         addressDataModel?.latitude
                             ?: return@LaunchedEffect,
-                        addressDataModel?.longitude
+                        addressDataModel.longitude
                             ?: return@LaunchedEffect
                     ),
                     10f,

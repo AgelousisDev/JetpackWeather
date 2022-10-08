@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,7 +21,9 @@ import com.agelousis.jetpackweather.ui.rows.HeaderRowLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.ui.composableView.FullScreenLottieLayout
+import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.ui.models.HeaderModel
+import com.agelousis.jetpackweather.ui.theme.weatherBackgroundGradient
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.rows.*
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -32,7 +33,8 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 @Composable
 fun TodayWeatherLayout(
     viewModel: WeatherViewModel,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
+    weatherDrawerNavigationType: WeatherDrawerNavigationType
 ) {
     val loaderState by viewModel.loaderStateStateFlow.collectAsState()
     val weatherResponseModel by viewModel.weatherResponseLiveData.observeAsState()
@@ -58,12 +60,7 @@ fun TodayWeatherLayout(
                 top = contentPadding.calculateTopPadding()
             )
             .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.surface,
-                        MaterialTheme.colorScheme.surfaceVariant
-                    )
-                )
+                brush = weatherBackgroundGradient()
             )
     ) {
         val (lazyColumnConstrainedReference, progressIndicatorConstrainedReference,
@@ -137,6 +134,7 @@ fun TodayWeatherLayout(
                                 )
                             )
                     }
+                    // Air Quality
                     item {
                         if (weatherResponseModel != null
                             && weatherResponseModel?.currentWeatherDataModel?.airQuality != null
@@ -144,6 +142,7 @@ fun TodayWeatherLayout(
                             AirQualityRowLayout(
                                 modifier = Modifier
                                     .animateItemPlacement(),
+                                weatherDrawerNavigationType = weatherDrawerNavigationType,
                                 weatherAirQualityDataModel = weatherResponseModel?.currentWeatherDataModel?.airQuality
                                     ?: return@item
                             )
@@ -242,6 +241,7 @@ fun TodayWeatherLayout(
 fun TodayWeatherLayoutPreview() {
     TodayWeatherLayout(
         viewModel = WeatherViewModel(),
-        contentPadding = PaddingValues()
+        contentPadding = PaddingValues(),
+        weatherDrawerNavigationType = WeatherDrawerNavigationType.NORMAL
     )
 }

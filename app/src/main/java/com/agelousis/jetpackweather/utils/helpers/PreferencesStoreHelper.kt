@@ -34,7 +34,7 @@ class PreferencesStoreHelper(val context: Context) {
 
     val temperatureUnitType
         get() = context.dataStore.data.map { preferences ->
-            valueEnumOrNull<TemperatureUnitType>(name = preferences[TEMPERATURE_UNIT_TYPE_KEY] ?: TemperatureUnitType.CELSIUS.name)
+            valueEnumOrNull<TemperatureUnitType>(name = preferences[TEMPERATURE_UNIT_TYPE_KEY])
         }
 
     suspend infix fun setOfflineMode(offlineMode: Boolean) {

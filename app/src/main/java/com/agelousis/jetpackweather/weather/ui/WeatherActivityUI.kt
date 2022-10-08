@@ -8,7 +8,6 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -40,6 +39,7 @@ import com.agelousis.jetpackweather.ui.composableView.models.PositiveButtonBlock
 import com.agelousis.jetpackweather.ui.composableView.models.SimpleDialogDataModel
 import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.ui.theme.Typography
+import com.agelousis.jetpackweather.ui.theme.slideVertically
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
 import com.agelousis.jetpackweather.utils.helpers.LocationHelper
 import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
@@ -165,7 +165,7 @@ fun WeatherActivityBottomNavigationLayout(
                     ),
                     //scrolledContainerColor = MaterialTheme.colorScheme.surface,
                     //scrollBehavior = scrollBehavior,
-                    navigationIcon = Icons.Filled.Menu,
+                    navigationIcon = if (weatherDrawerNavigationType == WeatherDrawerNavigationType.NORMAL) Icons.Filled.Menu else null,
                     navigationIconBlock = {
                         scope.launch {
                             drawerState.open()
@@ -187,17 +187,7 @@ fun WeatherActivityBottomNavigationLayout(
                             else
                                 true,
                             transitionSpec = {
-                                // Going forwards in the survey: Set the initial offset to start
-                                // at the size of the content so it slides in from right to left, and
-                                // slides out from the left of the screen to -fullWidth
-                                slideInVertically(
-                                    animationSpec = tween(500),
-                                    initialOffsetY = { fullWidth -> fullWidth }
-                                ) with
-                                        slideOutVertically(
-                                            animationSpec = tween(500),
-                                            targetOffsetY = { fullWidth -> -fullWidth }
-                                        )
+                                slideVertically
                             }
                         ) { state ->
                             if (state)
@@ -247,7 +237,8 @@ fun WeatherActivityBottomNavigationLayout(
                     WeatherActivityNavigation(
                         viewModel = viewModel,
                         navController = navController,
-                        contentPadding = innerPadding
+                        contentPadding = innerPadding,
+                        weatherDrawerNavigationType = weatherDrawerNavigationType
                     )
                 else
                     LocationPermissionRequest(
@@ -263,7 +254,8 @@ fun WeatherActivityBottomNavigationLayout(
 fun WeatherActivityNavigation(
     viewModel: WeatherViewModel,
     navController: NavHostController,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues,
+    weatherDrawerNavigationType: WeatherDrawerNavigationType
 ) {
     NavHost(
         navController = navController,
@@ -274,7 +266,8 @@ fun WeatherActivityNavigation(
         ) {
             TodayWeatherLayout(
                 viewModel = viewModel,
-                contentPadding = contentPadding
+                contentPadding = contentPadding,
+                weatherDrawerNavigationType = weatherDrawerNavigationType
             )
         }
         composable(

@@ -7,12 +7,12 @@ plugins {
 }
 
 val navVersion = "2.5.1"
-val composeVersion = "1.3.0-beta03"
+val composeVersion = "1.3.0-rc01"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.1.0-alpha04"
-val composeActivityVersion = "1.6.0"
-val composeMaterialYouVersion = "1.0.0-beta03"
-val liveDataViewModelVersion = "2.5.0-beta01"
+val composeActivityVersion = "1.7.0-alpha01"
+val composeMaterialYouVersion = "1.0.0-rc01"
+val liveDataViewModelVersion = "2.6.0-alpha02"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "20.0.0"
 val materialYouVersion = "1.8.0-alpha01"
@@ -68,7 +68,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.1"
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
     packagingOptions {
         resources {
@@ -97,17 +97,17 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$liveDataViewModelVersion")
     implementation("io.coil-kt:coil-compose:2.2.2")
-    implementation("androidx.glance:glance-appwidget:1.0.0-alpha04")
+    implementation("androidx.glance:glance-appwidget:1.0.0-alpha05")
     // Retrofit & OkHttp
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.8")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
 
     // Navigation
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha02")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     // Google Maps
@@ -116,14 +116,14 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:2.7.2")
 
     // Accompanist
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.26.4-beta")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.26.5-rc")
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
 
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.4-beta01")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0-beta01")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")

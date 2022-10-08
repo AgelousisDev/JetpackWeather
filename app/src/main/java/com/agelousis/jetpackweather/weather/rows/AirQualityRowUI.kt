@@ -10,17 +10,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.WeatherAirQualityDataModel
 import com.agelousis.jetpackweather.ui.composableView.RangeLayout
+import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.ui.theme.Typography
 
 @Composable
 fun AirQualityRowLayout(
     modifier: Modifier = Modifier,
+    weatherDrawerNavigationType: WeatherDrawerNavigationType,
     weatherAirQualityDataModel: WeatherAirQualityDataModel
 ) {
     val context = LocalContext.current
+    val statusBarsPadding = WindowInsets.statusBars.asPaddingValues()
     Column(
         verticalArrangement = Arrangement.spacedBy(
             space = 8.dp
@@ -46,7 +50,11 @@ fun AirQualityRowLayout(
                 .align(
                     alignment = Alignment.CenterHorizontally
                 ),
-            width = LocalConfiguration.current.screenWidthDp.dp - 32.dp,
+            width =
+                if (weatherDrawerNavigationType == WeatherDrawerNavigationType.PERMANENT_NAVIGATION_DRAWER)
+                    LocalConfiguration.current.screenWidthDp.dp - 240.dp - 32.dp - 2 * statusBarsPadding.calculateTopPadding()
+                else
+                    LocalConfiguration.current.screenWidthDp.dp - 32.dp,
             colors = listOf(
                 colorResource(id = R.color.green),
                 colorResource(id = R.color.lightBlue),

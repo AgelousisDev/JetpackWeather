@@ -91,8 +91,7 @@ infix fun Context.bitmapDescriptorFromVector(
 
 val WindowSizeClass.weatherDrawerNavigationType
     get() = when(this.widthSizeClass) {
-        WindowWidthSizeClass.Medium ->
-            WeatherDrawerNavigationType.NAVIGATION_RAIL
+        WindowWidthSizeClass.Medium,
         WindowWidthSizeClass.Expanded ->
             WeatherDrawerNavigationType.PERMANENT_NAVIGATION_DRAWER
         else ->

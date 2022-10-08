@@ -63,7 +63,7 @@ fun WeatherSmallTopAppBar(
     navigationIconBlock: NavigationIconBlock = {},
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    SmallTopAppBar(
+    TopAppBar(
         modifier = modifier,
         title = {
             Text(
