@@ -15,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +26,7 @@ import com.agelousis.jetpackweather.network.response.WeatherHourlyDataModel
 import com.agelousis.jetpackweather.ui.composableView.FullScreenLottieLayout
 import com.agelousis.jetpackweather.ui.models.HeaderModel
 import com.agelousis.jetpackweather.ui.rows.HeaderRowLayout
+import com.agelousis.jetpackweather.ui.theme.weatherBackgroundGradient
 import com.agelousis.jetpackweather.weather.rows.ForecastDayWeatherLayout
 import com.agelousis.jetpackweather.weather.rows.HourlyWeatherConditionsRowLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
@@ -63,12 +63,7 @@ fun NextDaysWeatherLayout(
                 top = contentPadding.calculateTopPadding()
             )
             .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.surface,
-                        MaterialTheme.colorScheme.surfaceVariant
-                    )
-                )
+                brush = weatherBackgroundGradient()
             )
     ) {
         val (lazyColumnConstrainedReference, progressIndicatorConstrainedReference,
