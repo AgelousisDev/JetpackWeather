@@ -16,7 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.ui.composableView.FullScreenLottieLayout
 import com.agelousis.jetpackweather.ui.rows.WeatherAlertRowLayout
+import com.agelousis.jetpackweather.ui.theme.weatherBackgroundGradient
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -49,12 +49,7 @@ fun WeatherAlertsLayout(
                 top = contentPadding.calculateTopPadding()
             )
             .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.surface,
-                        MaterialTheme.colorScheme.surfaceVariant
-                    )
-                )
+                brush = weatherBackgroundGradient()
             )
     ) {
         val (lazyColumnConstrainedReference, progressIndicatorConstrainedReference,

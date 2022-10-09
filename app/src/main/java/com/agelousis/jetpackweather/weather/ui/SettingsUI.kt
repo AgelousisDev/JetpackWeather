@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,6 +23,7 @@ import androidx.core.os.BuildCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agelousis.jetpackweather.ui.rows.SelectionInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.rows.SwitchInputFieldRowLayout
+import com.agelousis.jetpackweather.ui.theme.weatherBackgroundGradient
 import com.agelousis.jetpackweather.utils.extensions.*
 import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
@@ -72,12 +71,7 @@ fun SettingsLayout(
                 top = contentPadding.calculateTopPadding()
             )
             .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.surface,
-                        MaterialTheme.colorScheme.surfaceVariant
-                    )
-                )
+                brush = weatherBackgroundGradient()
             )
     ) {
         val (lazyColumnConstrainedReference) = createRefs()
@@ -85,7 +79,7 @@ fun SettingsLayout(
             modifier = Modifier
                 .constrainAs(lazyColumnConstrainedReference) {
                     start.linkTo(parent.start)
-                    top.linkTo(parent.top, 32.dp)
+                    top.linkTo(parent.top, 0.dp)
                     end.linkTo(parent.end)
                     bottom.linkTo(parent.bottom)
                     width = Dimension.fillToConstraints
