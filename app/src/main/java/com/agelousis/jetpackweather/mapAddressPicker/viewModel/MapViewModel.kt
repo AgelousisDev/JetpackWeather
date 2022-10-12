@@ -35,12 +35,14 @@ class MapViewModel: ViewModel()  {
         LocationHelper.getLocationFromAddress(
             context = context,
             strAddress = text
-        )?.let { addressDataModel ->
-            addressDataModelMutableStateFlow.value = addressDataModel
-            addressLine = addressDataModel.addressLine
-        } ?: run {
-            addressLine = ""
-            invalidAddressStateBlock()
+        ) { addressDataModel ->
+            addressDataModel?.let { unwrappedAddressDataModel ->
+                addressDataModelMutableStateFlow.value = unwrappedAddressDataModel
+                addressLine = unwrappedAddressDataModel.addressLine
+            } ?: run {
+                addressLine = ""
+                invalidAddressStateBlock()
+            }
         }
     }
 

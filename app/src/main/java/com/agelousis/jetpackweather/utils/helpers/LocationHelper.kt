@@ -69,23 +69,46 @@ class LocationHelper(
             }
         }
 
+        @SuppressLint("UnsafeOptInUsageError")
         fun getLocationFromAddress(
             context: Context,
-            strAddress: String
+            strAddress: String,
+            addressDataModelSuccessBlock: AddressDataModelSuccessBlock
         ) =
             with(Geocoder(context, Locale.getDefault())) {
-                getFromLocationName(strAddress, 1)?.let { addresses ->
-                    addresses.takeIf {
-                        it.isNotEmpty()
-                    } ?: return@with null
-                    AddressDataModel(
-                        countryName = addresses.firstOrNull()?.countryName,
-                        countryCode = addresses.firstOrNull()?.countryCode,
-                        longitude = addresses.firstOrNull()?.longitude,
-                        latitude = addresses.firstOrNull()?.latitude,
-                        addressLine = addresses.firstOrNull()?.getAddressLine(0)
-                    )
-                }
+                if (BuildCompat.isAtLeastT())
+                    getFromLocationName(
+                        strAddress,
+                        1
+                    ) { addresses ->
+                        addresses.takeIf {
+                            it.isNotEmpty()
+                        } ?: return@getFromLocationName
+                        addressDataModelSuccessBlock(
+                            AddressDataModel(
+                                countryName = addresses.firstOrNull()?.countryName,
+                                countryCode = addresses.firstOrNull()?.countryCode,
+                                longitude = addresses.firstOrNull()?.longitude,
+                                latitude = addresses.firstOrNull()?.latitude,
+                                addressLine = addresses.firstOrNull()?.getAddressLine(0)
+                            )
+                        )
+                    }
+                else
+                    getFromLocationName(strAddress, 1)?.let { addresses ->
+                        addresses.takeIf {
+                            it.isNotEmpty()
+                        } ?: return@with null
+                        addressDataModelSuccessBlock(
+                            AddressDataModel(
+                                countryName = addresses.firstOrNull()?.countryName,
+                                countryCode = addresses.firstOrNull()?.countryCode,
+                                longitude = addresses.firstOrNull()?.longitude,
+                                latitude = addresses.firstOrNull()?.latitude,
+                                addressLine = addresses.firstOrNull()?.getAddressLine(0)
+                            )
+                        )
+                    }
             }
 
         private infix fun getAddressDataFrom(address: Address?) =

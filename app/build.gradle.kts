@@ -6,7 +6,7 @@ plugins {
     id("com.github.ben-manes.versions") version "0.42.0"
 }
 
-val navVersion = "2.5.1"
+val navVersion = "2.6.0-alpha02"
 val composeVersion = "1.3.0-rc01"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.1.0-alpha04"
@@ -18,7 +18,7 @@ val playServicesLocationVersion = "20.0.0"
 val materialYouVersion = "1.8.0-alpha01"
 val lottieComposeVersion = "5.2.0"
 val browserVersion = "1.4.0"
-val dataStorePreferenceVersion = "1.0.0"
+val dataStorePreferenceVersion = "1.1.0-dev01"
 val composeMaterialYouWindowSizeVersion = "1.0.0-rc01"
 
 android {
@@ -98,9 +98,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$liveDataViewModelVersion")
     implementation("io.coil-kt:coil-compose:2.2.2")
     implementation("androidx.glance:glance-appwidget:1.0.0-alpha05")
+    implementation("androidx.glance:glance-wear-tiles:1.0.0-alpha05")
     // Retrofit & OkHttp
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.8")
 
     // Navigation
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
