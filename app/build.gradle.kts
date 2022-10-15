@@ -19,7 +19,7 @@ val materialYouVersion = "1.8.0-alpha01"
 val appCompatVersion = "1.7.0-alpha01"
 val lottieComposeVersion = "5.2.0"
 val browserVersion = "1.4.0"
-val dataStorePreferenceVersion = "1.1.0-dev01"
+val dataStorePreferenceVersion = "1.0.0"
 val composeMaterialYouWindowSizeVersion = "1.0.0-rc01"
 
 android {

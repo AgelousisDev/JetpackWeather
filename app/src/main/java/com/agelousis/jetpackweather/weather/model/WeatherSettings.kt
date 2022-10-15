@@ -70,7 +70,7 @@ sealed class WeatherSettings(
             context: Context,
             languageEnum: LanguageEnum?
         ) = this.apply {
-            optionModelList = (LanguageEnum languagesFrom context).mapIndexed { index, item ->
+            optionModelList = (LanguageEnum languagesFrom context).map { item ->
                 OptionModel(
                     label = item
                 )

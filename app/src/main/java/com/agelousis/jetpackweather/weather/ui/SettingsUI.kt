@@ -31,9 +31,7 @@ import com.agelousis.jetpackweather.weather.extensions.setAppLanguage
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun SettingsLayout(
@@ -229,8 +227,29 @@ private fun configureSwitchInputFieldEvent(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun SettingsLayoutPreview() {
+    val context = LocalContext.current
     SettingsLayout(
-        viewModel = viewModel(),
+        viewModel = viewModel<WeatherViewModel>().also { viewModel ->
+            viewModel.weatherSettingsList.clear()
+            viewModel.weatherSettingsList.add(
+                WeatherSettings.TemperatureType.with(
+                    context = context,
+                    temperatureUnitType = TemperatureUnitType.CELSIUS
+                )
+            )
+            viewModel.weatherSettingsList.add(
+                WeatherSettings.OfflineMode isEnabled true
+            )
+            viewModel.weatherSettingsList.add(
+                WeatherSettings.WeatherNotifications isEnabled true
+            )
+            viewModel.weatherSettingsList.add(
+                WeatherSettings.WeatherLanguage.with(
+                    context = context,
+                    languageEnum = LanguageEnum.ENGLISH
+                )
+            )
+        },
         contentPadding = PaddingValues()
     )
 }
