@@ -5,12 +5,15 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.core.content.ContextCompat
+import androidx.core.os.LocaleListCompat
 import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.utils.receiver.WeatherAlarmReceiver
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -87,6 +90,36 @@ infix fun Context.bitmapDescriptorFromVector(
     val canvas = android.graphics.Canvas(bm)
     drawable.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bm)
+}
+
+fun Context.getLocalizedString(
+    language: String,
+    resourceId: Int
+): String {
+    val configuration = this getLocalizedConfiguration language
+    return createConfigurationContext(configuration).resources.getString(resourceId)
+}
+
+fun Context.getLocalizedArray(
+    language: String,
+    resourceId: Int
+): Array<String> {
+    val configuration = this getLocalizedConfiguration language
+    return createConfigurationContext(configuration).resources.getStringArray(resourceId)
+}
+
+private infix fun Context.getLocalizedConfiguration(
+    language: String
+): Configuration {
+    val configuration = Configuration(resources.configuration)
+    configuration.setLocale(Locale(language))
+    return configuration
+}
+
+infix fun Context.setAppLanguage(
+    language: String
+) {
+    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(language))
 }
 
 val WindowSizeClass.weatherDrawerNavigationType

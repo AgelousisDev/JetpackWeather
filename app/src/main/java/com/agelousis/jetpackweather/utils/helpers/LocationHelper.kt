@@ -37,7 +37,7 @@ class LocationHelper(
             latitude: Double,
             addressDataModelSuccessBlock: AddressDataModelSuccessBlock
         ) {
-            Geocoder(context, Locale.ENGLISH).apply {
+            Geocoder(context, Locale.getDefault()).apply {
                 try {
                     if (BuildCompat.isAtLeastT())
                         getFromLocation(

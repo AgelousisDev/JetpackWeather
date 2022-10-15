@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.agelousis.jetpackweather.network.response.WeatherHourlyDataModel
 import com.agelousis.jetpackweather.ui.rows.HourlyWeatherConditionRowLayout
-import kotlinx.coroutines.delay
 
 @Composable
 fun HourlyWeatherConditionsRowLayout(
@@ -20,14 +19,15 @@ fun HourlyWeatherConditionsRowLayout(
     weatherHourlyDataModelList: List<WeatherHourlyDataModel>
 ) {
     val lazyListState = rememberLazyListState()
-    if (weatherHourlyDataModelList.size >= 24)
-        LaunchedEffect(
-            key1 = Unit
-        ) {
+
+    LaunchedEffect(
+        key1 = Unit
+    ) {
+        if (weatherHourlyDataModelList.size >= 24)
             lazyListState.animateScrollToItem(
                 index = 12
             )
-        }
+    }
     LazyRow(
         modifier = modifier,
         state = lazyListState,

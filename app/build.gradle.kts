@@ -16,6 +16,7 @@ val liveDataViewModelVersion = "2.6.0-alpha02"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "20.0.0"
 val materialYouVersion = "1.8.0-alpha01"
+val appCompatVersion = "1.7.0-alpha01"
 val lottieComposeVersion = "5.2.0"
 val browserVersion = "1.4.0"
 val dataStorePreferenceVersion = "1.1.0-dev01"
@@ -30,6 +31,11 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
+
+        // Languages
+        resourceConfigurations.clear()
+        resourceConfigurations.add("en")
+        resourceConfigurations.add("el")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -80,6 +86,7 @@ android {
 dependencies {
     // Native
     implementation("com.google.android.material:material:$materialYouVersion")
+    implementation("androidx.appcompat:appcompat:$appCompatVersion")
     // Datastore
     implementation("androidx.datastore:datastore-preferences:$dataStorePreferenceVersion")
 

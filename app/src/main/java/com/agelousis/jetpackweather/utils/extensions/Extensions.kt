@@ -28,7 +28,7 @@ fun Date.toDisplayDate(
 
 fun String.toDate(
     pattern: String = Constants.SERVER_DATE_TIME_FORMAT
-): Date? = with(SimpleDateFormat(pattern, Locale.getDefault())) {
+): Date? = with(SimpleDateFormat(pattern, Locale.ENGLISH)) {
     try {
         parse(this@toDate)
     }
@@ -38,7 +38,9 @@ fun String.toDate(
 }
 
 inline fun <reified T : Enum<*>> valueEnumOrNull(name: String?): T? =
-    T::class.java.enumConstants?.firstOrNull { it.name.lowercase() == name?.lowercase() }
+    T::class.java.enumConstants?.firstOrNull {
+        it.name.lowercase() == name?.lowercase()
+    }
 
 val Date.fullTime: String
     get() = with(SimpleDateFormat(Constants.FULL_TIME_FORMAT, Locale.getDefault())) {

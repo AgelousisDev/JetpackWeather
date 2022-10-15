@@ -134,17 +134,19 @@ fun SelectionInputFieldRowLayout(
                                 expandedDropDownMenu = false
                                 selectionInputFieldBlock(index)
                             },
-                            leadingIcon = {
-                                Icon(
-                                    painter = painterResource(id = optionModel.icon),
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.surfaceTint,
-                                    modifier = Modifier
-                                        .size(
-                                            size = 20.dp
-                                        )
-                                )
-                            }
+                            leadingIcon = if (optionModel.icon != null) {
+                                {
+                                    Icon(
+                                        painter = painterResource(id = optionModel.icon),
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.surfaceTint,
+                                        modifier = Modifier
+                                            .size(
+                                                size = 20.dp
+                                            )
+                                    )
+                                }
+                            } else null
                         )
                         if (index < (weatherSettings.optionModelList?.size ?: 0) - 1)
                             Divider()

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.WeatherHourlyDataModel
+import com.agelousis.jetpackweather.ui.composableView.MarqueeText
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.ui.theme.bold
 import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
@@ -104,7 +105,7 @@ fun HourlyWeatherConditionRowLayout(
                     style = textViewHeaderFont
                 )
                 // Condition Text
-                Text(
+                MarqueeText(
                     text = weatherHourlyDataModel.weatherConditionDataModel?.text ?: "",
                     style = Typography.bodyMedium,
                     color = colorResource(id = R.color.grey),
@@ -112,7 +113,7 @@ fun HourlyWeatherConditionRowLayout(
                 )
 
                 // Feels Like
-                Text(
+                MarqueeText(
                     text = stringResource(
                         id = R.string.key_feels_like_label,
                         weatherHourlyDataModel feelsLikeTemperatureUnitFormatted temperatureUnitType

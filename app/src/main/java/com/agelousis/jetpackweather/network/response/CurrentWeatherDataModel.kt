@@ -2,6 +2,7 @@ package com.agelousis.jetpackweather.network.response
 
 import android.content.Context
 import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.utils.extensions.getLocalizedArray
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.google.gson.annotations.SerializedName
 import java.lang.StringBuilder
@@ -101,17 +102,25 @@ data class CurrentWeatherDataModel(
     infix fun getWindDirection(
         context: Context
     ) = with(windDir) {
+        val windDirectionsInBaseLocaleArray = context.getLocalizedArray(
+            language = "en",
+            resourceId = R.array.key_wind_directions_array
+        )
         val windDirectionsArray = context.resources.getStringArray(R.array.key_wind_directions_array)
         val windDirectionsBuilder = StringBuilder()
-        for (windDirection in (windDir?.toCharArray()?.take(n = 2)?.distinct() ?: listOf()))
+        for (windDirection in (windDir?.toCharArray()?.take(n = 2)?.distinct() ?: listOf())) {
+            val windDirectionsArrayIndex = windDirectionsInBaseLocaleArray.indexOfFirst {
+                it.startsWith(
+                    prefix = windDirection.toString(),
+                    ignoreCase = true
+                )
+            }.takeIf {
+                it > -1
+            } ?: continue
             windDirectionsBuilder.append(
-                windDirectionsArray.firstOrNull {
-                    it.startsWith(
-                        prefix = windDirection.toString(),
-                        ignoreCase = true
-                    )
-                }
+                windDirectionsArray[windDirectionsArrayIndex]
             )
+        }
         windDirectionsBuilder.toString()
     }
 

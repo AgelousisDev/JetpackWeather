@@ -3,6 +3,7 @@ package com.agelousis.jetpackweather.weather.model
 import android.content.Context
 import androidx.annotation.StringRes
 import com.agelousis.jetpackweather.R
+import com.agelousis.jetpackweather.utils.enumerations.LanguageEnum
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 
 sealed class WeatherSettings(
@@ -57,6 +58,28 @@ sealed class WeatherSettings(
         ) = this.apply {
             optionIsChecked = weatherNotificationsState
             //optionIsEnabled = sharedPreferences.addressDataModel != null
+        }
+
+    }
+
+    object WeatherLanguage: WeatherSettings(
+        label = R.string.key_language_label
+    ) {
+
+        fun with(
+            context: Context,
+            languageEnum: LanguageEnum?
+        ) = this.apply {
+            optionModelList = (LanguageEnum languagesFrom context).mapIndexed { index, item ->
+                OptionModel(
+                    label = item
+                )
+            }
+            selectedOptionModel = languageEnum?.let {
+                OptionModel(
+                    label = it labelFrom context,
+                )
+            }
         }
 
     }

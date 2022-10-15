@@ -24,9 +24,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agelousis.jetpackweather.ui.rows.SelectionInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.rows.SwitchInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.theme.weatherBackgroundGradient
+import com.agelousis.jetpackweather.utils.enumerations.LanguageEnum
 import com.agelousis.jetpackweather.utils.extensions.*
 import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
+import com.agelousis.jetpackweather.weather.WeatherActivity
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
+import com.agelousis.jetpackweather.weather.extensions.restart
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -51,6 +54,9 @@ fun SettingsLayout(
     )
     val weatherNotificationsState by preferencesStorageHelper.weatherNotificationsState.collectAsState(
         initial = false
+    )
+    val languageEnum by preferencesStorageHelper.languageEnum.collectAsState(
+        initial = LanguageEnum.ENGLISH
     )
 
     val notificationsPermissionLauncher = rememberLauncherForActivityResult(
@@ -90,11 +96,13 @@ fun SettingsLayout(
                 items = viewModel.weatherSettingsList
             ) { weatherSettings ->
                 when(weatherSettings) {
-                    is WeatherSettings.TemperatureType -> {
+                    WeatherSettings.TemperatureType,
+                    WeatherSettings.WeatherLanguage -> {
                         SelectionInputFieldRowLayout(
                             weatherSettings = weatherSettings
                         ) { selectedPosition ->
                             configureSelectionInputFieldResult(
+                                context = context,
                                 scope = scope,
                                 preferencesStorageHelper = preferencesStorageHelper,
                                 weatherSettings = weatherSettings,
@@ -109,8 +117,8 @@ fun SettingsLayout(
                                 )
                         )
                     }
-                    is WeatherSettings.OfflineMode,
-                    is WeatherSettings.WeatherNotifications -> {
+                    WeatherSettings.OfflineMode,
+                    WeatherSettings.WeatherNotifications -> {
                         SwitchInputFieldRowLayout(
                             weatherSettings = weatherSettings
                         ) { isChecked ->
@@ -144,9 +152,10 @@ fun SettingsLayout(
         }
     }
     LaunchedEffect(
-        key1 = temperatureUnitType,
-        key2 = offlineMode,
-        key3 = weatherNotificationsState
+        temperatureUnitType,
+        offlineMode,
+        weatherNotificationsState,
+        languageEnum
     ) {
         viewModel.weatherSettingsList.clear()
         viewModel.weatherSettingsList.add(
@@ -161,10 +170,17 @@ fun SettingsLayout(
         viewModel.weatherSettingsList.add(
             WeatherSettings.WeatherNotifications isEnabled weatherNotificationsState
         )
+        viewModel.weatherSettingsList.add(
+            WeatherSettings.WeatherLanguage.with(
+                context = context,
+                languageEnum = languageEnum
+            )
+        )
     }
 }
 
 private fun configureSelectionInputFieldResult(
+    context: Context,
     scope: CoroutineScope,
     preferencesStorageHelper: PreferencesStoreHelper,
     weatherSettings: WeatherSettings,
@@ -174,6 +190,12 @@ private fun configureSelectionInputFieldResult(
         WeatherSettings.TemperatureType ->
             scope.launch {
                 preferencesStorageHelper setTemperatureUnitType TemperatureUnitType.values()[selectedPosition]
+            }
+        WeatherSettings.WeatherLanguage ->
+            scope.launch {
+                preferencesStorageHelper setLanguageEnum LanguageEnum.values()[selectedPosition]
+                context setAppLanguage LanguageEnum.values()[selectedPosition].locale
+                (context as? WeatherActivity)?.restart()
             }
         else -> {}
     }

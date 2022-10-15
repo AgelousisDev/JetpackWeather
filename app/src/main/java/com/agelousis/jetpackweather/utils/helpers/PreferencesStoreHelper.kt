@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
+import com.agelousis.jetpackweather.utils.enumerations.LanguageEnum
 import com.agelousis.jetpackweather.utils.extensions.jsonString
 import com.agelousis.jetpackweather.utils.extensions.toModel
 import com.agelousis.jetpackweather.utils.extensions.valueEnumOrNull
@@ -24,6 +25,7 @@ class PreferencesStoreHelper(val context: Context) {
         val WEATHER_RESPONSE_MODE_DATA_KEY = stringPreferencesKey(name = "weatherResponseModelData")
         private val WEATHER_NOTIFICATION_STATE_KEY = booleanPreferencesKey(name = "weatherNotifications")
         val CURRENT_ADDRESS_DATA_KEY = stringPreferencesKey(name = "currentAddressData")
+        private val WEATHER_LANGUAGE_ENUM_KEY = stringPreferencesKey(name = "languageEnum")
     }
 
     suspend infix fun setTemperatureUnitType(temperatureUnitType: TemperatureUnitType) {
@@ -34,7 +36,8 @@ class PreferencesStoreHelper(val context: Context) {
 
     val temperatureUnitType
         get() = context.dataStore.data.map { preferences ->
-            valueEnumOrNull<TemperatureUnitType>(name = preferences[TEMPERATURE_UNIT_TYPE_KEY])
+            valueEnumOrNull(name = preferences[TEMPERATURE_UNIT_TYPE_KEY])
+                ?: TemperatureUnitType.CELSIUS
         }
 
     suspend infix fun setOfflineMode(offlineMode: Boolean) {
@@ -85,6 +88,18 @@ class PreferencesStoreHelper(val context: Context) {
             preferences[CURRENT_ADDRESS_DATA_KEY]?.takeIf {
                 it.isNotEmpty()
             }?.toModel<AddressDataModel>()
+        }
+
+    suspend infix fun setLanguageEnum(languageEnum: LanguageEnum) {
+        context.dataStore.edit { mutablePreferences ->
+            mutablePreferences[WEATHER_LANGUAGE_ENUM_KEY] = languageEnum.name
+        }
+    }
+
+    val languageEnum
+        get() = context.dataStore.data.map { preferences ->
+            valueEnumOrNull(name = preferences[WEATHER_LANGUAGE_ENUM_KEY])
+                ?: LanguageEnum.ENGLISH
         }
 
 }

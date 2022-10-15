@@ -23,7 +23,7 @@ sealed class WeatherDrawerNavigationScreen(
 
         infix fun fromRoute(
             route: String
-        ) = WeatherDrawerNavigationScreen.values.firstOrNull { weatherDrawerNavigationScreen ->
+        ) = values.firstOrNull { weatherDrawerNavigationScreen ->
             weatherDrawerNavigationScreen.route == route
         }
 
