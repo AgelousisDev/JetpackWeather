@@ -1,6 +1,5 @@
 package com.agelousis.jetpackweather.weather.ui
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -19,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.core.os.BuildCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agelousis.jetpackweather.ui.rows.SelectionInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.rows.SwitchInputFieldRowLayout
@@ -29,13 +27,14 @@ import com.agelousis.jetpackweather.utils.extensions.*
 import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
 import com.agelousis.jetpackweather.weather.WeatherActivity
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
-import com.agelousis.jetpackweather.weather.extensions.restart
+import com.agelousis.jetpackweather.weather.extensions.setAppLanguage
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-@SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun SettingsLayout(
     viewModel: WeatherViewModel,
@@ -124,7 +123,7 @@ fun SettingsLayout(
                         ) { isChecked ->
                             if (weatherSettings is WeatherSettings.WeatherNotifications
                                 && !context.arePermissionsGranted(android.Manifest.permission.POST_NOTIFICATIONS)
-                                && BuildCompat.isAtLeastT()
+                                && isAndroid13
                             ) {
                                 notificationsPermissionLauncher.launch(
                                     android.Manifest.permission.POST_NOTIFICATIONS
@@ -194,8 +193,9 @@ private fun configureSelectionInputFieldResult(
         WeatherSettings.WeatherLanguage ->
             scope.launch {
                 preferencesStorageHelper setLanguageEnum LanguageEnum.values()[selectedPosition]
-                context setAppLanguage LanguageEnum.values()[selectedPosition].locale
-                (context as? WeatherActivity)?.restart()
+                (context as? WeatherActivity)?.setAppLanguage(
+                    languageEnum = LanguageEnum.values()[selectedPosition]
+                )
             }
         else -> {}
     }

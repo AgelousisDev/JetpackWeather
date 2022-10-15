@@ -1,8 +1,8 @@
 package com.agelousis.jetpackweather.weather
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.core.view.WindowCompat
@@ -12,7 +12,7 @@ import com.agelousis.jetpackweather.utils.extensions.weatherDrawerNavigationType
 import com.agelousis.jetpackweather.weather.ui.WeatherActivityBottomNavigationLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 
-class WeatherActivity : ComponentActivity() {
+class WeatherActivity: AppCompatActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

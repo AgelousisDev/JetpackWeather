@@ -541,7 +541,7 @@ fun requestWeather(
     viewModel.requestForecast(
         context = context,
         navController = navController,
-        location = "%f,%f".format(
+        location = "%s,%s".format(
             latitude,
             longitude
         ),

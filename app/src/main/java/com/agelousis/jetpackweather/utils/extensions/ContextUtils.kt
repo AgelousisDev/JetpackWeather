@@ -1,6 +1,7 @@
 package com.agelousis.jetpackweather.utils.extensions
 
 import android.app.AlarmManager
+import android.app.LocaleManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -8,11 +9,13 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.LocaleList
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import androidx.core.os.LocaleListCompat
 import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.utils.receiver.WeatherAlarmReceiver
@@ -119,7 +122,10 @@ private infix fun Context.getLocalizedConfiguration(
 infix fun Context.setAppLanguage(
     language: String
 ) {
-    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(language))
+    if (isAndroid13)
+        (getSystemService(Context.LOCALE_SERVICE) as? LocaleManager)?.applicationLocales = LocaleList(Locale.forLanguageTag(language))
+    else
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(language))
 }
 
 val WindowSizeClass.weatherDrawerNavigationType

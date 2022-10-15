@@ -4,8 +4,8 @@ import android.content.Context
 import com.agelousis.jetpackweather.R
 
 enum class LanguageEnum(val locale: String) {
-    ENGLISH(locale = "en"),
-    GREEK(locale = "el");
+    ENGLISH(locale = "en-GB"),
+    GREEK(locale = "el-GR");
 
     companion object {
 

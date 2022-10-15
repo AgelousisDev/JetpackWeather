@@ -1,16 +1,15 @@
 package com.agelousis.jetpackweather.utils.helpers
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Looper
-import androidx.core.os.BuildCompat
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModelSuccessBlock
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
+import com.agelousis.jetpackweather.utils.extensions.isAndroid13
 import com.google.android.gms.location.*
 import java.util.*
 
@@ -30,16 +29,15 @@ class LocationHelper(
 
     companion object {
 
-        @SuppressLint("UnsafeOptInUsageError")
         fun getAddressFromLocation(
             context: Context,
             longitude: Double,
             latitude: Double,
             addressDataModelSuccessBlock: AddressDataModelSuccessBlock
         ) {
-            Geocoder(context, Locale.getDefault()).apply {
+            Geocoder(context, Locale.ENGLISH).apply {
                 try {
-                    if (BuildCompat.isAtLeastT())
+                    if (isAndroid13)
                         getFromLocation(
                             latitude,
                             longitude,
@@ -69,14 +67,13 @@ class LocationHelper(
             }
         }
 
-        @SuppressLint("UnsafeOptInUsageError")
         fun getLocationFromAddress(
             context: Context,
             strAddress: String,
             addressDataModelSuccessBlock: AddressDataModelSuccessBlock
         ) =
-            with(Geocoder(context, Locale.getDefault())) {
-                if (BuildCompat.isAtLeastT())
+            with(Geocoder(context, Locale.ENGLISH)) {
+                if (isAndroid13)
                     getFromLocationName(
                         strAddress,
                         1

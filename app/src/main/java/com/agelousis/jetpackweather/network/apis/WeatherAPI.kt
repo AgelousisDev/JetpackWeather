@@ -1,6 +1,6 @@
 package com.agelousis.jetpackweather.network.apis
 
-import android.content.res.Resources
+import androidx.appcompat.app.AppCompatDelegate
 import com.agelousis.jetpackweather.BuildConfig
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import retrofit2.Call
@@ -14,7 +14,7 @@ interface WeatherAPI {
         @Query(value = "key") apiKey: String = BuildConfig.WEATHER_API_KEY,
         @Query(value = "q") location: String,
         @Query(value = "aqi") airQualityState: String = "no",
-        @Query(value = "lang") lang: String = Resources.getSystem().configuration.locales[0].language
+        @Query(value = "lang") lang: String = AppCompatDelegate.getApplicationLocales()[0]?.language ?: "en"
     ): Call<WeatherResponseModel>
 
     @GET(value = "forecast.json")
@@ -24,7 +24,7 @@ interface WeatherAPI {
         @Query(value = "days") days: Int = 1,
         @Query(value = "aqi") airQualityState: String = "no",
         @Query(value = "alerts") alertsState: String = "no",
-        @Query(value = "lang") lang: String = Resources.getSystem().configuration.locales[0].language
+        @Query(value = "lang") lang: String = AppCompatDelegate.getApplicationLocales()[0]?.language ?: "en"
     ): Call<WeatherResponseModel>
 
 
