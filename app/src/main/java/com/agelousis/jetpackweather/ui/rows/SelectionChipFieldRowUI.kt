@@ -1,0 +1,166 @@
+package com.agelousis.jetpackweather.ui.rows
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import coil.compose.AsyncImage
+import com.agelousis.jetpackweather.ui.theme.Typography
+import com.agelousis.jetpackweather.utils.enumerations.LanguageEnum
+import com.agelousis.jetpackweather.weather.model.OptionModel
+import com.agelousis.jetpackweather.weather.model.WeatherSettings
+
+
+@Composable
+fun SelectionChipFieldRowLayout(
+    weatherSettings: WeatherSettings,
+    selectionInputFieldBlock: SelectionInputFieldBlock
+) {
+    var selectedOptionIndexState by remember {
+        mutableStateOf(
+            value = weatherSettings.optionModelList?.indexOf(
+                weatherSettings.selectedOptionModel
+            ) ?: -1
+        )
+    }
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(
+                height = 90.dp
+            )
+    ) {
+        val (labelConstrainedReference, chipGridLazyColumnConstrainedReference)
+                = createRefs()
+        Text(
+            text = stringResource(id = weatherSettings.label),
+            style = Typography.bodyMedium,
+            modifier = Modifier
+                .constrainAs(labelConstrainedReference) {
+                    start.linkTo(parent.start, 16.dp)
+                    top.linkTo(parent.top, 8.dp)
+                    end.linkTo(parent.end, 16.dp)
+                    width = Dimension.fillToConstraints
+                }
+        )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(
+                count = 3
+            ),
+            verticalArrangement = Arrangement.spacedBy(
+                space = 8.dp
+            ),
+            horizontalArrangement = Arrangement.spacedBy(
+                space = 8.dp
+            ),
+            contentPadding = PaddingValues(
+                vertical = 8.dp,
+                horizontal = 16.dp
+            ),
+            modifier = Modifier
+                .constrainAs(chipGridLazyColumnConstrainedReference) {
+                    start.linkTo(parent.start)
+                    top.linkTo(labelConstrainedReference.bottom)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                }
+        ) {
+            itemsIndexed(
+                items = weatherSettings.optionModelList
+                    ?: listOf()
+            ) { index, optionModel ->
+                SelectionChipLayout(
+                    modifier = Modifier
+                        .animateItemPlacement(),
+                    state = selectedOptionIndexState == index,
+                    weatherSettings = weatherSettings,
+                    index = index,
+                    optionModel = optionModel
+                ) { selectedIndex ->
+                    selectedOptionIndexState = selectedIndex
+                    selectionInputFieldBlock(
+                        selectedIndex
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SelectionChipLayout(
+    modifier: Modifier = Modifier,
+    state: Boolean,
+    weatherSettings: WeatherSettings,
+    index: Int,
+    optionModel: OptionModel,
+    selectionInputFieldBlock: SelectionInputFieldBlock
+) {
+    ElevatedFilterChip(
+        selected = state,
+        onClick = {
+            selectionInputFieldBlock(index)
+        },
+        leadingIcon = if (optionModel.icon != null) {
+            {
+                Icon(
+                    painter = painterResource(id = optionModel.icon),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.surfaceTint,
+                    modifier = Modifier
+                        .size(
+                            size = 20.dp
+                        )
+                )
+            }
+        }
+        else if (optionModel.iconUrl != null) {
+            {
+                AsyncImage(
+                    model = optionModel.iconUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(
+                            size = 20.dp
+                        )
+                        .clip(
+                            shape = CircleShape
+                        )
+                )
+            }
+        }else null,
+        label = {
+            Text(
+                text = optionModel.label,
+                style = Typography.labelMedium
+            )
+        },
+        enabled = weatherSettings.optionIsEnabled,
+        modifier = modifier
+    )
+}
+
+@Preview
+@Composable
+fun SelectionChipFieldRowLayoutPreview() {
+    SelectionChipFieldRowLayout(
+        weatherSettings = WeatherSettings.WeatherLanguage.with(
+            context = LocalContext.current,
+            languageEnum = LanguageEnum.ENGLISH
+        )
+    ) {}
+}

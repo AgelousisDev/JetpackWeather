@@ -9,6 +9,8 @@ enum class LanguageEnum(val locale: String) {
 
     companion object {
 
+        private const val COUNTRY_FLAG_URL = "https://flagpedia.net/data/flags/normal/%s.png"
+
         infix fun languagesFrom(
             context: Context
         ): Array<String> = context.resources.getStringArray(R.array.key_languages_array)
@@ -20,5 +22,17 @@ enum class LanguageEnum(val locale: String) {
     ): String = context.resources.getStringArray(
         R.array.key_languages_array
     )[ordinal]
+
+    private val countryCode
+        get() = when(this) {
+            ENGLISH -> "GB"
+            GREEK -> "GR"
+        }
+
+    val iconUrl
+        get() = String.format(
+            COUNTRY_FLAG_URL,
+            countryCode.lowercase()
+        )
 
 }

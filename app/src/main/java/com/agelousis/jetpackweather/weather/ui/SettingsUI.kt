@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.agelousis.jetpackweather.ui.rows.SelectionChipFieldRowLayout
 import com.agelousis.jetpackweather.ui.rows.SelectionInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.rows.SwitchInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.theme.weatherBackgroundGradient
@@ -31,6 +32,7 @@ import com.agelousis.jetpackweather.weather.extensions.setAppLanguage
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -93,8 +95,7 @@ fun SettingsLayout(
                 items = viewModel.weatherSettingsList
             ) { weatherSettings ->
                 when(weatherSettings) {
-                    WeatherSettings.TemperatureType,
-                    WeatherSettings.WeatherLanguage -> {
+                    WeatherSettings.TemperatureType -> {
                         SelectionInputFieldRowLayout(
                             weatherSettings = weatherSettings
                         ) { selectedPosition ->
@@ -134,6 +135,26 @@ fun SettingsLayout(
                                 preferencesStorageHelper = preferencesStorageHelper,
                                 weatherSettings = weatherSettings,
                                 isChecked = isChecked
+                            )
+                        }
+                        Divider(
+                            thickness = 0.5.dp,
+                            modifier = Modifier
+                                .padding(
+                                    start = 16.dp
+                                )
+                        )
+                    }
+                    WeatherSettings.WeatherLanguage -> {
+                        SelectionChipFieldRowLayout(
+                            weatherSettings = weatherSettings
+                        ) { selectedPosition ->
+                            configureSelectionInputFieldResult(
+                                context = context,
+                                scope = scope,
+                                preferencesStorageHelper = preferencesStorageHelper,
+                                weatherSettings = weatherSettings,
+                                selectedPosition = selectedPosition
                             )
                         }
                         Divider(
@@ -191,6 +212,9 @@ private fun configureSelectionInputFieldResult(
         WeatherSettings.WeatherLanguage ->
             scope.launch {
                 preferencesStorageHelper setLanguageEnum LanguageEnum.values()[selectedPosition]
+                delay(
+                    timeMillis = 500L
+                )
                 (context as? WeatherActivity)?.setAppLanguage(
                     languageEnum = LanguageEnum.values()[selectedPosition]
                 )

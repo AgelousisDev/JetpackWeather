@@ -19,8 +19,8 @@
     <string name="key_sun_and_moon_label">Ήλιος &amp; Φεγγάρι</string>
     <string name="key_sunrise_label">Ανατολή ηλίου</string>
     <string name="key_moonrise_label">Ανατολή Σελήνης</string>
-    <string name="key_sunset_label">"Δύση του ηλιου "</string>
-    <string name="key_moon_set_label">Moonset</string>
+    <string name="key_sunset_label">Δύση του ηλιου</string>
+    <string name="key_moon_set_label">Δύση του φεγγαριού</string>
     <string name="key_temperature_label">Θερμοκρασία</string>
     <string name="key_wind_label">Άνεμος</string>
     <string name="key_km_hourly_label">km/h</string>
@@ -82,7 +82,7 @@
     <string name="key_widget_preview_location_label">CA 94043, USA</string>
     <string name="key_widget_preview_date_time_label">Τελευταία ενημέρωση Τρ, 20 Σεπ 2022 01:45</string>
     <string name="key_widget_preview_temperature_label">20°C</string>
-    <string name="key_widget_preview_condition_label">"Μερικώς συννεφιασμένος "</string>
+    <string name="key_widget_preview_condition_label">Μερικώς συννεφιασμένος</string>
     <string name="key_widget_preview_feels_like_temperature_label">Αισθάνεται σαν 19°C</string>
     <string name="key_widget_preview_wind_speed_label">3</string>
     <string name="key_widget_preview_kilometers_by_hour_label">km/h</string>
