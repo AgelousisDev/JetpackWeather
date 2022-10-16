@@ -53,6 +53,7 @@ fun WeatherDrawerNavigation(
                             bottomEnd = 32.dp
                         ),
                         modifier = Modifier
+
                             .background(
                                 color = Color.Transparent
                             )

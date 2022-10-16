@@ -1,5 +1,6 @@
 package com.agelousis.jetpackweather.ui.rows
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -9,14 +10,19 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.utils.enumerations.LanguageEnum
 import com.agelousis.jetpackweather.weather.model.OptionModel
@@ -39,7 +45,20 @@ fun SelectionChipFieldRowLayout(
         modifier = Modifier
             .fillMaxWidth()
             .height(
-                height = 90.dp
+                height = when(LocalConfiguration.current.orientation) {
+                    Configuration.ORIENTATION_LANDSCAPE ->
+                        weatherSettings.optionModelList?.size?.takeIf { size ->
+                            size >= 4
+                        }?.let { size ->
+                            (size / 4) * 90.dp
+                        } ?: 90.dp
+                    else ->
+                        weatherSettings.optionModelList?.size?.takeIf { size ->
+                            size >= 3
+                        }?.let { size ->
+                            (size / 3) * 90.dp
+                        } ?: 90.dp
+                }
             )
     ) {
         val (labelConstrainedReference, chipGridLazyColumnConstrainedReference)
@@ -57,7 +76,10 @@ fun SelectionChipFieldRowLayout(
         )
         LazyVerticalGrid(
             columns = GridCells.Fixed(
-                count = 3
+                count = when(LocalConfiguration.current.orientation) {
+                    Configuration.ORIENTATION_LANDSCAPE -> 4
+                    else -> 3
+                }
             ),
             verticalArrangement = Arrangement.spacedBy(
                 space = 8.dp
@@ -131,14 +153,28 @@ private fun SelectionChipLayout(
         else if (optionModel.iconUrl != null) {
             {
                 AsyncImage(
-                    model = optionModel.iconUrl,
+                    model = ImageRequest
+                        .Builder(
+                            context = LocalContext.current
+                        )
+                        .data(
+                            data = optionModel.iconUrl
+                        )
+                        .crossfade(
+                            enable = true
+                        )
+                        .build(),
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(
                             size = 20.dp
                         )
                         .clip(
                             shape = CircleShape
+                        )
+                        .shadow(
+                            elevation = 8.dp
                         )
                 )
             }

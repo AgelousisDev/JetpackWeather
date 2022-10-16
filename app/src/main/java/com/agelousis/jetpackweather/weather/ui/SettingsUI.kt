@@ -20,7 +20,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agelousis.jetpackweather.ui.rows.SelectionChipFieldRowLayout
-import com.agelousis.jetpackweather.ui.rows.SelectionInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.rows.SwitchInputFieldRowLayout
 import com.agelousis.jetpackweather.ui.theme.weatherBackgroundGradient
 import com.agelousis.jetpackweather.utils.enumerations.LanguageEnum
@@ -95,7 +94,7 @@ fun SettingsLayout(
                 items = viewModel.weatherSettingsList
             ) { weatherSettings ->
                 when(weatherSettings) {
-                    WeatherSettings.TemperatureType -> {
+                    /*WeatherSettings.TemperatureType -> {
                         SelectionInputFieldRowLayout(
                             weatherSettings = weatherSettings
                         ) { selectedPosition ->
@@ -114,7 +113,7 @@ fun SettingsLayout(
                                     start = 16.dp
                                 )
                         )
-                    }
+                    }*/
                     WeatherSettings.OfflineMode,
                     WeatherSettings.WeatherNotifications -> {
                         SwitchInputFieldRowLayout(
@@ -145,6 +144,7 @@ fun SettingsLayout(
                                 )
                         )
                     }
+                    WeatherSettings.TemperatureType,
                     WeatherSettings.WeatherLanguage -> {
                         SelectionChipFieldRowLayout(
                             weatherSettings = weatherSettings

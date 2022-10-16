@@ -124,9 +124,6 @@ fun WeatherActivityBottomNavigationLayout(
                 painter = painterResource(id = R.drawable.app_icon_foreground),
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(
-                        top = 32.dp
-                    )
                     .align(
                         alignment = Alignment.CenterHorizontally
                     )
