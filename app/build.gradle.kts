@@ -3,24 +3,23 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.plugin.parcelize")
-    id("com.github.ben-manes.versions") version "0.42.0"
+    id("com.github.ben-manes.versions") version "0.43.0"
 }
 
-val navVersion = "2.6.0-alpha02"
-val composeVersion = "1.3.0-rc01"
+val navVersion = "2.6.0-alpha03"
+val composeVersion = "1.4.0-alpha01"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.1.0-alpha04"
-val composeActivityVersion = "1.7.0-alpha01"
-val composeMaterialYouVersion = "1.0.0-rc01"
-val liveDataViewModelVersion = "2.6.0-alpha02"
+val composeActivityVersion = "1.7.0-alpha02"
+val composeMaterialYouVersion = "1.1.0-alpha01"
+val liveDataViewModelVersion = "2.6.0-alpha03"
 val playServicesMapsVersion = "18.1.0"
-val playServicesLocationVersion = "20.0.0"
-val materialYouVersion = "1.8.0-alpha01"
+val playServicesLocationVersion = "21.0.0"
+val materialYouVersion = "1.8.0-alpha02"
 val appCompatVersion = "1.7.0-alpha01"
 val lottieComposeVersion = "5.2.0"
-val browserVersion = "1.4.0"
+val browserVersion = "1.5.0-alpha01"
 val dataStorePreferenceVersion = "1.0.0"
-val composeMaterialYouWindowSizeVersion = "1.0.0-rc01"
 
 android {
     compileSdk = 33
@@ -98,7 +97,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:$composeActivityVersion")
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     implementation("androidx.compose.material3:material3:$composeMaterialYouVersion")
-    implementation("androidx.compose.material3:material3-window-size-class:$composeMaterialYouWindowSizeVersion")
+    implementation("androidx.compose.material3:material3-window-size-class:$composeMaterialYouVersion")
     implementation("androidx.compose.ui:ui-viewbinding:$composeVersion")
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
@@ -115,7 +114,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha02")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     // Google Maps
@@ -124,14 +123,14 @@ dependencies {
     implementation("com.google.maps.android:maps-compose:2.7.2")
 
     // Accompanist
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.26.5-rc")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.4-beta01")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0-beta01")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0-beta02")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")

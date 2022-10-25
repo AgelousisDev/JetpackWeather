@@ -19,10 +19,9 @@ typealias LocationPermissionsDeclinedBlock = () -> Unit
 class LocationHelper(
         private val context: Context,
         private val removeLocationUpdates: Boolean = true,
-        private val fastestInterval: Long? = null,
         private val interval: Long? = null,
         private val priority: Int? = null,
-        private val smallestDisplacement: Float? = null,
+        private val smallestDisplacement: Float = 100f,
         locationPermissionsDeclinedBlock: LocationPermissionsDeclinedBlock? = null,
         private val locationSuccessBlock: LocationSuccessBlock
 ): LocationCallback() {
@@ -139,14 +138,12 @@ class LocationHelper(
     }
 
     private val locationRequest by lazy {
-        val locationRequest = LocationRequest.create()
-                .setPriority(priority ?: Priority.PRIORITY_BALANCED_POWER_ACCURACY)
-                .setInterval(interval ?: (10L * 1000))
-                .setFastestInterval(fastestInterval ?: 10000)
-        smallestDisplacement?.let {
-            locationRequest.smallestDisplacement = it
-        }
-        locationRequest
+        LocationRequest.Builder(
+            priority ?: Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+            interval ?: (10L * 1000)
+        )
+            .setMinUpdateDistanceMeters(smallestDisplacement)
+            .build()
     }
 
     init {

@@ -45,19 +45,23 @@ fun SelectionChipFieldRowLayout(
         modifier = Modifier
             .fillMaxWidth()
             .height(
-                height = when(LocalConfiguration.current.orientation) {
+                height = when (LocalConfiguration.current.orientation) {
                     Configuration.ORIENTATION_LANDSCAPE ->
-                        weatherSettings.optionModelList?.size?.takeIf { size ->
-                            size >= 4
-                        }?.let { size ->
-                            (size / 4) * 90.dp
-                        } ?: 90.dp
+                        weatherSettings.optionModelList?.size
+                            ?.takeIf { size ->
+                                size >= 4
+                            }
+                            ?.let { size ->
+                                (size / 4) * 90.dp
+                            } ?: 90.dp
                     else ->
-                        weatherSettings.optionModelList?.size?.takeIf { size ->
-                            size >= 3
-                        }?.let { size ->
-                            (size / 3) * 90.dp
-                        } ?: 90.dp
+                        weatherSettings.optionModelList?.size
+                            ?.takeIf { size ->
+                                size >= 3
+                            }
+                            ?.let { size ->
+                                (size / 3) * 90.dp
+                            } ?: 90.dp
                 }
             )
     ) {
@@ -137,6 +141,7 @@ private fun SelectionChipLayout(
         onClick = {
             selectionInputFieldBlock(index)
         },
+        border = FilterChipDefaults.filterChipBorder(),
         leadingIcon = if (optionModel.icon != null) {
             {
                 Icon(
