@@ -15,7 +15,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.core.content.ContextCompat
-import androidx.core.os.BuildCompat
 import androidx.core.os.LocaleListCompat
 import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.utils.receiver.WeatherAlarmReceiver
