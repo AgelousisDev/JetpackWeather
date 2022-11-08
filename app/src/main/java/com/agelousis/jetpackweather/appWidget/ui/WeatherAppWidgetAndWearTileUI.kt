@@ -37,7 +37,7 @@ private val weatherAppWidgetGlanceModifier =
         )
 
 @Composable
-fun WeatherAppWidgetAndWearTileLayout() {
+fun WeatherAppWidgetLayout() {
     val context = LocalContext.current
     val preferences = currentState<Preferences>()
     val weatherResponseModel = preferences[
