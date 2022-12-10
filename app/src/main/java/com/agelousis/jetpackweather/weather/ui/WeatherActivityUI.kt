@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
@@ -31,7 +30,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.agelousis.jetpackweather.R
-import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.mapAddressPicker.MapAddressPickerActivity
 import com.agelousis.jetpackweather.network.repositories.SuccessUnitBlock
 import com.agelousis.jetpackweather.ui.composableView.*
@@ -41,6 +39,7 @@ import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.ui.theme.slideVertically
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
+import com.agelousis.jetpackweather.utils.extensions.getParcelable
 import com.agelousis.jetpackweather.utils.helpers.LocationHelper
 import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
@@ -66,7 +65,7 @@ fun WeatherActivityBottomNavigationLayout(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
-    val showDialogState by viewModel.showDialog.collectAsState()
+    val showDialogState by viewModel.showDialogStateFlow.collectAsState()
     val isRefreshing by viewModel.swipeRefreshStateFlow.collectAsState()
     var requestLocationOnStartupState by remember {
         mutableStateOf(value = true)
@@ -326,11 +325,7 @@ fun WeatherAppBarActions(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            viewModel.addressDataModelMutableStateFlow.value =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                    activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS, AddressDataModel::class.java)
-                else
-                    activityResult.data?.getParcelableExtra(MapAddressPickerActivity.CURRENT_ADDRESS)
+            viewModel.addressDataModelMutableStateFlow.value = activityResult.data?.getParcelable(MapAddressPickerActivity.CURRENT_ADDRESS)
             scope.launch {
                 preferencesStoreHelper setCurrentAddressData viewModel.addressDataModelStateFlow.value
             }

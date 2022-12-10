@@ -3,22 +3,22 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.plugin.parcelize")
-    id("com.github.ben-manes.versions") version "0.43.0"
+    id("com.github.ben-manes.versions") version "0.44.0"
 }
 
-val navVersion = "2.6.0-alpha03"
-val composeVersion = "1.4.0-alpha01"
+val navVersion = "2.6.0-alpha04"
+val composeVersion = "1.4.0-alpha03"
 val constraintLayoutVersion = "2.1.3"
-val constraintLayoutComposeVersion = "1.1.0-alpha04"
+val constraintLayoutComposeVersion = "1.1.0-alpha05"
 val composeActivityVersion = "1.7.0-alpha02"
-val composeMaterialYouVersion = "1.1.0-alpha01"
+val composeMaterialYouVersion = "1.1.0-alpha03"
 val liveDataViewModelVersion = "2.6.0-alpha03"
 val playServicesMapsVersion = "18.1.0"
-val playServicesLocationVersion = "21.0.0"
-val materialYouVersion = "1.8.0-alpha02"
+val playServicesLocationVersion = "21.0.1"
+val materialYouVersion = "1.8.0-beta01"
 val appCompatVersion = "1.7.0-alpha01"
 val lottieComposeVersion = "5.2.0"
-val browserVersion = "1.5.0-alpha01"
+val browserVersion = "1.5.0-alpha02"
 val dataStorePreferenceVersion = "1.0.0"
 
 android {
@@ -73,7 +73,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = "1.4.0-alpha02"
     }
     packagingOptions {
         resources {
@@ -114,23 +114,20 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha03")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha04")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     // Google Maps
     implementation("com.google.android.gms:play-services-location:$playServicesLocationVersion")
     implementation("com.google.android.gms:play-services-maps:$playServicesMapsVersion")
-    implementation("com.google.maps.android:maps-compose:2.7.2")
-
-    // Accompanist
-    implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
+    implementation("com.google.maps.android:maps-compose:2.7.3")
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
 
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.4-beta01")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0-beta02")
+    androidTestImplementation("androidx.test.ext:junit:1.1.4")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")

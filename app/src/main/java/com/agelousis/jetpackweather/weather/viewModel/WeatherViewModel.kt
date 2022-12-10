@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
@@ -15,6 +14,7 @@ import com.agelousis.jetpackweather.network.repositories.SuccessBlock
 import com.agelousis.jetpackweather.network.repositories.WeatherRepository
 import com.agelousis.jetpackweather.network.response.WeatherResponseModel
 import com.agelousis.jetpackweather.ui.models.HeaderModel
+import com.agelousis.jetpackweather.ui.viewModel.UIComposeViewModel
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.toDate
 import com.agelousis.jetpackweather.utils.extensions.toDisplayDate
@@ -24,12 +24,11 @@ import com.agelousis.jetpackweather.weather.model.WeatherSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
-class WeatherViewModel: ViewModel() {
+class WeatherViewModel: UIComposeViewModel() {
 
     private val uiScope = CoroutineScope(context = Dispatchers.Main)
 
@@ -45,39 +44,18 @@ class WeatherViewModel: ViewModel() {
         value = WeatherNavigationScreen.Today.route
     )
 
-    private val loaderStateMutableStateFlow = MutableStateFlow(value = false)
-    val loaderStateStateFlow: StateFlow<Boolean> = loaderStateMutableStateFlow.asStateFlow()
-
-    private val networkErrorMutableStateFlow = MutableStateFlow(value = false)
-    val networkErrorStateFlow: StateFlow<Boolean> = networkErrorMutableStateFlow.asStateFlow()
-
-    private val _showDialog = MutableStateFlow(value = false)
-    val showDialog: StateFlow<Boolean> = _showDialog.asStateFlow()
-
-    val requestLocationMutableState = MutableStateFlow(value = false)
-    val requestLocationState: StateFlow<Boolean> = requestLocationMutableState.asStateFlow()
-
-    var alertPair by mutableStateOf<Pair<String?, String?>>(value = null to null)
-
-    private fun showDialog() {
-        _showDialog.value = true
-    }
-
-    val swipeRefreshMutableStateFlow = MutableStateFlow(value = false)
-    val swipeRefreshStateFlow: StateFlow<Boolean> = swipeRefreshMutableStateFlow.asStateFlow()
-
     val lazyColumnFirstChildVisibilityMutableStateFlow = MutableStateFlow(value = true)
     val lazyColumnFirstChildVisibilityStateFlow = lazyColumnFirstChildVisibilityMutableStateFlow.asStateFlow()
 
     fun onDialogConfirm() {
         alertPair = null to null
-        _showDialog.value = false
+        showDialogMutableStateFlow.value = false
         // Continue with executing the confirmed action
     }
 
     fun onDialogDismiss() {
         alertPair = null to null
-        _showDialog.value = false
+        showDialogMutableStateFlow.value = false
     }
 
     var locationPermissionState by mutableStateOf(
