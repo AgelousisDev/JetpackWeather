@@ -2,7 +2,6 @@ package com.agelousis.jetpackweather.network.response
 
 import android.content.Context
 import com.agelousis.jetpackweather.R
-import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 import com.google.gson.annotations.SerializedName
 

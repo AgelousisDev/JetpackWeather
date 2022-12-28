@@ -20,6 +20,7 @@ val appCompatVersion = "1.7.0-alpha01"
 val lottieComposeVersion = "5.2.0"
 val browserVersion = "1.5.0-alpha02"
 val dataStorePreferenceVersion = "1.0.0"
+val googleMapsComposeVersion = "2.8.0"
 
 android {
     compileSdk = 33
@@ -107,7 +108,7 @@ dependencies {
     implementation("androidx.glance:glance-wear-tiles:1.0.0-alpha05")
     // Retrofit & OkHttp
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.8")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
 
     // Navigation
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
@@ -120,7 +121,7 @@ dependencies {
     // Google Maps
     implementation("com.google.android.gms:play-services-location:$playServicesLocationVersion")
     implementation("com.google.android.gms:play-services-maps:$playServicesMapsVersion")
-    implementation("com.google.maps.android:maps-compose:2.7.3")
+    implementation("com.google.maps.android:maps-compose:$googleMapsComposeVersion")
 
     // Lottie
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")

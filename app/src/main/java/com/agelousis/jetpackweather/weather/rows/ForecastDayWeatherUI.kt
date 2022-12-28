@@ -10,10 +10,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.network.response.CurrentDayWeatherDataModel
+import com.agelousis.jetpackweather.ui.composableView.LinkText
+import com.agelousis.jetpackweather.ui.composableView.LinkTextData
 import com.agelousis.jetpackweather.ui.theme.Typography
 import com.agelousis.jetpackweather.ui.theme.textViewHeaderFont
 import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
@@ -82,13 +88,23 @@ fun ForecastDayWeatherLayout(
                 space = 16.dp
             )
         ) {
-            Text(
-                text = currentDayWeatherDataModel.maxWindKph?.toInt()?.toString()
-                    ?: "",
-                style = textViewHeaderFont,
-                color = colorResource(
-                    id = currentDayWeatherDataModel.windStateColor
-                )
+            LinkText(
+                linkTextData = listOf(
+                    LinkTextData(
+                        text = currentDayWeatherDataModel.maxWindKph?.toInt()?.toString()
+                            ?: "",
+                        textColor = colorResource(
+                            id = currentDayWeatherDataModel.windStateColor
+                        )
+                    ),
+                    LinkTextData(
+                        text = stringResource(id = R.string.key_km_hourly_label),
+                        textColor = colorResource(id = R.color.grey),
+                        fontWeight = FontWeight.Light,
+                        fontSize = 12.sp
+                    )
+                ),
+                style = textViewHeaderFont
             )
             Text(
                 text = currentDayWeatherDataModel.getWindStateWarning(
@@ -121,4 +137,32 @@ fun ForecastDayWeatherLayout(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun ForecastDayWeatherLayoutPreview() {
+    ForecastDayWeatherLayout(
+        currentDayWeatherDataModel = CurrentDayWeatherDataModel(
+            maxTempC = 60.0,
+            maxTempF = 100.0,
+            minTempC = 10.0,
+            minTempF = 50.0,
+            avgTempC = 50.0,
+            avgTempF = 75.0,
+            maxWindMph = 50.0,
+            maxWindKph = 80.0,
+            totalPrecipMm = null,
+            totalPrecipIn = null,
+            avgVisKm = null,
+            avgVisMiles = null,
+            avgHumidity = 5.0,
+            dailyWillItRain = null,
+            dailyWillItSnow = null,
+            dailyChanceOfRain = null,
+            dailyChanceOfSnow = null,
+            weatherConditionDataModel = null,
+            uv = 7.0
+        )
+    )
 }
