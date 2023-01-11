@@ -15,7 +15,7 @@ val composeMaterialYouVersion = "1.1.0-alpha03"
 val liveDataViewModelVersion = "2.6.0-alpha03"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "21.0.1"
-val materialYouVersion = "1.8.0-beta01"
+val materialYouVersion = "1.8.0-rc01"
 val appCompatVersion = "1.7.0-alpha01"
 val lottieComposeVersion = "5.2.0"
 val browserVersion = "1.5.0-alpha02"
@@ -108,7 +108,7 @@ dependencies {
     implementation("androidx.glance:glance-wear-tiles:1.0.0-alpha05")
     // Retrofit & OkHttp
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
 
     // Navigation
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
@@ -127,8 +127,8 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
 
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.4")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
