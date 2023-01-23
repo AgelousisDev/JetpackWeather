@@ -7,20 +7,20 @@ plugins {
 }
 
 val navVersion = "2.6.0-alpha04"
-val composeVersion = "1.4.0-alpha03"
+val composeVersion = "1.4.0-alpha04"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.1.0-alpha05"
-val composeActivityVersion = "1.7.0-alpha02"
-val composeMaterialYouVersion = "1.1.0-alpha03"
-val liveDataViewModelVersion = "2.6.0-alpha03"
+val composeActivityVersion = "1.7.0-alpha03"
+val composeMaterialYouVersion = "1.1.0-alpha04"
+val liveDataViewModelVersion = "2.6.0-alpha04"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "21.0.1"
-val materialYouVersion = "1.8.0-rc01"
+val materialYouVersion = "1.9.0-alpha01"
 val appCompatVersion = "1.7.0-alpha01"
 val lottieComposeVersion = "5.2.0"
-val browserVersion = "1.5.0-alpha02"
+val browserVersion = "1.5.0-beta01"
 val dataStorePreferenceVersion = "1.0.0"
-val googleMapsComposeVersion = "2.8.0"
+val googleMapsComposeVersion = "2.8.1"
 
 android {
     compileSdk = 33
@@ -74,7 +74,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0-alpha02"
+        kotlinCompilerExtensionVersion = "1.4.0"
     }
     packagingOptions {
         resources {
