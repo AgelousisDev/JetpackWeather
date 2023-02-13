@@ -3,32 +3,32 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.plugin.parcelize")
-    id("com.github.ben-manes.versions") version "0.44.0"
+    id("com.github.ben-manes.versions") version "0.45.0"
 }
 
-val navVersion = "2.6.0-alpha04"
-val composeVersion = "1.4.0-alpha04"
+val navVersion = "2.6.0-alpha05"
+val composeVersion = "1.4.0-beta01"
 val constraintLayoutVersion = "2.1.3"
-val constraintLayoutComposeVersion = "1.1.0-alpha05"
-val composeActivityVersion = "1.7.0-alpha03"
-val composeMaterialYouVersion = "1.1.0-alpha04"
-val liveDataViewModelVersion = "2.6.0-alpha04"
+val constraintLayoutComposeVersion = "1.1.0-alpha07"
+val composeActivityVersion = "1.8.0-alpha01"
+val composeMaterialYouVersion = "1.1.0-alpha06"
+val liveDataViewModelVersion = "2.6.0-beta01"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "21.0.1"
 val materialYouVersion = "1.9.0-alpha01"
-val appCompatVersion = "1.7.0-alpha01"
+val appCompatVersion = "1.7.0-alpha02"
 val lottieComposeVersion = "5.2.0"
 val browserVersion = "1.5.0-beta01"
 val dataStorePreferenceVersion = "1.0.0"
 val googleMapsComposeVersion = "2.8.1"
 
 android {
-    compileSdk = 33
+    compileSdkPreview = "UpsideDownCake"
 
     defaultConfig {
         applicationId = "com.agelousis.jetpackweather"
         minSdk = 27
-        targetSdk = 33
+        targetSdkPreview = "UpsideDownCake"
         versionCode = 1
         versionName = "1.0"
 
@@ -74,7 +74,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = "1.4.2"
     }
     packagingOptions {
         resources {
@@ -115,7 +115,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha04")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha05")
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
 
     // Google Maps
