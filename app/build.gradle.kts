@@ -6,12 +6,12 @@ plugins {
     id("com.github.ben-manes.versions") version "0.46.0"
 }
 
-val navVersion = "2.6.0-alpha06"
-val composeVersion = "1.4.0-beta02"
+val navVersion = "2.6.0-alpha07"
+val composeVersion = "1.4.0-rc01"
 val constraintLayoutVersion = "2.1.3"
-val constraintLayoutComposeVersion = "1.1.0-alpha07"
-val composeActivityVersion = "1.8.0-alpha01"
-val composeMaterialYouVersion = "1.1.0-alpha07"
+val constraintLayoutComposeVersion = "1.1.0-alpha08"
+val composeActivityVersion = "1.8.0-alpha02"
+val composeMaterialYouVersion = "1.1.0-alpha08"
 val liveDataViewModelVersion = "2.6.0-rc01"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "21.0.1"
