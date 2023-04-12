@@ -6,12 +6,12 @@ plugins {
     id("com.github.ben-manes.versions") version "0.46.0"
 }
 
-val navVersion = "2.6.0-alpha08"
-val composeVersion = "1.5.0-alpha01"
+val navVersion = "2.6.0-alpha09"
+val composeVersion = "1.5.0-alpha02"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.1.0-alpha09"
 val composeActivityVersion = "1.8.0-alpha02"
-val composeMaterialYouVersion = "1.1.0-beta01"
+val composeMaterialYouVersion = "1.1.0-beta02"
 val liveDataViewModelVersion = "2.6.1"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "21.0.1"
@@ -103,7 +103,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$liveDataViewModelVersion")
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("io.coil-kt:coil-compose:2.3.0")
     implementation("androidx.glance:glance-appwidget:1.0.0-alpha05")
     implementation("androidx.glance:glance-wear-tiles:1.0.0-alpha05")
     // Retrofit & OkHttp
@@ -128,7 +128,7 @@ dependencies {
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha01")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha-8")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha01")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
