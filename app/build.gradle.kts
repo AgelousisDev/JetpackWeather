@@ -6,12 +6,12 @@ plugins {
     id("com.github.ben-manes.versions") version "0.46.0"
 }
 
-val navVersion = "2.6.0-alpha09"
-val composeVersion = "1.5.0-alpha02"
+val navVersion = "2.6.0-beta01"
+val composeVersion = "1.5.0-alpha03"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.1.0-alpha09"
-val composeActivityVersion = "1.8.0-alpha02"
-val composeMaterialYouVersion = "1.1.0-beta02"
+val composeActivityVersion = "1.8.0-alpha03"
+val composeMaterialYouVersion = "1.1.0-rc01"
 val liveDataViewModelVersion = "2.6.1"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "21.0.1"
@@ -74,7 +74,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.4"
+        kotlinCompilerExtensionVersion = "1.4.6"
     }
     packagingOptions {
         resources {

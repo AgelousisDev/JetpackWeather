@@ -1,14 +1,13 @@
 package com.agelousis.jetpackweather.utils.extensions
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Parcelable
-import androidx.core.os.BuildCompat
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.google.gson.Gson
 import okio.IOException
@@ -111,8 +110,7 @@ infix fun Bitmap.rotate(
 )
 
 val isAndroid13
-    @SuppressLint("UnsafeOptInUsageError")
-    get() = BuildCompat.isAtLeastT()
+    get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
 inline fun <reified T: Parcelable> Intent.getParcelable(
     key: String
