@@ -81,9 +81,11 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+    namespace = "com.agelousis.jetpackweather"
 }
 
 dependencies {
+    implementation("androidx.core:core-ktx:1.10.0")
     // Native
     implementation("com.google.android.material:material:$materialYouVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
