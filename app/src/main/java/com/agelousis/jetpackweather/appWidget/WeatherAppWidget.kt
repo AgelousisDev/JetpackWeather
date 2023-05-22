@@ -1,8 +1,10 @@
 package com.agelousis.jetpackweather.appWidget
 
-import androidx.compose.runtime.Composable
+import android.content.Context
+import androidx.glance.GlanceId
 import androidx.glance.action.*
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.provideContent
 import androidx.glance.state.GlanceStateDefinition
 import com.agelousis.jetpackweather.appWidget.helper.CustomGlanceStateDefinition
 import com.agelousis.jetpackweather.appWidget.ui.WeatherAppWidgetLayout
@@ -17,10 +19,15 @@ class WeatherAppWidget: GlanceAppWidget() {
     override val stateDefinition: GlanceStateDefinition<*>
         get() = CustomGlanceStateDefinition
 
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        provideContent {
+            WeatherAppWidgetLayout()
+        }
+    }
 
-    @Composable
+    /*@Composable
     override fun Content() {
         WeatherAppWidgetLayout()
-    }
+    }*/
 
 }

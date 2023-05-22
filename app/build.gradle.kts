@@ -6,19 +6,19 @@ plugins {
     id("com.github.ben-manes.versions") version "0.46.0"
 }
 
-val navVersion = "2.6.0-beta01"
-val composeVersion = "1.5.0-alpha03"
+val navVersion = "2.6.0-rc01"
+val composeVersion = "1.5.0-alpha04"
 val constraintLayoutVersion = "2.1.3"
 val constraintLayoutComposeVersion = "1.1.0-alpha09"
-val composeActivityVersion = "1.8.0-alpha03"
-val composeMaterialYouVersion = "1.1.0-rc01"
+val composeActivityVersion = "1.8.0-alpha04"
+val composeMaterialYouVersion = "1.2.0-alpha01"
 val liveDataViewModelVersion = "2.6.1"
 val playServicesMapsVersion = "18.1.0"
 val playServicesLocationVersion = "21.0.1"
 val materialYouVersion = "1.9.0-beta01"
 val appCompatVersion = "1.7.0-alpha02"
 val lottieComposeVersion = "6.0.0"
-val browserVersion = "1.5.0-beta01"
+val browserVersion = "1.6.0-alpha01"
 val dataStorePreferenceVersion = "1.0.0"
 val googleMapsComposeVersion = "2.8.1"
 
@@ -74,7 +74,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.6"
+        kotlinCompilerExtensionVersion = "1.4.7"
     }
     packagingOptions {
         resources {
@@ -85,7 +85,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.core:core-ktx:1.12.0-alpha04")
     // Native
     implementation("com.google.android.material:material:$materialYouVersion")
     implementation("androidx.appcompat:appcompat:$appCompatVersion")
@@ -105,8 +105,8 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
     implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$liveDataViewModelVersion")
-    implementation("io.coil-kt:coil-compose:2.3.0")
-    implementation("androidx.glance:glance-appwidget:1.0.0-alpha05")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("androidx.glance:glance-appwidget:1.0.0-beta01")
     implementation("androidx.glance:glance-wear-tiles:1.0.0-alpha05")
     // Retrofit & OkHttp
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
