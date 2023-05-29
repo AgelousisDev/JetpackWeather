@@ -6,31 +6,15 @@ plugins {
     id("com.github.ben-manes.versions") version "0.46.0"
 }
 
-val navVersion = "2.7.0-alpha01"
-val composeVersion = "1.5.0-beta01"
-val constraintLayoutVersion = "2.1.3"
-val constraintLayoutComposeVersion = "1.1.0-alpha10"
-val composeActivityVersion = "1.8.0-alpha04"
-val composeMaterialYouVersion = "1.2.0-alpha02"
-val liveDataViewModelVersion = "2.6.1"
-val playServicesMapsVersion = "18.1.0"
-val playServicesLocationVersion = "21.0.1"
-val materialYouVersion = "1.9.0-beta01"
-val appCompatVersion = "1.7.0-alpha02"
-val lottieComposeVersion = "6.0.0"
-val browserVersion = "1.6.0-alpha01"
-val dataStorePreferenceVersion = "1.0.0"
-val googleMapsComposeVersion = "2.8.1"
-
 android {
-    compileSdkPreview = "UpsideDownCake"
+    compileSdkPreview = ConfigData.compileSdkVersion
 
     defaultConfig {
         applicationId = "com.agelousis.jetpackweather"
-        minSdk = 27
-        targetSdkPreview = "UpsideDownCake"
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = ConfigData.minSdkVersion
+        targetSdkPreview = ConfigData.targetSdkVersion
+        versionCode = ConfigData.versionCodeVersion
+        versionName = ConfigData.versionNameVersion
 
         // Languages
         resourceConfigurations.clear()
@@ -74,64 +58,63 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = Versions.kotlinCompilerExtensionVersion
     }
     packagingOptions {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
-    namespace = "com.agelousis.jetpackweather"
+    namespace = ConfigData.packageName
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0-alpha04")
+    implementation(Dependencies.coreKtx)
     // Native
-    implementation("com.google.android.material:material:$materialYouVersion")
-    implementation("androidx.appcompat:appcompat:$appCompatVersion")
+    implementation(Dependencies.material)
+    implementation(Dependencies.appCompat)
     // Datastore
-    implementation("androidx.datastore:datastore-preferences:$dataStorePreferenceVersion")
+    implementation(Dependencies.dataStorePreferences)
 
     // Browser
-    implementation("androidx.browser:browser:$browserVersion")
+    implementation(Dependencies.browser)
 
-    implementation("androidx.compose.ui:ui:$composeVersion")
-    implementation("androidx.compose.material:material:$composeVersion")
-    implementation("androidx.activity:activity-compose:$composeActivityVersion")
-    implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
-    implementation("androidx.compose.material3:material3:$composeMaterialYouVersion")
-    implementation("androidx.compose.material3:material3-window-size-class:$composeMaterialYouVersion")
-    implementation("androidx.compose.ui:ui-viewbinding:$composeVersion")
-    implementation("androidx.compose.runtime:runtime-livedata:$composeVersion")
-    implementation("androidx.constraintlayout:constraintlayout-compose:$constraintLayoutComposeVersion")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$liveDataViewModelVersion")
-    implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation("androidx.glance:glance-appwidget:1.0.0-beta01")
-    implementation("androidx.glance:glance-wear-tiles:1.0.0-alpha05")
+    implementation(Dependencies.composeUi)
+    implementation(Dependencies.composeMaterial)
+    implementation(Dependencies.activityCompose)
+    implementation(Dependencies.composeUiToolingPreview)
+    implementation(Dependencies.composeMaterialYou)
+    implementation(Dependencies.composeMaterialYouWindowSizeClass)
+    implementation(Dependencies.composeUiViewBinding)
+    implementation(Dependencies.composeRuntimeLiveData)
+    implementation(Dependencies.constraintLayoutCompose)
+    implementation(Dependencies.lifecycleViewModelCompose)
+    implementation(Dependencies.coilCompose)
+    implementation(Dependencies.glanceAppWidget)
     // Retrofit & OkHttp
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11")
+    implementation(Dependencies.retrofit2ConverterGson)
+    implementation(Dependencies.http3LoggingInterceptor)
 
     // Navigation
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation(Dependencies.navigationUiKtx)
+    implementation(Dependencies.navigationCompose)
 
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation(Dependencies.lifecycleRuntimeKtx)
+    implementation(Dependencies.lifecycleExtensions)
 
     // Google Maps
-    implementation("com.google.android.gms:play-services-location:$playServicesLocationVersion")
-    implementation("com.google.android.gms:play-services-maps:$playServicesMapsVersion")
-    implementation("com.google.maps.android:maps-compose:$googleMapsComposeVersion")
+    implementation(Dependencies.gmsPlayServicesLocation)
+    implementation(Dependencies.gmsPlayServicesMaps)
+    implementation(Dependencies.androidMapsCompose)
 
     // Lottie
-    implementation("com.airbnb.android:lottie-compose:$lottieComposeVersion")
+    implementation(Dependencies.lottieCompose)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha01")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha01")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
-    debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:$composeVersion")
+    testImplementation(Dependencies.junit)
+    androidTestImplementation(Dependencies.testExtJunit)
+    androidTestImplementation(Dependencies.testEspressoCore)
+    androidTestImplementation(Dependencies.composeUiTestJunit)
+    debugImplementation(Dependencies.composeUiTooling)
+    debugImplementation(Dependencies.composeUiTestManifest)
 }
