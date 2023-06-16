@@ -3,16 +3,16 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.plugin.parcelize")
-    id("com.github.ben-manes.versions") version "0.46.0"
+    id("com.github.ben-manes.versions") version "0.47.0"
 }
 
 android {
-    compileSdkPreview = ConfigData.compileSdkVersion
+    compileSdk = ConfigData.compileSdkVersion
 
     defaultConfig {
         applicationId = "com.agelousis.jetpackweather"
         minSdk = ConfigData.minSdkVersion
-        targetSdkPreview = ConfigData.targetSdkVersion
+        targetSdk = ConfigData.targetSdkVersion
         versionCode = ConfigData.versionCodeVersion
         versionName = ConfigData.versionNameVersion
 
