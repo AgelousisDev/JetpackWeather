@@ -2,9 +2,6 @@ package com.agelousis.jetpackweather.ui.rows
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -29,13 +26,14 @@ import com.agelousis.jetpackweather.weather.model.OptionModel
 import com.agelousis.jetpackweather.weather.model.WeatherSettings
 
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SelectionChipFieldRowLayout(
     weatherSettings: WeatherSettings,
     selectionInputFieldBlock: SelectionInputFieldBlock
 ) {
     var selectedOptionIndexState by remember {
-        mutableStateOf(
+        mutableIntStateOf(
             value = weatherSettings.optionModelList?.indexOf(
                 weatherSettings.selectedOptionModel
             ) ?: -1
@@ -54,6 +52,7 @@ fun SelectionChipFieldRowLayout(
                             ?.let { size ->
                                 (size / 4) * 90.dp
                             } ?: 90.dp
+
                     else ->
                         weatherSettings.optionModelList?.size
                             ?.takeIf { size ->
@@ -78,40 +77,25 @@ fun SelectionChipFieldRowLayout(
                     width = Dimension.fillToConstraints
                 }
         )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(
-                count = when(LocalConfiguration.current.orientation) {
-                    Configuration.ORIENTATION_LANDSCAPE -> 4
-                    else -> 3
-                }
-            ),
+        FlowRow(
             verticalArrangement = Arrangement.spacedBy(
                 space = 8.dp
             ),
             horizontalArrangement = Arrangement.spacedBy(
                 space = 8.dp
             ),
-            contentPadding = PaddingValues(
-                vertical = 8.dp,
-                horizontal = 16.dp
-            ),
             modifier = Modifier
                 .constrainAs(chipGridLazyColumnConstrainedReference) {
-                    start.linkTo(parent.start)
-                    top.linkTo(labelConstrainedReference.bottom)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start, 16.dp)
+                    top.linkTo(labelConstrainedReference.bottom, 8.dp)
+                    end.linkTo(parent.end, 16.dp)
+                    bottom.linkTo(parent.bottom, 8.dp)
                     width = Dimension.fillToConstraints
                     height = Dimension.fillToConstraints
                 }
         ) {
-            itemsIndexed(
-                items = weatherSettings.optionModelList
-                    ?: listOf()
-            ) { index, optionModel ->
+            for ((index, optionModel) in weatherSettings.optionModelList?.withIndex() ?: listOf())
                 SelectionChipLayout(
-                    modifier = Modifier
-                        .animateItemPlacement(),
                     state = selectedOptionIndexState == index,
                     weatherSettings = weatherSettings,
                     index = index,
@@ -122,7 +106,6 @@ fun SelectionChipFieldRowLayout(
                         selectedIndex
                     )
                 }
-            }
         }
     }
 }
@@ -183,7 +166,7 @@ private fun SelectionChipLayout(
                         )
                 )
             }
-        }else null,
+        } else null,
         label = {
             Text(
                 text = optionModel.label,

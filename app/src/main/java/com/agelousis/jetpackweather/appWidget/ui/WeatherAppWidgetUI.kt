@@ -1,6 +1,12 @@
 package com.agelousis.jetpackweather.appWidget.ui
 
+import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -25,6 +31,8 @@ import com.agelousis.jetpackweather.utils.constants.Constants
 import com.agelousis.jetpackweather.utils.extensions.*
 import com.agelousis.jetpackweather.utils.helpers.PreferencesStoreHelper
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private val weatherAppWidgetGlanceModifier =
     GlanceModifier
@@ -49,6 +57,18 @@ fun WeatherAppWidgetLayout() {
     val temperatureUnitType = valueEnumOrNull<TemperatureUnitType>(
         name = preferences[PreferencesStoreHelper.TEMPERATURE_UNIT_TYPE_KEY]
     )
+    var iconBitmap by remember {
+        mutableStateOf<Bitmap?>(value = null)
+    }
+    LaunchedEffect(
+        key1 = Unit
+    ) {
+        launch(
+            context = Dispatchers.Default
+        ) {
+            iconBitmap = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.iconUrl?.urlBitmap
+        }
+    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalAlignment = Alignment.CenterVertically,
@@ -163,12 +183,12 @@ fun WeatherAppWidgetLayout() {
                     ),
                     modifier = weatherAppWidgetGlanceModifier
                 )
-                val iconBitmap = weatherResponseModel?.currentWeatherDataModel?.weatherConditionDataModel?.iconUrl?.urlBitmap
                 if (iconBitmap != null)
-                // Condition Icon
+                    // Condition Icon
                     Image(
                         provider = ImageProvider(
                             bitmap = iconBitmap
+                                ?: return@Row
                         ),
                         contentDescription = null,
                         modifier = weatherAppWidgetGlanceModifier
