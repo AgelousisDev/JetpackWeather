@@ -205,7 +205,7 @@ fun WeatherAlertRowLayout(
                     state = moreInfoExpandState
                 ) {
                     Column {
-                        Divider(
+                        HorizontalDivider(
                             thickness = 0.2.dp,
                             color = colorResource(id = R.color.dayNightTextOnBackground),
                             modifier = Modifier

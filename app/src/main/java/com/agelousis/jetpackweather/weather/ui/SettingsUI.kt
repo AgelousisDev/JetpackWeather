@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -136,7 +137,7 @@ fun SettingsLayout(
                                 isChecked = isChecked
                             )
                         }
-                        Divider(
+                        HorizontalDivider(
                             thickness = 0.5.dp,
                             modifier = Modifier
                                 .padding(
@@ -157,7 +158,7 @@ fun SettingsLayout(
                                 selectedPosition = selectedPosition
                             )
                         }
-                        Divider(
+                        HorizontalDivider(
                             thickness = 0.5.dp,
                             modifier = Modifier
                                 .padding(

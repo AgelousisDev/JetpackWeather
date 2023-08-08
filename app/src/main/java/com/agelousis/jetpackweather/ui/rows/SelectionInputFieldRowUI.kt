@@ -149,7 +149,7 @@ fun SelectionInputFieldRowLayout(
                             } else null
                         )
                         if (index < (weatherSettings.optionModelList?.size ?: 0) - 1)
-                            Divider()
+                            HorizontalDivider()
                     }
                 }
             }
