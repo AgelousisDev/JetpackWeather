@@ -342,7 +342,8 @@ fun WeatherAppBarActions(
         }
     }
     Crossfade(
-        targetState = viewModel.currentNavigationRoute
+        targetState = viewModel.currentNavigationRoute,
+        label = "CurrentNavigationRoute"
     ) {
         if (it != WeatherDrawerNavigationScreen.Settings.route)
             // Current Location
@@ -369,7 +370,8 @@ fun WeatherAppBarActions(
             }
     }
     Crossfade(
-        targetState = viewModel.currentNavigationRoute
+        targetState = viewModel.currentNavigationRoute,
+        label = "CurrentNavigationRoute"
     ) {
         if (it != WeatherDrawerNavigationScreen.Settings.route)
             // Edit

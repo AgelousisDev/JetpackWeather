@@ -168,7 +168,8 @@ fun WeatherAlertRowLayout(
                         }
                 ) {
                     Crossfade(
-                        targetState = moreInfoExpandState
+                        targetState = moreInfoExpandState,
+                        label = "MoreInfoExpandState"
                     ) {
                         Text(
                             text = stringResource(

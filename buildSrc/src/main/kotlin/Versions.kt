@@ -1,13 +1,13 @@
 object Versions {
-    const val gradlePlugin = "8.1.0"
+    const val gradlePlugin = "8.1.1"
     const val kotlinVersion = "1.9.0"
-    const val coreKtxVersion = "1.12.0-beta01"
-    const val navVersion = "2.7.0-rc01"
-    const val composeVersion = "1.6.0-alpha02"
+    const val coreKtxVersion = "1.12.0-rc01"
+    const val navVersion = "2.7.1"
+    const val composeVersion = "1.6.0-alpha04"
     const val constraintLayoutVersion = "2.1.3"
-    const val constraintLayoutComposeVersion = "1.1.0-alpha11"
-    const val composeActivityVersion = "1.8.0-alpha06"
-    const val composeMaterialYouVersion = "1.2.0-alpha04"
+    const val constraintLayoutComposeVersion = "1.1.0-alpha12"
+    const val composeActivityVersion = "1.8.0-alpha07"
+    const val composeMaterialYouVersion = "1.2.0-alpha06"
     const val liveDataViewModelVersion = "2.7.0-alpha01"
     const val playServicesMapsVersion = "18.1.0"
     const val playServicesLocationVersion = "21.0.1"
@@ -26,7 +26,7 @@ object Versions {
     const val junitVersion = "4.13.2"
     const val testExtJunitVersion = "1.2.0-alpha01"
     const val testEspressoCoreVersion = "3.6.0-alpha01"
-    const val kotlinCompilerExtensionVersion = "1.5.1"
+    const val kotlinCompilerExtensionVersion = "1.5.2"
 }
 object ConfigData {
     const val compileSdkVersion = 34
