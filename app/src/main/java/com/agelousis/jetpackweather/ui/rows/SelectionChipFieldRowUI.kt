@@ -124,7 +124,10 @@ private fun SelectionChipLayout(
         onClick = {
             selectionInputFieldBlock(index)
         },
-        border = FilterChipDefaults.filterChipBorder(),
+        border = FilterChipDefaults.filterChipBorder(
+            enabled = true,
+            selected = state
+        ),
         leadingIcon = if (optionModel.icon != null) {
             {
                 Icon(
