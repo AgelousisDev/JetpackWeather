@@ -1,7 +1,7 @@
 package com.agelousis.jetpackweather.ui.composableView
 
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -10,14 +10,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
 
+//Spannable
 data class LinkTextData(
     val text: String,
-    val tag: String? = null,
     val textColor: Color? = null,
     val fontWeight: FontWeight? = null,
     val fontSize: TextUnit? = null,
+    val tag: String? = null,
     val annotation: String? = null,
-    val onClick: ((str: AnnotatedString.Range<String>) -> Unit)? = null,
+    val onClick: ((url: String) -> Unit)? = null,
     val decoration: TextDecoration = TextDecoration.None
 )
 //Spannable
@@ -32,24 +33,28 @@ fun LinkText(
         data = linkTextData
     )
 
-    ClickableText(
-        text = annotatedString,
-        style = style,
-        onClick = { offset ->
-            onClickText?.invoke()
-            linkTextData.forEach { annotatedStringData ->
-                if (annotatedStringData.tag != null && annotatedStringData.annotation != null) {
-                    annotatedString.getStringAnnotations(
-                        tag = annotatedStringData.tag,
-                        start = offset,
-                        end = offset,
-                    ).firstOrNull()?.let {
-                        annotatedStringData.onClick?.invoke(it)
+    Text(
+        modifier = modifier
+            .clickable(
+                onClick = {
+                    onClickText?.invoke()
+                    linkTextData.forEachIndexed { index, linkTextData ->
+                        if (linkTextData.annotation != null) {
+                            linkTextData.onClick?.invoke(
+                                annotatedString.getStringAnnotations(
+                                    start = 0,
+                                    end = linkTextData.tag?.length
+                                        ?: return@forEachIndexed
+                                ).getOrNull(
+                                    index = index
+                                )?.tag ?: ""
+                            )
+                        }
                     }
                 }
-            }
-        },
-        modifier = modifier
+            ),
+        text = annotatedString,
+        style = style
     )
 }
 
@@ -58,20 +63,24 @@ private fun createAnnotatedString(
     data: List<LinkTextData>
 ) = buildAnnotatedString {
     data.forEach { linkTextData ->
-        if (linkTextData.tag != null && linkTextData.annotation != null) {
+        if (!linkTextData.tag.isNullOrEmpty()
+            && !linkTextData.annotation.isNullOrEmpty()
+        ) {
             pushStringAnnotation(
                 tag = linkTextData.tag,
-                annotation = linkTextData.annotation,
+                annotation = linkTextData.annotation
             )
             withStyle(
                 style = SpanStyle(
-                    color = MaterialTheme.colors.primary,
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline,
                     fontWeight = linkTextData.fontWeight,
                     fontSize = linkTextData.fontSize ?: TextUnit.Unspecified
                 )
             ) {
-                append(linkTextData.text)
+                append(
+                    text = linkTextData.text
+                )
             }
             pop()
         } else {
@@ -83,7 +92,9 @@ private fun createAnnotatedString(
                     fontSize = linkTextData.fontSize ?: TextUnit.Unspecified
                 )
             ) {
-                append(linkTextData.text)
+                append(
+                    text = linkTextData.text
+                )
             }
         }
     }

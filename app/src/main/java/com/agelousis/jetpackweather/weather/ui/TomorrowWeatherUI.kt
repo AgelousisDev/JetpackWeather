@@ -95,7 +95,7 @@ fun TomorrowWeatherLayout(
                     item {
                         CalendarRowLayout(
                             modifier = Modifier
-                                .animateItemPlacement(),
+                                .animateItem(),
                             weatherNavigationScreen = WeatherNavigationScreen.Tomorrow,
                             weatherResponseModel = weatherResponseModel
                         )
@@ -104,7 +104,7 @@ fun TomorrowWeatherLayout(
                     item {
                         CurrentTemperatureRowLayout(
                             modifier = Modifier
-                                .animateItemPlacement(),
+                                .animateItem(),
                             currentWeatherDataModel = weatherResponseModel?.weatherForecastDataModel
                                 ?.nextWeatherForecastDayDataModel?.currentWeatherDataModel
                                 ?: return@item
@@ -115,7 +115,7 @@ fun TomorrowWeatherLayout(
                         if (weatherResponseModel != null)
                             HeaderRowLayout(
                                 modifier = Modifier
-                                    .animateItemPlacement(),
+                                    .animateItem(),
                                 headerModel = HeaderModel(
                                     header = stringResource(id = R.string.key_temperature_label)
                                 )
@@ -132,7 +132,7 @@ fun TomorrowWeatherLayout(
                         if (weatherResponseModel != null)
                             HeaderRowLayout(
                                 modifier = Modifier
-                                    .animateItemPlacement(),
+                                    .animateItem(),
                                 headerModel = HeaderModel(
                                     header = stringResource(id = R.string.key_sun_and_moon_label)
                                 )
@@ -141,7 +141,7 @@ fun TomorrowWeatherLayout(
                     item {
                         SunAndMoonRowLayout(
                             modifier = Modifier
-                                .animateItemPlacement(),
+                                .animateItem(),
                             sunAndMoonStates = weatherResponseModel?.weatherForecastDataModel?.nextWeatherForecastDayDataModel?.weatherAstroDataModel?.availableSunAndMoonStates ?: listOf(),
                             weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.nextWeatherForecastDayDataModel?.weatherAstroDataModel
                         )

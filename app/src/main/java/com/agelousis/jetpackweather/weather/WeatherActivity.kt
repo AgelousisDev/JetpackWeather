@@ -24,9 +24,8 @@ class WeatherActivity: AppCompatActivity() {
                 val windowSize = calculateWindowSizeClass(
                     activity = this
                 )
-                val viewModel = viewModel<WeatherViewModel>()
                 WeatherActivityBottomNavigationLayout(
-                    viewModel = viewModel,
+                    viewModel = viewModel(),
                     weatherDrawerNavigationType = windowSize.weatherDrawerNavigationType
                 )
             }

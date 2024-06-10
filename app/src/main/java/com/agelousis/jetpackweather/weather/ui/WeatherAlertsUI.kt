@@ -87,7 +87,7 @@ fun WeatherAlertsLayout(
                     ) { weatherAlertModel ->
                         WeatherAlertRowLayout(
                             modifier = Modifier
-                                .animateItemPlacement(),
+                                .animateItem(),
                             weatherAlertModel = weatherAlertModel
                         )
                     }

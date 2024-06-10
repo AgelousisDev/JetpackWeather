@@ -104,7 +104,7 @@ fun NextDaysWeatherLayout(
                             is HeaderModel ->
                                 HeaderRowLayout(
                                     modifier = Modifier
-                                        .animateItemPlacement(),
+                                        .animateItem(),
                                     headerModel = forecastItem
                                 )
                             is CurrentDayWeatherDataModel ->
@@ -114,7 +114,7 @@ fun NextDaysWeatherLayout(
                             is List<*> ->
                                 HourlyWeatherConditionsRowLayout(
                                     modifier = Modifier
-                                        .animateItemPlacement(),
+                                        .animateItem(),
                                     weatherHourlyDataModelList = forecastItem.filterIsInstance<WeatherHourlyDataModel>()
                                 )
                         }

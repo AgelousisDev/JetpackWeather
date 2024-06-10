@@ -3,18 +3,18 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.plugin.parcelize")
-    id("com.github.ben-manes.versions") version Versions.githubBanesVersion
+    id("com.github.ben-manes.versions") version Versions.GITHUB_BANES_VERSION
 }
 
 android {
-    compileSdk = ConfigData.compileSdkVersion
+    compileSdk = ConfigData.COMPILE_SDK_VERSION
 
     defaultConfig {
         applicationId = "com.agelousis.jetpackweather"
-        minSdk = ConfigData.minSdkVersion
-        targetSdk = ConfigData.targetSdkVersion
-        versionCode = ConfigData.versionCodeVersion
-        versionName = ConfigData.versionNameVersion
+        minSdk = ConfigData.MIN_SDK_VERSION
+        targetSdk = ConfigData.TARGET_SDK_VERSION
+        versionCode = ConfigData.VERSION_CODE_VERSION
+        versionName = ConfigData.VERSION_NAME_VERSION
 
         // Languages
         resourceConfigurations.clear()
@@ -48,24 +48,24 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = Versions.kotlinCompilerExtensionVersion
+        kotlinCompilerExtensionVersion = Versions.KOTLIN_COMPILER_EXTENSION_VERSION
     }
     packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
-    namespace = ConfigData.packageName
+    namespace = ConfigData.PACKAGE_NAME
 }
 
 dependencies {

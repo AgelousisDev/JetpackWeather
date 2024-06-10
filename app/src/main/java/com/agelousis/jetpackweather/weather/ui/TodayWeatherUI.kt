@@ -98,7 +98,7 @@ fun TodayWeatherLayout(
                     item {
                         CalendarRowLayout(
                             modifier = Modifier
-                                .animateItemPlacement(),
+                                .animateItem(),
                             weatherNavigationScreen = WeatherNavigationScreen.Today,
                             weatherResponseModel = weatherResponseModel
                         )
@@ -107,7 +107,7 @@ fun TodayWeatherLayout(
                     item {
                         CurrentTemperatureRowLayout(
                             modifier = Modifier
-                                .animateItemPlacement(),
+                                .animateItem(),
                             currentWeatherDataModel = weatherResponseModel?.currentWeatherDataModel ?: return@item
                         )
                     }
@@ -118,7 +118,7 @@ fun TodayWeatherLayout(
                         )
                             HeaderRowLayout(
                                 modifier = Modifier
-                                    .animateItemPlacement(),
+                                    .animateItem(),
                                 headerModel = HeaderModel(
                                     header = stringResource(id = R.string.key_air_quality_label)
                                 )
@@ -131,7 +131,7 @@ fun TodayWeatherLayout(
                         )
                             AirQualityRowLayout(
                                 modifier = Modifier
-                                    .animateItemPlacement(),
+                                    .animateItem(),
                                 weatherDrawerNavigationType = weatherDrawerNavigationType,
                                 weatherAirQualityDataModel = weatherResponseModel?.currentWeatherDataModel?.airQuality
                                     ?: return@item
@@ -144,7 +144,7 @@ fun TodayWeatherLayout(
                         )
                             HeaderRowLayout(
                                 modifier = Modifier
-                                    .animateItemPlacement(),
+                                    .animateItem(),
                                 headerModel = HeaderModel(
                                     header = stringResource(id = R.string.key_temperature_label)
                                 )
@@ -161,7 +161,7 @@ fun TodayWeatherLayout(
                         if (weatherResponseModel != null)
                             HeaderRowLayout(
                                 modifier = Modifier
-                                    .animateItemPlacement(),
+                                    .animateItem(),
                                 headerModel = HeaderModel(
                                     header = stringResource(id = R.string.key_sun_and_moon_label)
                                 )
@@ -170,7 +170,7 @@ fun TodayWeatherLayout(
                     item {
                         SunAndMoonRowLayout(
                             modifier = Modifier
-                                .animateItemPlacement(),
+                                .animateItem(),
                             sunAndMoonStates = weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.weatherAstroDataModel?.availableSunAndMoonStates ?: listOf(),
                             weatherAstroDataModel = weatherResponseModel?.weatherForecastDataModel?.todayWeatherForecastDayDataModel?.weatherAstroDataModel
                         )
