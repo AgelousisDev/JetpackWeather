@@ -2,8 +2,6 @@ package com.agelousis.jetpackweather.ui.theme
 
 import android.app.Activity
 import android.os.Build
-import androidx.activity.ComponentActivity
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -55,7 +53,6 @@ fun JetpackWeatherTheme(
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
-            (view.context as? ComponentActivity)?.enableEdgeToEdge()
             //(view.context as Activity).window?.navigationBarColor = Color.Transparent.toArgb()
             //(view.context as Activity).window?.statusBarColor = colorScheme.surface.toArgb()
             WindowCompat.getInsetsController((view.context as Activity).window, view).isAppearanceLightStatusBars = !darkTheme

@@ -55,10 +55,9 @@ private val weatherDrawerNavigationScreens = listOf(
     WeatherDrawerNavigationScreen.Settings
 )
 
-@OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
-fun WeatherActivityBottomNavigationLayout(
+fun WeatherActivityBottomNavigationView(
     viewModel: WeatherViewModel,
     weatherDrawerNavigationType: WeatherDrawerNavigationType
 ) {
@@ -110,10 +109,8 @@ fun WeatherActivityBottomNavigationLayout(
         )
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     WeatherDrawerNavigation(
-        modifier = Modifier
-            .statusBarsPadding(),
         weatherDrawerNavigationType = weatherDrawerNavigationType,
-        viewModel  = viewModel,
+        viewModel = viewModel,
         drawerState = drawerState,
         coroutineScope = scope,
         navController = navController,
@@ -176,30 +173,31 @@ fun WeatherActivityBottomNavigationLayout(
                 )
             },
             bottomBar = {
-                        AnimatedContent(
-                            targetState = viewModel.currentNavigationRoute != WeatherDrawerNavigationScreen.Settings.route
-                                    && if (weatherDrawerNavigationType == WeatherDrawerNavigationType.PERMANENT_NAVIGATION_DRAWER)
-                                lazyColumnFirstItemVisibilityState
-                            else
-                                true,
-                            transitionSpec = {
-                                slideVertically
+                AnimatedContent(
+                    targetState = viewModel.currentNavigationRoute != WeatherDrawerNavigationScreen.Settings.route
+                            && if (weatherDrawerNavigationType == WeatherDrawerNavigationType.PERMANENT_NAVIGATION_DRAWER)
+                        lazyColumnFirstItemVisibilityState
+                    else
+                        true,
+                    transitionSpec = {
+                        slideVertically
+                    },
+                    label = "BottomAppBarState"
+                ) { state ->
+                    if (state)
+                        WeatherBottomNavigation(
+                            navController = navController,
+                            items = viewModel.bottomNavigationItems.also { bottomNavigationItems ->
+                                bottomNavigationItems.firstOrNull { weatherNavigationScreen ->
+                                    weatherNavigationScreen is WeatherNavigationScreen.Alerts
+                                }?.badge =
+                                    if (!weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty())
+                                        weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList?.size?.toString()
+                                    else
+                                        null
                             }
-                        ) { state ->
-                            if (state)
-                                WeatherBottomNavigation(
-                                    navController = navController,
-                                    items = viewModel.bottomNavigationItems.also { bottomNavigationItems ->
-                                        bottomNavigationItems.firstOrNull { weatherNavigationScreen ->
-                                            weatherNavigationScreen is WeatherNavigationScreen.Alerts
-                                        }?.badge =
-                                            if (!weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList.isNullOrEmpty())
-                                                weatherResponseModel?.weatherAlertsDataModel?.weatherAlertsModelList?.size?.toString()
-                                            else
-                                                null
-                                    }
-                                )
-                        }
+                        )
+                }
                 /*Crossfade(
                     targetState = viewModel.currentNavigationRoute != WeatherDrawerNavigationScreen.Settings.route
                             && if (weatherDrawerNavigationType == WeatherDrawerNavigationType.PERMANENT_NAVIGATION_DRAWER)
@@ -301,12 +299,14 @@ fun WeatherActivityNavigation(
     }
     navController.addOnDestinationChangedListener { innerNavController, destination, _ ->
         viewModel.currentNavigationRoute = destination.route ?: WeatherNavigationScreen.Today.route
-        viewModel.weatherUiAppBarTitle = when(destination.route) {
+        viewModel.weatherUiAppBarTitle = when (destination.route) {
             WeatherDrawerNavigationScreen.Settings.route ->
                 innerNavController.context.resources.getString(R.string.key_settings_label)
+
             else ->
                 //viewModel.weatherResponseLiveData.value?.weatherLocationDataModel?.regionCountry
-                    viewModel.addressDataModelStateFlow.value?.addressLine ?: innerNavController.context.resources.getString(R.string.app_name)
+                viewModel.addressDataModelStateFlow.value?.addressLine
+                    ?: innerNavController.context.resources.getString(R.string.app_name)
         }
     }
 }
@@ -325,7 +325,8 @@ fun WeatherAppBarActions(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            viewModel.addressDataModelMutableStateFlow.value = activityResult.data?.getParcelable(MapAddressPickerActivity.CURRENT_ADDRESS)
+            viewModel.addressDataModelMutableStateFlow.value =
+                activityResult.data?.getParcelable(MapAddressPickerActivity.CURRENT_ADDRESS)
             scope.launch {
                 preferencesStoreHelper setCurrentAddressData viewModel.addressDataModelStateFlow.value
             }
@@ -346,13 +347,13 @@ fun WeatherAppBarActions(
         label = "CurrentNavigationRoute"
     ) {
         if (it != WeatherDrawerNavigationScreen.Settings.route)
-            // Current Location
+        // Current Location
             IconButton(
                 enabled = viewModel.locationPermissionState
                         || context.arePermissionsGranted(
-                            android.Manifest.permission.ACCESS_COARSE_LOCATION,
-                            android.Manifest.permission.ACCESS_FINE_LOCATION
-                        ),
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ),
                 onClick = {
                     requestLocation(
                         context = context,
@@ -374,7 +375,7 @@ fun WeatherAppBarActions(
         label = "CurrentNavigationRoute"
     ) {
         if (it != WeatherDrawerNavigationScreen.Settings.route)
-            // Edit
+        // Edit
             IconButton(
                 onClick = {
                     mapAddressPickerLauncher.launch(
@@ -548,7 +549,7 @@ fun requestWeather(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun WeatherActivityLayoutPreview() {
-    WeatherActivityBottomNavigationLayout(
+    WeatherActivityBottomNavigationView(
         viewModel = viewModel<WeatherViewModel>().also { weatherViewModel ->
             weatherViewModel.bottomNavigationItems.add(
                 WeatherNavigationScreen.Alerts
