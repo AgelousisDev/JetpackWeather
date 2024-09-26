@@ -4,6 +4,7 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.plugin.parcelize")
     id("com.github.ben-manes.versions") version Versions.GITHUB_BANES_VERSION
+    id("org.jetbrains.kotlin.plugin.compose") version Versions.KOTLIN_VERSION
 }
 
 android {

@@ -10,17 +10,16 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.LocaleList
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.core.content.ContextCompat
-import androidx.core.os.LocaleListCompat
 import com.agelousis.jetpackweather.ui.enumerations.WeatherDrawerNavigationType
 import com.agelousis.jetpackweather.utils.receiver.WeatherAlarmReceiver
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 fun Context.arePermissionsGranted(
     vararg permissions: String
@@ -121,10 +120,8 @@ private infix fun Context.getLocalizedConfiguration(
 infix fun Context.setAppLanguage(
     language: String
 ) {
-    if (isAndroid13)
-        (getSystemService(Context.LOCALE_SERVICE) as? LocaleManager)?.applicationLocales = LocaleList(Locale.forLanguageTag(language))
-    else
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(language))
+    (getSystemService(Context.LOCALE_SERVICE) as? LocaleManager)?.applicationLocales =
+        LocaleList(Locale.forLanguageTag(language))
 }
 
 val WindowSizeClass.weatherDrawerNavigationType

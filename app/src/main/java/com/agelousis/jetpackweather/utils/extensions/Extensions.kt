@@ -6,14 +6,15 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Parcelable
 import com.agelousis.jetpackweather.utils.constants.Constants
 import com.google.gson.Gson
 import okio.IOException
 import java.net.URL
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 fun Date.toDisplayDate(
     pattern: String = Constants.DISPLAY_DATE_TIME_FORMAT,
@@ -109,12 +110,6 @@ infix fun Bitmap.rotate(
     true
 )
 
-val isAndroid13
-    get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-
 inline fun <reified T: Parcelable> Intent.getParcelable(
     key: String
-) = if (isAndroid13)
-        extras?.getParcelable(key, T::class.java)
-    else
-        extras?.getParcelable(key)
+) = extras?.getParcelable(key, T::class.java)

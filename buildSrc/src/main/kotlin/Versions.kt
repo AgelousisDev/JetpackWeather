@@ -1,21 +1,21 @@
 object Versions {
     const val GRADLE_PLUGIN = "8.5.0"
-    const val KOTLIN_VERSION = "1.9.25"
-    const val CORE_KTX_VERSION = "1.15.0-alpha01"
-    const val NAVIGATION_VERSION = "2.8.0-beta07"
-    const val COMPOSE_VERSION = "1.7.0-beta07"
-    const val CONSTRAINT_LAYOUT_COMPOSE_VERSION = "1.1.0-alpha14"
-    const val COMPOSE_ACTIVITY_VERSION = "1.9.0"
-    const val COMPOSE_MATERIAL_YOU_VERSION = "1.3.0-beta05"
-    const val LIVE_DATA_VIEW_MODEL_VERSION = "2.9.0-alpha01"
+    const val KOTLIN_VERSION = "2.1.0-Beta1"
+    const val CORE_KTX_VERSION = "1.15.0-alpha02"
+    const val NAVIGATION_VERSION = "2.8.1"
+    const val COMPOSE_VERSION = "1.8.0-alpha02"
+    const val CONSTRAINT_LAYOUT_COMPOSE_VERSION = "1.1.0-beta01"
+    const val COMPOSE_ACTIVITY_VERSION = "1.10.0-alpha02"
+    const val COMPOSE_MATERIAL_YOU_VERSION = "1.3.0"
+    const val LIVE_DATA_VIEW_MODEL_VERSION = "2.9.0-alpha03"
     const val PLAY_SERVICES_MAPS_VERSION = "19.0.0"
     const val PLAY_SERVICES_LOCATION_VERSION = "21.3.0"
-    const val MATERIAL_VERSION = "1.13.0-alpha05"
+    const val MATERIAL_VERSION = "1.13.0-alpha06"
     const val APP_COMPAT_VERSION = "1.7.0"
-    const val LOTTIE_COMPOSE_VERSION = "6.5.0"
+    const val LOTTIE_COMPOSE_VERSION = "6.5.2"
     const val BROWSER_VERSION = "1.8.0"
     const val DATA_STORE_PREFERENCE_VERSION = "1.1.1"
-    const val GOOGLE_MAPS_COMPOSE_VERSION = "6.1.1"
+    const val GOOGLE_MAPS_COMPOSE_VERSION = "6.1.2"
     const val COIL_COMPOSE_VERSION = "2.7.0"
     const val GLANCE_APP_WIDGET_VERSION = "1.1.0"
     const val RETROFIT_TWO_GSON_CONVERTER_VERSION = "2.11.0"
@@ -30,7 +30,7 @@ object Versions {
 }
 object ConfigData {
     const val COMPILE_SDK_VERSION = 35
-    const val MIN_SDK_VERSION = 27
+    const val MIN_SDK_VERSION = 33
     const val TARGET_SDK_VERSION = 35
     const val VERSION_CODE_VERSION = 1
     const val VERSION_NAME_VERSION = "1.0"

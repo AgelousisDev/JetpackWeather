@@ -122,7 +122,6 @@ fun SettingsLayout(
                         ) { isChecked ->
                             if (weatherSettings is WeatherSettings.WeatherNotifications
                                 && !context.arePermissionsGranted(android.Manifest.permission.POST_NOTIFICATIONS)
-                                && isAndroid13
                             ) {
                                 notificationsPermissionLauncher.launch(
                                     android.Manifest.permission.POST_NOTIFICATIONS

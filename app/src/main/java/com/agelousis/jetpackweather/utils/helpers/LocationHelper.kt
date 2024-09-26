@@ -9,9 +9,13 @@ import android.os.Looper
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModel
 import com.agelousis.jetpackweather.mapAddressPicker.AddressDataModelSuccessBlock
 import com.agelousis.jetpackweather.utils.extensions.arePermissionsGranted
-import com.agelousis.jetpackweather.utils.extensions.isAndroid13
-import com.google.android.gms.location.*
-import java.util.*
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.Priority
+import java.util.Locale
 
 typealias LocationSuccessBlock = (Location) -> Unit
 typealias LocationPermissionsDeclinedBlock = () -> Unit
@@ -36,28 +40,18 @@ class LocationHelper(
         ) {
             Geocoder(context, Locale.ENGLISH).apply {
                 try {
-                    if (isAndroid13)
-                        getFromLocation(
-                            latitude,
-                            longitude,
-                            1
-                        ) { addresses ->
-                            addresses.takeIf {
-                                it.isNotEmpty()
-                            } ?: return@getFromLocation
-                            addressDataModelSuccessBlock(
-                                this@Companion getAddressDataFrom addresses.firstOrNull()
-                            )
-                        }
-                    else
-                        getFromLocation(latitude, longitude, 1)?.let { addresses ->
-                            addresses.takeIf {
-                                it.isNotEmpty()
-                            } ?: return@let
-                            addressDataModelSuccessBlock(
-                                this@Companion getAddressDataFrom addresses.firstOrNull()
-                            )
-                        }
+                    getFromLocation(
+                        latitude,
+                        longitude,
+                        1
+                    ) { addresses ->
+                        addresses.takeIf {
+                            it.isNotEmpty()
+                        } ?: return@getFromLocation
+                        addressDataModelSuccessBlock(
+                            this@Companion getAddressDataFrom addresses.firstOrNull()
+                        )
+                    }
                 } catch (e: Exception) {
                     addressDataModelSuccessBlock(
                         null
@@ -72,39 +66,23 @@ class LocationHelper(
             addressDataModelSuccessBlock: AddressDataModelSuccessBlock
         ) =
             with(Geocoder(context, Locale.ENGLISH)) {
-                if (isAndroid13)
-                    getFromLocationName(
-                        strAddress,
-                        1
-                    ) { addresses ->
-                        addresses.takeIf {
-                            it.isNotEmpty()
-                        } ?: return@getFromLocationName
-                        addressDataModelSuccessBlock(
-                            AddressDataModel(
-                                countryName = addresses.firstOrNull()?.countryName,
-                                countryCode = addresses.firstOrNull()?.countryCode,
-                                longitude = addresses.firstOrNull()?.longitude,
-                                latitude = addresses.firstOrNull()?.latitude,
-                                addressLine = addresses.firstOrNull()?.getAddressLine(0)
-                            )
+                getFromLocationName(
+                    strAddress,
+                    1
+                ) { addresses ->
+                    addresses.takeIf {
+                        it.isNotEmpty()
+                    } ?: return@getFromLocationName
+                    addressDataModelSuccessBlock(
+                        AddressDataModel(
+                            countryName = addresses.firstOrNull()?.countryName,
+                            countryCode = addresses.firstOrNull()?.countryCode,
+                            longitude = addresses.firstOrNull()?.longitude,
+                            latitude = addresses.firstOrNull()?.latitude,
+                            addressLine = addresses.firstOrNull()?.getAddressLine(0)
                         )
-                    }
-                else
-                    getFromLocationName(strAddress, 1)?.let { addresses ->
-                        addresses.takeIf {
-                            it.isNotEmpty()
-                        } ?: return@with null
-                        addressDataModelSuccessBlock(
-                            AddressDataModel(
-                                countryName = addresses.firstOrNull()?.countryName,
-                                countryCode = addresses.firstOrNull()?.countryCode,
-                                longitude = addresses.firstOrNull()?.longitude,
-                                latitude = addresses.firstOrNull()?.latitude,
-                                addressLine = addresses.firstOrNull()?.getAddressLine(0)
-                            )
-                        )
-                    }
+                    )
+                }
             }
 
         private infix fun getAddressDataFrom(address: Address?) =
