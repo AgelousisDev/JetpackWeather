@@ -58,9 +58,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Versions.KOTLIN_COMPILER_EXTENSION_VERSION
-    }
     packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
@@ -88,6 +85,7 @@ dependencies {
     implementation(Dependencies.composeMaterialYouWindowSizeClass)
     implementation(Dependencies.composeUiViewBinding)
     implementation(Dependencies.composeRuntimeLiveData)
+    implementation(Dependencies.composeMaterialIcons)
     implementation(Dependencies.constraintLayoutCompose)
     implementation(Dependencies.lifecycleViewModelCompose)
     implementation(Dependencies.coilCompose)

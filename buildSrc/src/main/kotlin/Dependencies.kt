@@ -13,6 +13,7 @@ object Dependencies {
     val composeUiToolingPreview by lazy { "androidx.compose.ui:ui-tooling-preview:${Versions.COMPOSE_VERSION}" }
     val composeMaterialYou by lazy { "androidx.compose.material3:material3:${Versions.COMPOSE_MATERIAL_YOU_VERSION}" }
     val composeMaterialYouWindowSizeClass by lazy { "androidx.compose.material3:material3-window-size-class:${Versions.COMPOSE_MATERIAL_YOU_VERSION}" }
+    val composeMaterialIcons by lazy { "androidx.compose.material:material-icons-core:${Versions.COMPOSE_ICONS_VERSION}" }
     val composeUiViewBinding by lazy { "androidx.compose.ui:ui-viewbinding:${Versions.COMPOSE_VERSION}" }
     val composeRuntimeLiveData by lazy { "androidx.compose.runtime:runtime-livedata:${Versions.COMPOSE_VERSION}" }
     val constraintLayoutCompose by lazy { "androidx.constraintlayout:constraintlayout-compose:${Versions.CONSTRAINT_LAYOUT_COMPOSE_VERSION}" }
