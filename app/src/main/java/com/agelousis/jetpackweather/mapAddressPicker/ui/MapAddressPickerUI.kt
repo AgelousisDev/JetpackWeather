@@ -40,8 +40,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MapAddressPickerTopAppBar(
-    viewModel: MapViewModel,
-    modifier: Modifier = Modifier
+    viewModel: MapViewModel
 ) {
     val context = LocalContext.current
     val snackBarHostState = remember {
@@ -54,8 +53,6 @@ fun MapAddressPickerTopAppBar(
               hostState = snackBarHostState
           )
         },
-        modifier = modifier
-            .statusBarsPadding(),
         topBar = {
             WeatherSmallTopAppBar(
                 title = stringResource(id = R.string.key_location_label),
