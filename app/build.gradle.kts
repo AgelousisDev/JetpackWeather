@@ -18,9 +18,16 @@ android {
         versionName = ConfigData.VERSION_NAME_VERSION
 
         // Languages
-        resourceConfigurations.clear()
+        androidResources.localeFilters.clear()
+        androidResources.localeFilters.addAll(
+            elements = listOf(
+                "en",
+                "el"
+            )
+        )
+        /*resourceConfigurations.clear()
         resourceConfigurations.add("en")
-        resourceConfigurations.add("el")
+        resourceConfigurations.add("el")*/
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
