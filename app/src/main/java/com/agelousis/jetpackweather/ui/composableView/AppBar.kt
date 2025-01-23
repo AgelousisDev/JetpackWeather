@@ -1,8 +1,14 @@
 package com.agelousis.jetpackweather.ui.composableView
 
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +39,7 @@ fun WeatherTopAppBar(
                 style = Typography.displayLarge
             )
         },
-        colors = TopAppBarDefaults.largeTopAppBarColors(
+        colors = topAppBarColors(
             scrolledContainerColor = scrolledContainerColor
         ),
         navigationIcon = {
@@ -44,7 +50,7 @@ fun WeatherTopAppBar(
                     Icon(
                         imageVector = navigationIcon,
                         contentDescription = "backIcon",
-                        tint = navigationIconTint ?: LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                        tint = navigationIconTint ?: LocalContentColor.current
                     )
                 }
         },
@@ -79,7 +85,7 @@ fun WeatherSmallTopAppBar(
                     Icon(
                         imageVector = navigationIcon,
                         contentDescription = "backIcon",
-                        tint = navigationIconTint ?: LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                        tint = navigationIconTint ?: LocalContentColor.current
                     )
                 }
         },
