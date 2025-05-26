@@ -17,7 +17,7 @@ plugins {
 
 allprojects {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).all {
-        kotlinOptions {
+        /*kotlinOptions {
             freeCompilerArgs =
                 listOf(
                     *kotlinOptions.freeCompilerArgs.toTypedArray(),
@@ -28,6 +28,6 @@ allprojects {
                     //"-opt-in=com.google.accompanist.pager.ExperimentalPagerApi",
                     "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
                 )
-        }
+        }*/
     }
 }

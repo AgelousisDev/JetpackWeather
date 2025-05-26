@@ -38,6 +38,7 @@ import com.google.maps.android.compose.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapAddressPickerTopAppBar(
     viewModel: MapViewModel

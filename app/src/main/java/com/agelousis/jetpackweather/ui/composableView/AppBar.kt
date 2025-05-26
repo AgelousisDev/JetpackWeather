@@ -1,6 +1,7 @@
 package com.agelousis.jetpackweather.ui.composableView
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -20,6 +21,7 @@ import com.agelousis.jetpackweather.R
 
 typealias NavigationIconBlock = () -> Unit
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherTopAppBar(
     modifier: Modifier = Modifier,
@@ -59,6 +61,7 @@ fun WeatherTopAppBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherSmallTopAppBar(
     modifier: Modifier = Modifier,
@@ -94,6 +97,7 @@ fun WeatherSmallTopAppBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun WeatherTopAppBarPreview() {

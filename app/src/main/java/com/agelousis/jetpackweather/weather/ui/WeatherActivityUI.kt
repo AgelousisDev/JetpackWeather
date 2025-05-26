@@ -55,6 +55,7 @@ private val weatherDrawerNavigationScreens = listOf(
     WeatherDrawerNavigationScreen.Settings
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
 fun WeatherActivityBottomNavigationView(

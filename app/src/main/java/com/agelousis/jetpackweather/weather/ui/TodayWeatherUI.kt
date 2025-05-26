@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -19,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.agelousis.jetpackweather.ui.rows.HeaderRowLayout
 import com.agelousis.jetpackweather.weather.viewModel.WeatherViewModel
 import com.agelousis.jetpackweather.R
@@ -29,6 +31,7 @@ import com.agelousis.jetpackweather.ui.theme.weatherBackgroundGradient
 import com.agelousis.jetpackweather.weather.bottomNavigation.WeatherNavigationScreen
 import com.agelousis.jetpackweather.weather.rows.*
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TodayWeatherLayout(
     viewModel: WeatherViewModel,
@@ -239,7 +242,7 @@ fun TodayWeatherLayout(
 @Composable
 fun TodayWeatherLayoutPreview() {
     TodayWeatherLayout(
-        viewModel = WeatherViewModel(),
+        viewModel = viewModel(),
         contentPadding = PaddingValues(),
         weatherDrawerNavigationType = WeatherDrawerNavigationType.NORMAL
     )
