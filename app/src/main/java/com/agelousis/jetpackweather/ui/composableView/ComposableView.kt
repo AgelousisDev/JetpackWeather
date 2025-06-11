@@ -7,12 +7,30 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,7 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -33,11 +51,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.agelousis.jetpackweather.R
-import com.agelousis.jetpackweather.ui.theme.*
+import com.agelousis.jetpackweather.ui.theme.Butterscotch
+import com.agelousis.jetpackweather.ui.theme.Petrol
+import com.agelousis.jetpackweather.ui.theme.PetrolLighter
+import com.agelousis.jetpackweather.ui.theme.Purple40
+import com.agelousis.jetpackweather.ui.theme.PurpleGrey80
+import com.agelousis.jetpackweather.ui.theme.Typography
+import com.agelousis.jetpackweather.ui.theme.WhiteTwo
+import com.agelousis.jetpackweather.ui.theme.textViewAlertTitleFont
 import com.agelousis.jetpackweather.utils.extensions.bitmapDescriptorFromVector
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberUpdatedMarkerState
 
 typealias SimpleButtonBlock = () -> Unit
 
@@ -49,14 +74,14 @@ fun VerticalProgress(
     animationDuration: Int = 1000
 ) {
     var verticalProgressStateChanged by remember {
-        mutableStateOf(
+        mutableFloatStateOf(
             value = progress
         )
     }
     if (verticalProgressStateChanged != progress)
         verticalProgressStateChanged = progress
     var progressStateRemember by remember {
-        mutableStateOf(value = 0.1f)
+        mutableFloatStateOf(value = 0.1f)
     }
 
     // This is to animate the foreground indicator
@@ -95,7 +120,9 @@ fun VerticalProgress(
         Box(
             modifier = Modifier
                 .weight(
-                    weight = if ((1 - progressStateAnimate.value) == 0f) 0.0001f else 1 - progressStateAnimate.value
+                    weight = (1 - progressStateAnimate.value).takeIf { weight ->
+                        weight > 0f
+                    } ?: 0.0001f
                 )
                 .fillMaxWidth()
         )
@@ -132,7 +159,7 @@ fun CircularProgressbar(
     remainingTextStyle: TextStyle = Typography.labelMedium
 ) {
     var circularProgressStateChanged by remember {
-        mutableStateOf(
+        mutableFloatStateOf(
             value = dataUsage
         )
     }
@@ -140,7 +167,7 @@ fun CircularProgressbar(
         circularProgressStateChanged = dataUsage
     // It remembers the data usage value
     var dataUsageRemember by remember {
-        mutableStateOf(value = -1f)
+        mutableFloatStateOf(value = -1f)
     }
 
     // This is to animate the foreground indicator
@@ -387,10 +414,11 @@ fun MapMarker(
     @DrawableRes iconResourceId: Int
 ) {
     val icon = context bitmapDescriptorFromVector iconResourceId
+    val markerState = rememberUpdatedMarkerState(
+        position = position
+    )
     Marker(
-        state = MarkerState(
-            position = position
-        ),
+        state = markerState,
         title = title,
         snippet = snippet ?: "",
         icon = icon
@@ -453,7 +481,7 @@ fun RangeLayoutPreview() {
             .height(
                 height = 100.dp
             ),
-        width = LocalConfiguration.current.screenWidthDp.dp,
+        width = LocalWindowInfo.current.containerSize.width.dp,
         colors = listOf(
             Butterscotch,
             Petrol,
