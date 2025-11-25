@@ -1,12 +1,11 @@
 package com.agelousis.jetpackweather.weather.bottomNavigation
 
-import androidx.annotation.StringRes
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.weather.drawerNavigation.WeatherDrawerNavigationScreen
 
 sealed class WeatherNavigationScreen(
     val route: String,
-    @StringRes val resourceId: Int,
+   val resourceId: Int,
     val icon: Int,
     var badge: String? = null
 ) {

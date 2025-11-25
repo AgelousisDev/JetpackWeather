@@ -20,6 +20,8 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import java.util.Calendar
 import java.util.Locale
+import androidx.core.graphics.createBitmap
+import androidx.core.net.toUri
 
 fun Context.arePermissionsGranted(
     vararg permissions: String
@@ -35,16 +37,16 @@ fun Context.arePermissionsGranted(
 
 infix fun Context.openWebViewIntent(urlString: String) {
     try {
-        val uri = Uri.parse(urlString)
+        val uri = urlString.toUri()
         val intentBuilder = CustomTabsIntent.Builder()
         val chromeIntent = intentBuilder.build()
         chromeIntent.intent.setPackage("com.android.chrome")
         chromeIntent.launchUrl(this, uri)
     }
-    catch(e: Exception) {
+    catch(_: Exception) {
         try {
             startActivity(
-                Intent(Intent.ACTION_VIEW, Uri.parse(urlString))
+                Intent(Intent.ACTION_VIEW, urlString.toUri())
             )
         }
         catch(_: Exception) {}
@@ -81,10 +83,9 @@ infix fun Context.bitmapDescriptorFromVector(
     val drawable = ContextCompat.getDrawable(this, vectorResId)
         ?: return null
     drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
-    val bm = Bitmap.createBitmap(
-        drawable.intrinsicWidth,
-        drawable.intrinsicHeight,
-        Bitmap.Config.ARGB_8888
+    val bm = createBitmap(
+        width = drawable.intrinsicWidth,
+        height = drawable.intrinsicHeight
     )
 
     // draw it onto the bitmap

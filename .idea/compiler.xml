@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="17">
-      <module name="JetpackWeather.app" target="21" />
-      <module name="JetpackWeather.buildSrc" target="21" />
-      <module name="JetpackWeather.buildSrc.main" target="21" />
-      <module name="JetpackWeather.buildSrc.test" target="21" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="17" />
   </component>
 </project>

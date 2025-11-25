@@ -1,6 +1,5 @@
 package com.agelousis.jetpackweather.weather.drawerNavigation
 
-import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
@@ -10,7 +9,7 @@ import com.agelousis.jetpackweather.R
 sealed class WeatherDrawerNavigationScreen(
     val route: String,
     val icon: ImageVector,
-    @StringRes val label: Int
+    val label: Int
 ) {
 
     companion object {

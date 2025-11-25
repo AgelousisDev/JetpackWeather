@@ -1,13 +1,12 @@
 package com.agelousis.jetpackweather.weather.model
 
 import android.content.Context
-import androidx.annotation.StringRes
 import com.agelousis.jetpackweather.R
 import com.agelousis.jetpackweather.utils.enumerations.LanguageEnum
 import com.agelousis.jetpackweather.weather.enumerations.TemperatureUnitType
 
 sealed class WeatherSettings(
-    @StringRes val label: Int
+    val label: Int
 ) {
     var optionModelList: List<OptionModel>? = null
     var selectedOptionModel: OptionModel? = null
@@ -30,7 +29,7 @@ sealed class WeatherSettings(
             }
             selectedOptionModel = temperatureUnitType?.let {
                 OptionModel(
-                    label = context.resources.getStringArray(R.array.key_temperature_unit_types_array)[TemperatureUnitType.values().indexOf(it)],
+                    label = context.resources.getStringArray(R.array.key_temperature_unit_types_array)[TemperatureUnitType.entries.indexOf(it)],
                     icon = it.icon
                 )
             }
@@ -73,7 +72,7 @@ sealed class WeatherSettings(
             optionModelList = (LanguageEnum languagesFrom context).mapIndexed { index, item ->
                 OptionModel(
                     label = item,
-                    iconUrl = LanguageEnum.values()[index].iconUrl
+                    iconUrl = LanguageEnum.entries[index].iconUrl
                 )
             }
             selectedOptionModel = languageEnum?.let {
